@@ -563,7 +563,7 @@ meaningful completion (with type clues) and cross-reference support.
 Unfortunately, =tern= has some problems with cross-references that explain why I
 am using =xref-js2= instead.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package tern
     :ensure-system-package (tern . "npm install -g tern")
     :bind (("C-c C-c" . compile)
