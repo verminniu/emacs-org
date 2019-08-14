@@ -51,6 +51,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
 	 user-full-name "Vermin"                          ; Set the full name of the current user
 	 user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
 	 vc-follow-symlinks t                             ; Always follow the symlinks
+	 make-backup-files nil							  ; close backup files
 	 view-read-only t)                                ; Always open read-only buffers in view-mode
   ;  (cd "~/")                                         ; Move to the user directory
 	(column-number-mode 1)                            ; Show the column number
@@ -93,10 +94,10 @@ happiness.
 [[#Icons][all-the-icons]].
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package nord-theme
+  (use-package doom-themes
     :config
     (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/"))
-    (load-theme 'nord t))
+    (load-theme 'doom-dracula t))
 
   (use-package doom-modeline
     :defer 0.1
@@ -207,7 +208,8 @@ I find invasive.
 * Languages
 ** C++
    use cquery for lsp server
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   clangd is better
+   #+BEGIN_SRC emacs-lisp :tangle no
    (with-eval-after-load 'projectile
    (setq projectile-project-root-files-top-down-recurring
         (append '("compile_commands.json"
@@ -237,7 +239,14 @@ I find invasive.
   (use-package google-c-style
     :hook ((c-mode c++-mode) . google-set-c-style)
            (c-mode-common . google-make-newline-indent))
+
+  (use-package modern-cpp-font-lock
+    :diminish
+	:init (modern-c++-font-lock-global-mode t)
+  )
 #+END_SRC
+
+
 * Advanced Configuration
 ** Company
 =company= provides auto-completion at point and to Displays a small pop-in
