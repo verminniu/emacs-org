@@ -32,39 +32,40 @@ first install it, if you don't already.
 For a better user experience of GNU Emacs, here are the default values I use.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq-default
-   ad-redefinition-action 'accept                   ; Silence warnings for redefinition
-   cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
-   display-time-default-load-average nil            ; Don't display load average
-   fill-column 80                                   ; Set width for automatic line breaks
-   mode-require-final-newline t                     ; add a newline to end of file
-   help-window-select t                             ; Focus new help windows when opened
-   inhibit-startup-screen t                         ; Disable start-up screen
-   initial-scratch-message ""                       ; Empty the initial *scratch* buffer
-   kill-ring-max 128                                ; Maximum length of kill ring
-   load-prefer-newer t                              ; Prefers the newest version of a file
-   mark-ring-max 128                                ; Maximum length of mark ring
-   scroll-conservatively most-positive-fixnum       ; Always scroll by one line
-   select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
-   tab-width 4                                      ; Set width for tabs
-   use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
-   user-full-name "Vermin"                          ; Set the full name of the current user
-   user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
-   vc-follow-symlinks t                             ; Always follow the symlinks
-   view-read-only t)                                ; Always open read-only buffers in view-mode
-;  (cd "~/")                                         ; Move to the user directory
-  (column-number-mode 1)                            ; Show the column number
-  (display-time-mode 1)                             ; Enable time in the mode-line
-  (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
-  (global-hl-line-mode)                             ; Hightlight current line
-  (set-default-coding-systems 'gb2312)               ; Default to gb2312 encoding
-;; (set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
-;;(set-terminal-coding-system 'gb2312)
-;;(set-keyboard-coding-system 'gb2312)
-;;(set-language-environment "Chinese-GB")
-;;(prefer-coding-system 'gb2312)
-  (show-paren-mode 1)                               ; Show the parent
-
+	(setq-default
+	 ad-redefinition-action 'accept                   ; Silence warnings for redefinition
+	 cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
+	 display-time-default-load-average nil            ; Don't display load average
+	 fill-column 80                                   ; Set width for automatic line breaks
+	 mode-require-final-newline t                     ; add a newline to end of file
+	 help-window-select t                             ; Focus new help windows when opened
+	 inhibit-startup-screen t                         ; Disable start-up screen
+	 initial-scratch-message ""                       ; Empty the initial *scratch* buffer
+	 kill-ring-max 128                                ; Maximum length of kill ring
+	 load-prefer-newer t                              ; Prefers the newest version of a file
+	 mark-ring-max 128                                ; Maximum length of mark ring
+	 scroll-conservatively most-positive-fixnum       ; Always scroll by one line
+	 select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
+	 tab-width 4                                      ; Set width for tabs
+	 use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
+	 user-full-name "Vermin"                          ; Set the full name of the current user
+	 user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
+	 vc-follow-symlinks t                             ; Always follow the symlinks
+	 view-read-only t)                                ; Always open read-only buffers in view-mode
+  ;  (cd "~/")                                         ; Move to the user directory
+	(column-number-mode 1)                            ; Show the column number
+	(display-time-mode 1)                             ; Enable time in the mode-line
+	(fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
+	(global-hl-line-mode)                             ; Hightlight current line
+	(set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
+	;;(set-default-coding-systems 'gb2312)               ; Default to gb2312 encoding
+	;;(set-terminal-coding-system 'gb2312)
+	;;(set-keyboard-coding-system 'gb2312)
+	;;(set-language-environment "Chinese-GB")
+	(prefer-coding-system 'gb2312)		;
+	(show-paren-mode 1)                               ; Show the parent
+	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
+	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 #+END_SRC
 
 ** Customization
@@ -135,6 +136,8 @@ completion candidates.
   (use-package company
     :defer 0.5
     :delight
+	:init
+	(add-hook 'after-init-hook 'global-company-mode)
     :custom
     (company-begin-commands '(self-insert-command))
     (company-idle-delay .1)
@@ -317,7 +320,11 @@ exists as well).
     (projectile-require-project nil)
     (projectile-known-projects-file (expand-file-name (format "~/.emacs.d/cache/projectile-bookmarks.eld")))
     (projectile-mode-line '(:eval (projectile-project-name)))
-    :config (projectile-global-mode))
+    :config
+	(setq projectile-globally-ignored-file-suffixes '(".o" ".a"))
+	(setq projectile-enable-caching t)
+	(projectile-global-mode)
+	)
 
   (use-package counsel-projectile
     :after (counsel projectile)
@@ -418,8 +425,6 @@ I like to have lines of the same length.
 #+BEGIN_QUOTE
 YASnippet is a template system for Emacs. It allows you to type an abbreviation
 and automatically expand it into function templates.
-
-[[https://github.com/joaotavora/yasnippet][João Távora]]
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -441,17 +446,17 @@ and automatically expand it into function templates.
 #+END_SRC
 ** Number Window
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package window-numbering
-  :init
-  (window-numbering-mode 1)
-  :config
-  (setq window-numbering-assign-func
-      (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
-)
+  (use-package window-numbering			;
+	:init
+	(window-numbering-mode 1)
+	:config
+	(setq window-numbering-assign-func
+		(lambda () (when (equal (buffer-name) "*Calculator*") 9)))
+  )
 #+END_SRC
-** iedit
+** Add mutil iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package iedit
-)
+  (use-package iedit						;
+  )
 
 #+END_SRC
