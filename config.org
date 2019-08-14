@@ -449,3 +449,9 @@ and automatically expand it into function templates.
       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
 )
 #+END_SRC
+** iedit
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package iedit
+)
+
+#+END_SRC
