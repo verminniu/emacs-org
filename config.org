@@ -104,6 +104,13 @@ happiness.
     :config (doom-modeline-mode))
 #+END_SRC
 
+** FlyCheck
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package flycheck
+     :init
+	 (global-flycheck-mode)
+   )
+   #+END_SRC
 ** LSP
 #+BEGIN_SRC emacs-lisp :tangle yes
  (use-package lsp-mode
