@@ -39,3 +39,17 @@
 (setq gc-cons-threshold (* 2 1000 1000))
 
 ;;; init.el ends here
+;;(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ ;;'(package-selected-packages
+ ;;  (quote
+;;	(hungry-delete git-timemachine git-gutter magit git-commit counsel-projectile projectile smartparens rainbow-delimiters hydra async company-box company google-c-style doom-modeline nord-theme use-package-ensure-system-package delight))))
+;;(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+;; )
