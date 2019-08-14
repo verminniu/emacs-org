@@ -308,13 +308,13 @@ exists as well).
   (use-package projectile
     ;;:defer 1
     :custom
-    (projectile-cache-file (expand-file-name (format "%s/emacs/projectile.cache" xdg-cache)))
+    (projectile-cache-file (expand-file-name (format "~/.emacs.d/cache/projectile.cache")))
     (projectile-globally-ignored-file-suffixes '(".o" ".a"))
     (projectile-completion-system 'ivy)
     (projectile-enable-caching t)
     (projectile-keymap-prefix (kbd "C-c p"))
     (projectile-require-project nil)
-    (projectile-known-projects-file (expand-file-name (format "%s/emacs/projectile-bookmarks.eld" xdg-cache)))
+    (projectile-known-projects-file (expand-file-name (format "~/.emacs.d/cache/projectile-bookmarks.eld")))
     (projectile-mode-line '(:eval (projectile-project-name)))
     :config (projectile-global-mode))
 
