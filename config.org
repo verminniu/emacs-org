@@ -1,4 +1,4 @@
-#+TITLE:  Vermin's Emacs Configuration
+ #+TITLE:  Vermin's Emacs Configuration
 
 * Emacs Initialization
 
@@ -103,6 +103,93 @@ happiness.
     :config (doom-modeline-mode))
 #+END_SRC
 
+** LSP
+#+BEGIN_SRC emacs-lisp :tangle yes
+ (use-package lsp-mode
+     :diminish lsp-mode
+     :hook (prog-mode . lsp-deferred)
+     :bind (:map lsp-mode-map
+            ("C-c C-d" . lsp-describe-thing-at-point))
+     :init (setq lsp-auto-guess-root t       ; Detect project root
+                 lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
+                 flymake-fringe-indicator-position 'right-fringe)
+     :config
+	 (setq lsp-enable-snippet nil)
+     ;; Configure LSP clients
+     (use-package lsp-clients
+       :ensure nil
+       :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))))
+
+   (use-package lsp-ui
+     :functions my-lsp-ui-imenu-hide-mode-line
+     :commands lsp-ui-doc-hide
+     :custom-face (lsp-ui-doc-background ((t (:background ,(face-background 'tooltip)))))
+     :bind (:map lsp-ui-mode-map
+            ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+            ([remap xref-find-references] . lsp-ui-peek-find-references)
+            ("C-c u" . lsp-ui-imenu))
+     :init (setq lsp-ui-doc-enable t
+                 lsp-ui-doc-use-webkit nil
+                 lsp-ui-doc-delay 1.0
+                 lsp-ui-doc-include-signature t
+                 lsp-ui-doc-position 'at-point
+                 lsp-ui-doc-border (face-foreground 'default)
+
+                 lsp-ui-sideline-enable nil
+                 lsp-ui-sideline-ignore-duplicate t)
+     :config
+     (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+
+     ;; `C-g'to close doc
+     (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+
+     ;; Reset `lsp-ui-doc-background' after loading theme
+     (add-hook 'after-load-theme-hook
+               (lambda ()
+                 (setq lsp-ui-doc-border (face-foreground 'default))
+                 (set-face-background 'lsp-ui-doc-background
+                                      (face-background 'tooltip))))
+
+     ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+     ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
+     (defun my-lsp-ui-imenu-hide-mode-line ()
+       "Hide the mode-line in lsp-ui-imenu."
+       (setq mode-line-format nil))
+     (advice-add #'lsp-ui-imenu :after #'my-lsp-ui-imenu-hide-mode-line))
+
+   (use-package company-lsp
+     :init (setq company-lsp-cache-candidates 'auto))
+
+   ;; Debug
+   (use-package dap-mode
+     :diminish
+     :functions dap-hydra/nil
+     :bind (:map lsp-mode-map
+            ("<f5>" . dap-debug)
+            ("M-<f5>" . dap-hydra))
+     :hook ((after-init . dap-mode)
+            (dap-mode . dap-ui-mode)
+            (dap-session-created . (lambda (&_rest) (dap-hydra)))
+            (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+
+            (python-mode . (lambda () (require 'dap-python)))
+            (ruby-mode . (lambda () (require 'dap-ruby)))
+            (go-mode . (lambda () (require 'dap-go)))
+            (java-mode . (lambda () (require 'dap-java)))
+            ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+            (php-mode . (lambda () (require 'dap-php)))
+            (elixir-mode . (lambda () (require 'dap-elixir)))
+            ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
+
+   ;; `lsp-mode' and `treemacs' integration.
+   (use-package lsp-treemacs
+     :commands lsp-treemacs-errors-list
+   )
+
+   (use-package helm-lsp
+     :commands helm-lsp-workspace-symbol
+   )
+#+end_SRC
 ** Turn off mouse interface
 
 Since I never use the mouse with GNU Emacs, I prefer not to use certain
@@ -118,7 +205,39 @@ I find invasive.
 #+END_SRC
 
 * Languages
+** C++
+   use cquery for lsp server
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (with-eval-after-load 'projectile
+   (setq projectile-project-root-files-top-down-recurring
+        (append '("compile_commands.json"
+                  ".cquery")
+                projectile-project-root-files-top-down-recurring)))
 
+   (setq cquery-executable "/usr/local/bin/cquery")
+
+   (use-package cquery
+    :commands lsp
+	:hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
+	                                                  (require 'cquery)
+													  (lsp-deferred)))
+    :config
+	(setq cquery-executable "/usr/local/bin/cquery")
+	(setq cquery-extra-args '("--log-file=~/.cquery/log/cq.log"))
+	(setq cquery-cache-dir "~/.cquery/cache")
+	(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
+	;;(setq cquery-sem-highlight-method 'overlay)
+	(setq cquery-sem-highlight-method 'font-lock)
+	(cquery-use-default-rainbow-sem-highlight)
+	)
+
+   #+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package google-c-style
+    :hook ((c-mode c++-mode) . google-set-c-style)
+           (c-mode-common . google-make-newline-indent))
+#+END_SRC
 * Advanced Configuration
 ** Company
 =company= provides auto-completion at point and to Displays a small pop-in
@@ -390,22 +509,6 @@ file. Let's get ride of them:
     :ensure nil
     :hook (before-save . delete-trailing-whitespace))
 #+END_SRC
-
-*** =hungry-delete=
-
-#+BEGIN_QUOTE
-Deleting a whitespace character will delete all whitespace until the next
-non-whitespace character.
-
-[[https://github.com/nflath/hungry-delete][Nathaniel Flath]]
-#+END_QUOTE
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package hungry-delete
-    :defer 0.7
-    :delight
-    :config (global-hungry-delete-mode))
-#+END_SRC
 ** Word Wrap
 
 I like to have lines of the same length.
@@ -459,4 +562,15 @@ and automatically expand it into function templates.
   (use-package iedit						;
   )
 
+#+END_SRC
+** Icons
+To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
+and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
+find.
+
+*NOTE:* if it's the first time that you install the package, you must run
+=M-x all-the-icons-install-fonts=.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package all-the-icons)
 #+END_SRC
