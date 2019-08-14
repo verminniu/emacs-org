@@ -37,6 +37,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
    cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
    display-time-default-load-average nil            ; Don't display load average
    fill-column 80                                   ; Set width for automatic line breaks
+   mode-require-final-newline t                     ; add a newline to end of file
    help-window-select t                             ; Focus new help windows when opened
    inhibit-startup-screen t                         ; Disable start-up screen
    initial-scratch-message ""                       ; Empty the initial *scratch* buffer
@@ -437,4 +438,14 @@ and automatically expand it into function templates.
 
   (use-package ivy-yasnippet :after yasnippet)
   (use-package react-snippets :after yasnippet)
+#+END_SRC
+** Number Window
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package window-numbering
+  :init
+  (window-numbering-mode 1)
+  :config
+  (setq window-numbering-assign-func
+      (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
+)
 #+END_SRC
