@@ -97,7 +97,7 @@ happiness.
   (use-package doom-themes
     :config
     (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/"))
-    (load-theme 'doom-dracula t))
+    (load-theme 'doom-Iosvkem t))
 
   (use-package doom-modeline
     :defer 0.1
@@ -222,7 +222,7 @@ I find invasive.
     :commands lsp
 	:hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
 	                                                  (require 'cquery)
-													  (lsp-deferred)))
+													  (lsp)))
     :config
 	(setq cquery-executable "/usr/local/bin/cquery")
 	(setq cquery-extra-args '("--log-file=~/.cquery/log/cq.log"))
@@ -245,7 +245,6 @@ I find invasive.
 	:init (modern-c++-font-lock-global-mode t)
   )
 #+END_SRC
-
 
 * Advanced Configuration
 ** Company
