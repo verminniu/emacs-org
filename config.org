@@ -85,7 +85,7 @@ I also made sure to follow the XDG base directory specification for the
     (load custom-file t))
 #+END_SRC
 
-** Theme
+q** Theme
 
 I'm a big fan of [[https://github.com/arcticicestudio/nord-emacs][nord-theme]] and combined with [[https://github.com/seagle0128/doom-modeline][doom-modeline]], it's just
 happiness.
@@ -313,6 +313,454 @@ like being able to find my way easily.
     :hook (ibuffer . my/ibuffer-projectile))
 #+END_SRC
 
+** History
+
+Provides the ability to have commands and their history saved so that whenever
+you return to work, you can re-run things as you need them. This is not a
+radical function, it is part of a good user experience.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package savehist
+    :ensure nil
+    :custom
+    (history-delete-duplicates t)
+    (history-length t)
+    (savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+    (savehist-file (expand-file-name (format "~/.emacs.d/cache/history")))
+    (savehist-save-minibuffer-history 1)
+    :config (savehist-mode 1))
+#+END_SRC
+
+** Hydra
+
+Hydra allows me to display a list of all the commands implemented in the echo
+area and easily interact with them.
+
+#+BEGIN_QUOTE
+Once you summon the Hydra through the prefixed binding (the body + any one
+head), all heads can be called in succession with only a short extension.
+
+The Hydra is vanquished once Hercules, any binding that isn't the Hydra's head,
+arrives. Note that Hercules, besides vanquishing the Hydra, will still serve his
+original purpose, calling his proper command. This makes the Hydra very
+seamless, it's like a minor mode that disables itself auto-magically.
+
+[[https://github.com/abo-abo/hydra][Oleh Krehel]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package hydra
+    :bind (("C-c L" . hydra-ledger/body)
+           ("C-c b" . hydra-buffer/body)
+           ("C-c c" . hydra-clock/body)
+           ("C-c e" . hydra-erc/body)
+           ("C-c f" . hydra-flycheck/body)
+           ("C-c g" . hydra-go-to-file/body)
+           ("C-c m" . hydra-magit/body)
+           ("C-c o" . hydra-org/body)
+           ("C-c p" . hydra-projectile/body)
+           ("C-c s" . hydra-spelling/body)
+           ("C-c u" . hydra-upload/body)
+           ("C-c y" . hydra-yasnippet/body)
+           ("C-c w" . hydra-windows/body)))
+#+END_SRC
+
+*** Hydra / Buffer
+
+Group Buffer commands.
+
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-buffer (:color blue)
+    "
+    ^
+    ^Buffer^             ^Do^
+    ^──────^─────────────^──^──────────
+    _q_ quit             _k_ kill
+    ^^                   _l_ list
+    ^^                   _n_ next
+    ^^                   _p_ previous
+    ^^                   ^^
+    "
+    ("q" nil)
+    ("k" kill-buffer)
+    ("l" ibuffer)
+    ("n" next-buffer)
+    ("p" previous-buffer))
+#+END_SRC
+
+*** Hydra / Clock
+
+Group clock commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-clock (:color blue)
+    "
+    ^
+    ^Clock^             ^Do^
+    ^─────^─────────────^──^─────────
+    _q_ quit            _c_ cancel
+    ^^                  _d_ display
+    ^^                  _e_ effort
+    ^^                  _i_ in
+    ^^                  _j_ jump
+    ^^                  _o_ out
+    ^^                  _r_ report
+    ^^                  ^^
+    "
+    ("q" nil)
+    ("c" org-clock-cancel)
+    ("d" org-clock-display)
+    ("e" org-clock-modify-effort-estimate)
+    ("i" org-clock-in)
+    ("j" org-clock-goto)
+    ("o" org-clock-out)
+    ("r" org-clock-report))
+#+END_SRC
+
+*** Hydra / ERC
+
+Group ERC commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-erc (:color blue)
+    "
+    ^
+    ^ERC^             ^Do^
+    ^───^─────────────^──^────────────
+    _q_ quit          _c_ connect
+    ^^                _d_ disconnect
+    ^^                _j_ join
+    ^^                _n_ names
+    ^^                _u_ users
+    ^^                ^^
+    "
+    ("q" nil)
+    ("c" my/erc-start-or-switch)
+    ("d" erc-quit-server)
+    ("j" erc-join-channel)
+    ("n" erc-channel-names)
+    ("u" my/erc-count-users))
+#+END_SRC
+
+*** Hydra / Flycheck
+
+Group Flycheck commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-flycheck (:color blue)
+    "
+    ^
+    ^Flycheck^          ^Errors^            ^Checker^
+    ^────────^──────────^──────^────────────^───────^─────
+    _q_ quit            _<_ previous        _?_ describe
+    _M_ manual          _>_ next            _d_ disable
+    _v_ verify setup    _f_ check           _m_ mode
+    ^^                  _l_ list            _s_ select
+    ^^                  ^^                  ^^
+    "
+    ("q" nil)
+    ("<" flycheck-previous-error :color pink)
+    (">" flycheck-next-error :color pink)
+    ("?" flycheck-describe-checker)
+    ("M" flycheck-manual)
+    ("d" flycheck-disable-checker)
+    ("f" flycheck-buffer)
+    ("l" flycheck-list-errors)
+    ("m" flycheck-mode)
+    ("s" flycheck-select-checker)
+    ("v" flycheck-verify-setup))
+#+END_SRC
+
+*** Hydra / Go To
+
+Group jump-to-files commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-go-to-file (:color blue)
+    "
+    ^
+    ^Go To^           ^Config^            ^Agenda             ^Other^
+    ^─────^───────────^──────^────────────^──────^────────────^─────^────────
+    _q_ quit          _ca_ alacritty      _ac_ contacts       _ob_ book
+    ^^                _cd_ dunst          _af_ findmycat      _ol_ learning
+    ^^                _ce_ emacs          _ao_ organizer      _om_ movies
+    ^^                _ci_ i3             _ap_ people         _op_ purchases
+    ^^                _cn_ neofetch       _ar_ routine        _ou_ usb
+    ^^                _cp_ polybar        _as_ school         ^^
+    ^^                _cq_ qutebrowser    ^^                  ^^
+    ^^                _cR_ rofi           ^^                  ^^
+    ^^                _cr_ ranger         ^^                  ^^
+    ^^                _cs_ sway           ^^                  ^^
+    ^^                _ct_ tmux           ^^                  ^^
+    ^^                ^^                  ^^                  ^^
+    "
+    ("q" nil)
+    ("ac" (find-file "~/.personal/agenda/contacts.org"))
+    ("af" (find-file "~/.personal/agenda/findmycat.org"))
+    ("ao" (find-file "~/.personal/agenda/organizer.org"))
+    ("ap" (find-file "~/.personal/agenda/people.org"))
+    ("ar" (find-file "~/.personal/agenda/routine.org"))
+    ("as" (find-file "~/.personal/agenda/school.org"))
+    ("ca" (find-file (format "%s/alacritty/alacritty.yml" xdg-config)))
+    ("cd" (find-file (format "%s/dunst/dunstrc" xdg-config)))
+    ("ce" (find-file "~/.emacs.d/config.org"))
+    ("ci" (find-file (format "%s/i3/config" xdg-config)))
+    ("cn" (find-file (format "%s/neofetch/config.conf" xdg-config)))
+    ("cp" (find-file (format "%s/polybar/config" xdg-config)))
+    ("cq" (find-file (format "%s/qutebrowser/config.py" xdg-config)))
+    ("cR" (find-file (format "%s/rofi/config.rasi" xdg-config)))
+    ("cr" (find-file (format "%s/ranger/rc.conf" xdg-config)))
+    ("cs" (find-file (format "%s/sway/config" xdg-config)))
+    ("ct" (find-file (format "%s/tmux/tmux.conf" xdg-config)))
+    ("ob" (find-file "~/.personal/other/books.org"))
+    ("ol" (find-file "~/.personal/other/learning.org"))
+    ("om" (find-file "~/.personal/other/movies.org"))
+    ("op" (find-file "~/.personal/other/purchases.org"))
+    ("ou" (find-file "~/.personal/other/usb.org")))
+#+END_SRC
+
+*** Hydra / Ledger
+
+Group Ledger commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-ledger (:color blue)
+    "
+    ^
+    ^Ledger^             ^Do^
+    ^──────^─────────────^──^────────
+    _q_ quit             _a_ add
+    ^^                   _c_ clear
+    ^^                   _C_ copy
+    ^^                   _d_ delete
+    ^^                   _r_ report
+    ^^                   ^^
+    "
+    ("q" nil)
+    ("a" ledger-add-transaction)
+    ("c" ledger-mode-clean-buffer)
+    ("C" ledger-copy-transaction-at-point)
+    ("d" ledger-delete-current-transaction)
+    ("r" ledger-report))
+#+END_SRC
+
+*** Hydra / Magit
+
+Group Magit commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-magit (:color blue)
+    "
+    ^
+    ^Magit^             ^Do^
+    ^─────^─────────────^──^────────
+    _q_ quit            _b_ blame
+    ^^                  _c_ clone
+    ^^                  _i_ init
+    ^^                  _s_ status
+    ^^                  ^^
+    "
+    ("q" nil)
+    ("b" magit-blame)
+    ("c" magit-clone)
+    ("i" magit-init)
+    ("s" magit-status))
+#+END_SRC
+
+*** Hydra / Org
+
+Group Org commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-org (:color blue)
+    "
+    ^
+    ^Org^             ^Do^
+    ^───^─────────────^──^─────────────
+    _q_ quit          _A_ archive
+    ^^                _a_ agenda
+    ^^                _c_ capture
+    ^^                _d_ decrypt
+    ^^                _i_ insert-link
+    ^^                _j_ jump-task
+    ^^                _k_ cut-subtree
+    ^^                _o_ open-link
+    ^^                _r_ refile
+    ^^                _s_ store-link
+    ^^                _t_ todo-tree
+    ^^                ^^
+    "
+    ("q" nil)
+    ("A" my/org-archive-done-tasks)
+    ("a" org-agenda)
+    ("c" org-capture)
+    ("d" org-decrypt-entry)
+    ("k" org-cut-subtree)
+    ("i" org-insert-link-global)
+    ("j" my/org-jump)
+    ("o" org-open-at-point-global)
+    ("r" org-refile)
+    ("s" org-store-link)
+    ("t" org-show-todo-tree))
+#+END_SRC
+
+*** Hydra / Projectile
+
+Group Projectile commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-projectile (:color blue)
+    "
+    ^
+    ^Projectile^        ^Buffers^           ^Find^              ^Search^
+    ^──────────^────────^───────^───────────^────^──────────────^──────^────────────
+    _q_ quit            _b_ list            _d_ directory       _r_ replace
+    _i_ reset cache     _k_ kill all        _D_ root            _R_ regexp replace
+    ^^                  _S_ save all        _f_ file            _s_ search
+    ^^                  ^^                  _p_ project         ^^
+    ^^                  ^^                  ^^                  ^^
+    "
+    ("q" nil)
+    ("b" counsel-projectile-switch-to-buffer)
+    ("d" counsel-projectile-find-dir)
+    ("D" projectile-dired)
+    ("f" counsel-projectile-find-file)
+    ("i" projectile-invalidate-cache :color red)
+    ("k" projectile-kill-buffers)
+    ("p" counsel-projectile-switch-project)
+    ("r" projectile-replace)
+    ("R" projectile-replace-regexp)
+    ("s" counsel-rg)
+    ("S" projectile-save-project-buffers))
+#+END_SRC
+
+*** Hydra / Spelling
+
+Group spelling commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-spelling (:color blue)
+    "
+    ^
+    ^Spelling^          ^Errors^            ^Checker^
+    ^────────^──────────^──────^────────────^───────^───────
+    _q_ quit            _<_ previous        _c_ correction
+    ^^                  _>_ next            _C_ clear
+    ^^                  _f_ find            _d_ dictionary
+    ^^                  ^^                  _l_ language
+    ^^                  ^^                  _s_ switch
+    ^^                  ^^                  _w_ wiki
+    "
+    ("q" nil)
+    ("<" flyspell-correct-previous :color pink)
+    (">" flyspell-correct-next :color pink)
+    ("c" langtool-correct-buffer)
+    ("C" langtool-check-done)
+    ("d" ispell-change-dictionary)
+    ("f" langtool-check)
+    ("l" (message "Current language: %s (%s)" langtool-default-language ispell-current-dictionary))
+    ("s" my/switch-language)
+    ("w" wiki-summary))
+#+END_SRC
+
+*** Hydra / TypeScript
+
+Group TypeScript commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-typescript (:color blue)
+    "
+    ^
+    ^TypeScript^          ^Do^
+    ^──────────^──────────^──^────────
+    _q_ quit             _b_ back
+    ^^                   _e_ errors
+    ^^                   _j_ jump
+    ^^                   _r_ references
+    ^^                   _R_ restart
+    ^^                   ^^
+    "
+    ("q" nil)
+    ("b" tide-jump-back)
+    ("e" tide-project-errors)
+    ("j" tide-jump-to-definition)
+    ("r" tide-references)
+    ("R" tide-restart-server))
+#+END_SRC
+
+*** Hydra / Upload
+
+Group upload commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-upload (:color blue)
+    "
+    ^
+    ^Upload^          ^Do^
+    ^──────^──────────^──^────────
+    _q_ quit          _b_ buffer
+    ^^                _i_ image
+    ^^                _r_ region
+    ^^                ^^
+    "
+    ("q" nil)
+    ("b" webpaste-paste-buffer)
+    ("i" imgbb-upload)
+    ("r" webpaste-paste-region))
+#+END_SRC
+
+*** Hydra / YASnippet
+
+Group YASnippet commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-yasnippet (:color blue)
+    "
+    ^
+    ^YASnippet^          ^Do^
+    ^─────────^──────────^──^────────
+    _q_ quit             _i_ insert
+    ^^                   _m_ mode
+    ^^                   _n_ new
+    ^^                   ^^
+    "
+    ("q" nil)
+    ("i" ivy-yasnippet)
+    ("m" yas-minor-mode)
+    ("n" yas-new-snippet))
+#+END_SRC
+
+*** Hydra / Windows
+
+Group window-related commands.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-windows (:color pink)
+    "
+    ^
+    ^Windows^           ^Window^            ^Zoom^
+    ^───────^───────────^──────^────────────^────^──────
+    _q_ quit            _b_ balance         _-_ out
+    ^^                  _i_ heighten        _+_ in
+    ^^                  _j_ narrow          _=_ reset
+    ^^                  _k_ lower           ^^
+    ^^                  _l_ widen           ^^
+    ^^                  _s_ swap            ^^
+    ^^                  ^^                  ^^
+    "
+    ("q" nil)
+    ("b" balance-windows)
+    ("i" enlarge-window)
+    ("j" shrink-window-horizontally)
+    ("k" shrink-window)
+    ("l" enlarge-window-horizontally)
+    ("s" switch-window-then-swap-buffer :color blue)
+    ("-" text-scale-decrease)
+    ("+" text-scale-increase)
+    ("=" (text-scale-increase 0)))
+#+END_SRC
+
 ** Ivy
 
 I used =helm= before, but I find =ivy= faster and lighter.
@@ -463,6 +911,27 @@ exists as well).
   (use-package counsel-projectile
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
+#+END_SRC
+
+** Recent Files
+
+Provides fast access to the recent files.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package recentf
+    :bind ("C-c r" . recentf-open-files)
+    :init (recentf-mode)
+    :custom
+    (recentf-exclude (list "COMMIT_EDITMSG"
+                           "~$"
+                           "/scp:"
+                           "/ssh:"
+                           "/sudo:"
+                           "/tmp/"))
+    (recentf-max-menu-items 15)
+    (recentf-max-saved-items 200)
+    (recentf-save-file (expand-file-name (format "~/.emacs.d/cache/recentf")))
+    :config (run-at-time nil (* 5 60) 'recentf-save-list))
 #+END_SRC
 
 ** Version Control
