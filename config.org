@@ -285,11 +285,26 @@ I find invasive.
 
    #+END_SRC
 
-  #+BEGIN_SRC emacs-lisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle no
   (use-package google-c-style				;
 	:hook ((c-mode c++-mode) . google-set-c-style)
 		   (c-mode-common . google-make-newline-indent))
+  #+END_SRC
 
+  #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; C/C++ Mode
+  (use-package cc-mode
+    :ensure nil
+	:bind (:map c-mode-base-map
+                ("C-c c" . compile))
+	:hook (c-mode-common . (lambda ()
+                (c-set-style "k&r")
+                (setq tab-width 4)
+                (setq c-basic-offset 4)))
+  )
+  #+END_SRC
+
+  #+BEGIN_SRC  emacs-lisp :tangle yes
   (use-package modern-cpp-font-lock
 	:diminish
 	:init (modern-c++-font-lock-global-mode t)
