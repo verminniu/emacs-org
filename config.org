@@ -1,4 +1,4 @@
-\0;95;0c #+TITLE:  Vermin's Emacs Configuration
+#+TITLE:  Vermin's Emacs Configuration
 
 * Emacs Initialization
 
@@ -230,7 +230,9 @@ I find invasive.
 
 * Languages
 ** C++
-   use cquery for lsp server
+   c++ lsp server
+   disable cquery and ccls to use clangd as lsp server
+   =cquery=
    #+BEGIN_SRC emacs-lisp :tangle no
    (with-eval-after-load 'projectile
    (setq projectile-project-root-files-top-down-recurring
@@ -257,7 +259,31 @@ I find invasive.
 
    #+END_SRC
 
+   =ccls=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (with-eval-after-load 'projectile
+   (setq projectile-project-root-files-top-down-recurring
+        (append '("compile_commands.json"
+                  ".ccls")
+                projectile-project-root-files-top-down-recurring)))
 
+   (use-package ccls
+    :commands lsp
+	:hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
+	                                                  (require 'ccls)
+													  (lsp)))
+    :config
+	(setq ccls-executable "/usr/local/bin/ccls")
+	(setq ccls-extra-args '("--log-file=~/.ccls/log/ccls.log"))
+	(setq ccls-cache-dir "~/.ccls/cache")
+	(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+	(setq ccls-sem-highlight-method 'font-lock)
+	;; alternatively, (setq ccls-sem-highlight-method 'overlay)
+	;; For rainbow semantic highlighting
+	(ccls-use-default-rainbow-sem-highlight)
+	)
+
+   #+END_SRC
 
   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-c-style				;
