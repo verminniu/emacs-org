@@ -1,4 +1,4 @@
- #+TITLE:  Vermin's Emacs Configuration
+\0;95;0c #+TITLE:  Vermin's Emacs Configuration
 
 * Emacs Initialization
 
@@ -85,7 +85,7 @@ I also made sure to follow the XDG base directory specification for the
     (load custom-file t))
 #+END_SRC
 
-q** Theme
+** Theme
 
 I'm a big fan of [[https://github.com/arcticicestudio/nord-emacs][nord-theme]] and combined with [[https://github.com/seagle0128/doom-modeline][doom-modeline]], it's just
 happiness.
@@ -97,7 +97,23 @@ happiness.
   (use-package doom-themes
     :config
     (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/"))
-    (load-theme 'doom-Iosvkem t))
+    (load-theme 'doom-Iosvkem t)
+    ;; Global settings (defaults)
+	(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+	;; Enable flashing mode-line on errors
+	(doom-themes-visual-bell-config)
+
+	;; Enable custom neotree theme (all-the-icons must be installed!)
+	(doom-themes-neotree-config)
+	;; or for treemacs users
+	(setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+	(doom-themes-treemacs-config)
+
+	;; Corrects (and improves) org-mode's native fontification.
+	(doom-themes-org-config)
+	)
 
   (use-package doom-modeline
     :defer 0.1
@@ -215,7 +231,6 @@ I find invasive.
 * Languages
 ** C++
    use cquery for lsp server
-   clangd is better
    #+BEGIN_SRC emacs-lisp :tangle no
    (with-eval-after-load 'projectile
    (setq projectile-project-root-files-top-down-recurring
@@ -242,16 +257,18 @@ I find invasive.
 
    #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package google-c-style
-    :hook ((c-mode c++-mode) . google-set-c-style)
-           (c-mode-common . google-make-newline-indent))
+
+
+  #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package google-c-style				;
+	:hook ((c-mode c++-mode) . google-set-c-style)
+		   (c-mode-common . google-make-newline-indent))
 
   (use-package modern-cpp-font-lock
-    :diminish
+	:diminish
 	:init (modern-c++-font-lock-global-mode t)
   )
-#+END_SRC
+  #+END_SRC
 
 * Advanced Configuration
 ** Company
@@ -1058,4 +1075,10 @@ find.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons
   )
+
+  (use-package all-the-icons-dired
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  )
+
 #+END_SRC
