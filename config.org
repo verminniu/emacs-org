@@ -587,5 +587,6 @@ find.
 =M-x all-the-icons-install-fonts=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package all-the-icons)
+  (use-package all-the-icons
+  )
 #+END_SRC
