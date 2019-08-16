@@ -229,6 +229,64 @@ I find invasive.
 #+END_SRC
 
 * Languages
+** Emacs Lisp
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package elisp-mode :ensure nil :delight "ξ ")
+#+END_SRC
+
+*** Eldoc
+
+Provides minibuffer hints when working with Emacs Lisp.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eldoc
+    :delight
+    :hook (emacs-lisp-mode . eldoc-mode))
+#+END_SRC
+
+** Python
+   Lsp-mode will start py on python mode
+
+   #+BEGIN_SRC shell :tangle no
+   pip install 'python-language-server[all]'
+   pip3 install 'python-language-server[all]'
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   ;; Python Mode
+   ;; Install:
+   ;;   pip install pyflakes
+   ;;   pip install autopep8
+   ;;   change to python3
+   (use-package python
+     :ensure nil
+	 :defines gud-pdb-command-name pdb-path
+	 :config
+	 ;; Disable readline based native completion
+	 (setq python-shell-completion-native-enable nil)
+	 (setq python-indent-offset 4
+        python-sort-imports-on-save t
+        python-shell-interpreter "python3"
+        pippel-python-command "python3"
+        importmagic-python-interpreter "python3"
+        flycheck-python-pylint-executable "pylint"
+        flycheck-python-flake8-executable "flake8")
+
+	 (add-hook 'inferior-python-mode-hook
+            (lambda ()
+              ;; (bind-key "C-c C-z" #'kill-buffer-and-window inferior-python-mode-map)
+              (process-query-on-exit-flag (get-process "Python"))))
+
+	  ;; Live Coding in Python
+	  (use-package live-py-mode)
+
+	  ;; Format using YAPF
+	  ;; Install: pip install yapf
+	  (use-package yapfify
+        :diminish yapf-mode
+        :hook (python-mode . yapf-mode)))
+     #+END_SRC
 ** C++
    c++ lsp server
    disable cquery and ccls to use clangd as lsp server
@@ -310,6 +368,7 @@ I find invasive.
 	:init (modern-c++-font-lock-global-mode t)
   )
   #+END_SRC
+** GO
 
 * Advanced Configuration
 ** Icons
