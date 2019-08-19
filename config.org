@@ -1305,6 +1305,13 @@ and automatically expand it into function templates.
 		(lambda () (when (equal (buffer-name) "*Calculator*") 9)))
   )
 #+END_SRC
+** Whole line or region
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package whole-line-or-region
+     :init
+	 (add-hook 'after-init-hook 'whole-line-or-region-mode)
+   )
+   #+END_SRC
 ** Add mutil iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit						;
