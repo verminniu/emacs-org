@@ -1312,6 +1312,17 @@ and automatically expand it into function templates.
 	 (add-hook 'after-init-hook 'whole-line-or-region-mode)
    )
    #+END_SRC
+
+** Symbol overlay
+   hight light symbol in different color
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package symbol-overlay
+     :bind (("M-i" . symbol-overlay-put)
+	        ("M-n" . symbol-overlay-jump-next)
+			("M-p" . symbol-overlay-jump-prev)
+	       )
+   )
+   #+END_SRC
 ** Add mutil iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit						;
