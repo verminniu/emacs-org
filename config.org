@@ -290,6 +290,7 @@ Provides minibuffer hints when working with Emacs Lisp.
 ** C++
    c++ lsp server
    disable cquery and ccls to use clangd as lsp server
+   cquery not support new lsp-mode
    =cquery=
    #+BEGIN_SRC emacs-lisp :tangle no
    (with-eval-after-load 'projectile
@@ -298,15 +299,13 @@ Provides minibuffer hints when working with Emacs Lisp.
                   ".cquery")
                 projectile-project-root-files-top-down-recurring)))
 
-   (setq cquery-executable "/usr/local/bin/cquery")
-
    (use-package cquery
     :commands lsp
 	:hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
 	                                                  (require 'cquery)
 													  (lsp)))
     :config
-	(setq cquery-executable "/usr/local/bin/cquery")
+	(setq cquery-executable "cquery")
 	(setq cquery-extra-args '("--log-file=~/.cquery/log/cq.log"))
 	(setq cquery-cache-dir "~/.cquery/cache")
 	(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
@@ -314,7 +313,6 @@ Provides minibuffer hints when working with Emacs Lisp.
 	(setq cquery-sem-highlight-method 'font-lock)
 	(cquery-use-default-rainbow-sem-highlight)
 	)
-
    #+END_SRC
 
    =ccls=
