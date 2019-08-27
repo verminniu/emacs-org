@@ -1,7 +1,6 @@
 #+TITLE:  Vermin's Emacs Configuration
 
 * Emacs Initialization
-
 ** Packages Sources
 
 In order to install packages, it is useful to configure the package sources.
@@ -1039,12 +1038,15 @@ smaller, simpler, and smoother to use yet highly customizable.
   (use-package counsel
     :after ivy
     :delight
-    :bind (("C-x C-d" . counsel-dired-jump)
+    :bind (
+	       ("C-x C-d" . counsel-dired-jump)
            ("C-x C-h" . counsel-minibuffer-history)
            ("C-x C-l" . counsel-find-library)
            ("C-x C-r" . counsel-recentf)
            ("C-x C-u" . counsel-unicode-char)
-           ("C-x C-v" . counsel-set-variable))
+           ("C-x C-v" . counsel-set-variable)
+           ("C-c n" . counsel-imenu)
+		   )
     :config (counsel-mode)
     :custom (counsel-rg-base-command "rg -S -M 150 --no-heading --line-number --color never %s"))
 
