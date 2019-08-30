@@ -331,9 +331,9 @@ Provides minibuffer hints when working with Emacs Lisp.
 													  (lsp)
 													  ))
     :config
-	(setq ccls-executable "/usr/local/bin/ccls")
+	(setq ccls-executable "ccls")
 	(setq ccls-extra-args '("--log-file=~/.ccls/log/ccls.log"))
-	(setq ccls-cache-dir "~/.ccls/cache")
+	;;(setq ccls-cache-dir "~/.ccls/cache")
 	(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
 	(setq ccls-sem-highlight-method 'font-lock)
 	;; alternatively, (setq ccls-sem-highlight-method 'overlay)
@@ -546,7 +546,14 @@ completion candidates.
     :config
     (define-key company-active-map (kbd "C-n") 'company-select-next)
     (define-key company-active-map (kbd "C-p") 'company-select-previous)
+;;	(delete 'company-dabbrev 'company-backends)
+;;	(add-to-list 'company-backends #'company-dabbrev)
+	(setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
+	(setq company-dabbrev-code-other-buffers 'all)
   )
+
+
+
 #+END_SRC
 
 I use =company= with =company-box= that allows a company front-end with icons.
@@ -1170,8 +1177,7 @@ exists as well).
     (projectile-known-projects-file (expand-file-name (format "~/.emacs.d/cache/projectile-bookmarks.eld")))
     (projectile-mode-line '(:eval (projectile-project-name)))
     :config
-	(setq projectile-globally-ignored-file-suffixes '(".o" ".a"))
-	(setq projectile-enable-caching t)
+	(add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
 	(projectile-global-mode)
 	)
 
