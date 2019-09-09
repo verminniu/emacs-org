@@ -130,6 +130,7 @@ happiness.
 #+BEGIN_SRC emacs-lisp :tangle yes
  (use-package lsp-mode
      :diminish lsp-mode
+     :after yasnippet
      :hook (prog-mode . lsp-deferred)
      :bind (:map lsp-mode-map
             ("C-c C-d" . lsp-describe-thing-at-point))
@@ -137,7 +138,8 @@ happiness.
                  lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
                  flymake-fringe-indicator-position 'right-fringe)
      :config
-	 (setq lsp-enable-snippet nil)
+	 ;;(setq lsp-enable-snippet nil)
+	 ;;(setq company-lsp-enable-snippet nil)
      ;; Configure LSP clients
      (use-package lsp-clients
        :ensure nil
@@ -1293,15 +1295,12 @@ and automatically expand it into function templates.
     :config (yasnippet-snippets-initialize))
 
   (use-package yasnippet
-    :delight yas-minor-mode " υ"
-    :hook (yas-minor-mode . my/disable-yas-if-no-snippets)
-    :config (yas-global-mode)
-    :preface
-    (defun my/disable-yas-if-no-snippets ()
-      (when (and yas-minor-mode (null (yas--get-snippet-tables)))
-        (yas-minor-mode -1))))
+    :defer t
+	:init
+	  (add-hook 'prog-mode-hook 'yas-minor-mode))
 
   (use-package ivy-yasnippet :after yasnippet)
+  (use-package auto-yasnippet :after yasnippet)
   (use-package react-snippets :after yasnippet)
 #+END_SRC
 ** Number Window
