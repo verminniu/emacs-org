@@ -1058,6 +1058,7 @@ smaller, simpler, and smoother to use yet highly customizable.
            ("C-x C-u" . counsel-unicode-char)
            ("C-x C-v" . counsel-set-variable)
            ("C-c n" . counsel-imenu)
+		   ("M-x" . counsel-M-x)
 		   )
     :config (counsel-mode)
     :custom (counsel-rg-base-command "rg -S -M 150 --no-heading --line-number --color never %s"))
@@ -1331,44 +1332,23 @@ and automatically expand it into function templates.
 	       )
    )
    #+END_SRC
-** Tabnine
-   =not work well disable it now=
+** Smex
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package smex
+    :init
+	(smex-initialize)
+;;    :bind (("M-x" . smex)
+;;	       ("M-X" . smex-major-mode-commands)
+;;		   ("C-c C-c M-x" . execute-extended-command)
+;;	      )
+  )
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-
-   (defun company//sort-by-tabnine (candidates)
-   (if (or (functionp company-backend)
-             (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
-      candidates
-    (let ((candidates-table (make-hash-table :test #'equal))
-          candidates-1
-          candidates-2)
-      (dolist (candidate candidates)
-        (if (eq (get-text-property 0 'company-backend candidate)
-                'company-tabnine)
-            (unless (gethash candidate candidates-table)
-              (push candidate candidates-2))
-          (push candidate candidates-1)
-          (puthash candidate t candidates-table)))
-      (setq candidates-1 (nreverse candidates-1))
-      (setq candidates-2 (nreverse candidates-2))
-      (nconc (seq-take candidates-1 2)
-             (seq-take candidates-2 2)
-             (seq-drop candidates-1 2)
-             (seq-drop candidates-2 2)))))
-
-
-   ;; run M-x compay-tabnine-install-binary
-   (use-package company-tabnine :ensure t
-     :init
-	 (setq company-tabnine-binaries-folder "~/.emacs.d/tabnine")
-     :config
-	 (setq company-idle-delay 0)
-	 (setq company-show-numbers t)
-	 (add-to-list 'company-backends #'company-tabnine)
-   )
-
-   #+END_SRC
+  (use-package helm-smex
+    :bind (("M-x" . helm-smex)
+	       ("M-X" . helm-smex-major-mode-commands)
+	      )
+  )
+#+END_SRC
 ** Add mutil iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit						;
