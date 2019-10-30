@@ -55,7 +55,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
 	 view-read-only t)                                ; Always open read-only buffers in view-mode
   ;  (cd "~/")                                         ; Move to the user directory
 	(column-number-mode 1)                            ; Show the column number
-    (global-linum-mode 1)
+    ;;(global-linum-mode 1)
 	(display-time-mode 1)                             ; Enable time in the mode-line
 	(fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
 	(global-hl-line-mode)                             ; Hightlight current line
@@ -113,7 +113,7 @@ happiness.
 	(doom-themes-treemacs-config)
 
 	;; Corrects (and improves) org-mode's native fontification.
-	;;(doom-themes-org-config)
+	(doom-themes-org-config)
 	)
 
   (use-package doom-modeline
@@ -344,6 +344,16 @@ Provides minibuffer hints when working with Emacs Lisp.
 	;; For rainbow semantic highlighting
 	(ccls-use-default-rainbow-sem-highlight)
 	)
+
+   #+END_SRC
+
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+   ;; company-ctags
+   (use-package company-ctags
+     :config
+     (company-ctags-auto-setup)
+   )
 
    #+END_SRC
 
