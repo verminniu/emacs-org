@@ -232,6 +232,15 @@ I find invasive.
 #+END_SRC
 
 * Languages
+** Protobuf
+   Proto buf support
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package protobuf-mode
+     :config
+     (setq auto-mode-alist  (cons '(".proto$" . protobuf-mode) auto-mode-alist))
+     )
+
+   #+END_SRC
 ** Emacs Lisp
 
 #+BEGIN_SRC emacs-lisp :tangle yes
