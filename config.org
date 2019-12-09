@@ -391,6 +391,19 @@ Provides minibuffer hints when working with Emacs Lisp.
 	:init (modern-c++-font-lock-global-mode t)
   )
   #+END_SRC
+** Markdown
+   Grip use github api Need github account try other
+   #+BEGIN_SRC emacs-lisp :tangle no
+   ;; try grip-mode
+   ;; Grip install:
+   ;;      Python
+   ;:      pip install grip
+   (use-package grip-mode
+     :ensure t
+     :hook ((markdown-mode org-mode) . grip-mode)
+     )
+   #+END_SRC
+
 ** GO
    #+BEGIN_SRC emacs-lisp :tangle yes
    ;;; Commentary:
