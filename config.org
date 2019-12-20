@@ -232,6 +232,15 @@ I find invasive.
 #+END_SRC
 
 * Languages
+** Yaml
+   Yaml mode support
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package yaml-mode
+     :config
+     (setq auto-mode-alist  (cons '(".yml$" . yaml-mode) auto-mode-alist))
+     )
+   #+END_SRC
+
 ** Protobuf
    Proto buf support
    #+BEGIN_SRC emacs-lisp :tangle yes
