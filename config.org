@@ -232,6 +232,19 @@ I find invasive.
 #+END_SRC
 
 * Languages
+** CMake
+   CMake support
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package cmake-mode
+     )
+
+   (use-package cmake-font-lock
+     :config
+     (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
+     (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
+     )
+   #+END_SRC
+
 ** Yaml
    Yaml mode support
    #+BEGIN_SRC emacs-lisp :tangle yes
