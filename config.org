@@ -67,6 +67,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
 	(prefer-coding-system 'gb2312)		;
 	(show-paren-mode 1)                               ; Show the parent
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
+	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 #+END_SRC
 
