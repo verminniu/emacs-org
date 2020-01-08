@@ -232,6 +232,16 @@ I find invasive.
 #+END_SRC
 
 * Languages
+** Doxygen Comment
+   Use srecode to genenate doxygen comment
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package srecode
+     :config
+     (semantic-mode)
+     (global-srecode-minor-mode 1)
+   )
+   #+END_SRC
+
 ** CMake
    CMake support
    #+BEGIN_SRC emacs-lisp :tangle yes
