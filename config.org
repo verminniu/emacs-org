@@ -1427,7 +1427,9 @@ and automatically expand it into function templates.
 #+END_SRC
 ** Add mutil iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package iedit						;
+  (use-package iedit
+    :bind (("C-c ;" . iedit-mode)
+    )
   )
 
 #+END_SRC
