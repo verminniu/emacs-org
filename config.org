@@ -1435,6 +1435,7 @@ and automatically expand it into function templates.
      (global-diff-hl-mode)
    )
 
+   (use-package diffview)
    #+END_SRC
 
    Use ztree to diff dirs
