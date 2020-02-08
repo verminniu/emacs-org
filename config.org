@@ -1398,7 +1398,7 @@ and automatically expand it into function templates.
    #+END_SRC
 
 ** Ediff
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package ediff
      :config
      (setq ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -1427,6 +1427,14 @@ and automatically expand it into function templates.
     ;; turn off whitespace checking:
     (setq ediff-diff-options "-w")
     )
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package diff-hl
+     :init
+     (global-diff-hl-mode)
+   )
+
    #+END_SRC
 
    Use ztree to diff dirs
