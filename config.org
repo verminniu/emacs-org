@@ -1398,40 +1398,59 @@ and automatically expand it into function templates.
    #+END_SRC
 
 ** Ediff
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
    (use-package ediff
      :config
      (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(setq ediff-split-window-function 'split-window-horizontally)
+     (setq ediff-split-window-function 'split-window-horizontally)
 
-(defun update-diff-colors ()
-  "update the colors for diff faces"
-  (set-face-attribute 'diff-added nil
+     (defun update-diff-colors ()
+     "update the colors for diff faces"
+     (set-face-attribute 'diff-added nil
                       :foreground "white" :background "blue")
-  (set-face-attribute 'diff-removed nil
+     (set-face-attribute 'diff-removed nil
                       :foreground "white" :background "red3")
-  (set-face-attribute 'diff-changed nil
+     (set-face-attribute 'diff-changed nil
                       :foreground "white" :background "purple"))
 
-(eval-after-load "diff-mode"
-  '(update-diff-colors))
+     (eval-after-load "diff-mode"
+       '(update-diff-colors))
 
-;; Usage: emacs -diff file1 file2
-(defun command-line-diff (switch)
+     ;; Usage: emacs -diff file1 file2
+     (defun command-line-diff (switch)
       (let ((file1 (pop command-line-args-left))
             (file2 (pop command-line-args-left)))
         (ediff file1 file2)))
 
-(add-to-list 'command-switch-alist '("diff" . command-line-diff))
+    (add-to-list 'command-switch-alist '("diff" . command-line-diff))
 
-;; turn off whitespace checking:
-(setq ediff-diff-options "-w")
-   )
+    ;; turn off whitespace checking:
+    (setq ediff-diff-options "-w")
+    )
    #+END_SRC
 
    Use ztree to diff dirs
    #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package ztree)
+   #+END_SRC
+
+** Vdiff
+   Use vdiff
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package vdiff
+     :config
+     (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
+   )
+
+   (use-package vdiff-magit
+     :config
+     (define-key magit-mode-map "e" 'vdiff-magit-dwim)
+     (define-key magit-mode-map "E" 'vdiff-magit)
+     (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")
+     (transient-suffix-put 'magit-dispatch "e" :command 'vdiff-magit-dwim)
+     (transient-suffix-put 'magit-dispatch "E" :description "vdiff")
+     (transient-suffix-put 'magit-dispatch "E" :command 'vdiff-magit)
+   )
    #+END_SRC
 
 ** Symbol overlay
