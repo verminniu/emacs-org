@@ -59,12 +59,13 @@ For a better user experience of GNU Emacs, here are the default values I use.
 	(display-time-mode 1)                             ; Enable time in the mode-line
 	(fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
 	(global-hl-line-mode)                             ; Hightlight current line
-	(set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
+	;;(set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
 	;;(set-default-coding-systems 'gb2312)               ; Default to gb2312 encoding
 	;;(set-terminal-coding-system 'gb2312)
 	;;(set-keyboard-coding-system 'gb2312)
 	;;(set-language-environment "Chinese-GB")
-	(prefer-coding-system 'gb2312)		;
+	(prefer-coding-system 'utf-8-unix)		;
+	;;(prefer-coding-system 'gb2312-unix)		;
 	(show-paren-mode 1)                               ; Show the parent
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
