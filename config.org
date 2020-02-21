@@ -3,34 +3,34 @@
 * Emacs Initialization
 ** Packages Sources
 
-In order to install packages, it is useful to configure the package sources.
+   In order to install packages, it is useful to configure the package sources.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
                            ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
-#+END_SRC
+   #+END_SRC
 
 ** use-package
 
-To be able to manage its configuration with =use-package= it is necessary to
-first install it, if you don't already.
+   To be able to manage its configuration with =use-package= it is necessary to
+   first install it, if you don't already.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
 
   (use-package delight :ensure t)
   (use-package use-package-ensure-system-package :ensure t)
-#+END_SRC
+   #+END_SRC
 
 * Start Up
 ** Better defaults
 
-For a better user experience of GNU Emacs, here are the default values I use.
+   For a better user experience of GNU Emacs, here are the default values I use.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
 	(setq-default
 	 ad-redefinition-action 'accept                   ; Silence warnings for redefinition
 	 cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
@@ -70,33 +70,41 @@ For a better user experience of GNU Emacs, here are the default values I use.
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-#+END_SRC
+   #+END_SRC
 
 ** Customization
 
-To avoid overloading the GNU Emacs custormization =init.el= file made by the
-user with the UI, I add the generated code in a separate file.
+   To avoid overloading the GNU Emacs custormization =init.el= file made by the
+   user with the UI, I add the generated code in a separate file.
 
-I also made sure to follow the XDG base directory specification for the
-=auto-save-file= folder, in order to keep my =~/.emacs.d= folder clean.
+   I also made sure to follow the XDG base directory specification for the
+   =auto-save-file= folder, in order to keep my =~/.emacs.d= folder clean.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default
    auto-save-list-file-name (expand-file-name (format "~/.emacs.d/data/auto-save-list"))
    custom-file (expand-file-name (format "~/.emacs.d/data/custom.el")))
   (when (file-exists-p custom-file)
     (load custom-file t))
-#+END_SRC
+   #+END_SRC
 
+** Shell Path
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package exec-path-from-shell
+     :init
+     (setq exec-path-from-shell-check-startup-files nil)
+     (exec-path-from-shell-initialize)
+   )
+   #+END_SRC
 ** Theme
 
-I'm a big fan of [[https://github.com/arcticicestudio/nord-emacs][nord-theme]] and combined with [[https://github.com/seagle0128/doom-modeline][doom-modeline]], it's just
-happiness.
+   I'm a big fan of [[https://github.com/arcticicestudio/nord-emacs][nord-theme]] and combined with [[https://github.com/seagle0128/doom-modeline][doom-modeline]], it's just
+   happiness.
 
-*NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
-[[#Icons][all-the-icons]].
+   *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
+   [[#Icons][all-the-icons]].
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package doom-themes
     :config
     ;; (load-theme 'doom-Iosvkem t)
@@ -121,7 +129,7 @@ happiness.
   (use-package doom-modeline
     :defer 0.1
     :config (doom-modeline-mode))
-#+END_SRC
+   #+END_SRC
 
 ** FlyCheck
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -131,7 +139,7 @@ happiness.
    )
    #+END_SRC
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
  (use-package lsp-mode
      :diminish lsp-mode
      :after yasnippet
@@ -218,20 +226,20 @@ happiness.
    (use-package helm-lsp
      :commands helm-lsp-workspace-symbol
    )
-#+end_SRC
+   #+end_SRC
 ** Turn off mouse interface
 
-Since I never use the mouse with GNU Emacs, I prefer not to use certain
-graphical elements as seen as the menu bar, toolbar, scrollbar and tooltip that
-I find invasive.
+   Since I never use the mouse with GNU Emacs, I prefer not to use certain
+   graphical elements as seen as the menu bar, toolbar, scrollbar and tooltip that
+   I find invasive.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (when window-system
     (menu-bar-mode -1)              ; Disable the menu bar
     (scroll-bar-mode -1)            ; Disable the scroll bar
     (tool-bar-mode -1)              ; Disable the tool bar
     (tooltip-mode -1))              ; Disable the tooltips
-#+END_SRC
+   #+END_SRC
 
 * Languages
 ** Doxygen Comment
@@ -277,19 +285,19 @@ I find invasive.
    #+END_SRC
 ** Emacs Lisp
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elisp-mode :ensure nil :delight "ξ ")
-#+END_SRC
+   #+END_SRC
 
 *** Eldoc
 
-Provides minibuffer hints when working with Emacs Lisp.
+    Provides minibuffer hints when working with Emacs Lisp.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eldoc
     :delight
     :hook (emacs-lisp-mode . eldoc-mode))
-#+END_SRC
+    #+END_SRC
 
 ** Python
    Lsp-mode will start py on python mode
@@ -332,7 +340,7 @@ Provides minibuffer hints when working with Emacs Lisp.
 	  (use-package yapfify
         :diminish yapf-mode
         :hook (python-mode . yapf-mode)))
-     #+END_SRC
+   #+END_SRC
 ** C++
    c++ lsp server
    disable cquery and ccls to use clangd as lsp server
@@ -400,13 +408,13 @@ Provides minibuffer hints when working with Emacs Lisp.
 
    #+END_SRC
 
-  #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-c-style				;
 	:hook ((c-mode c++-mode) . google-set-c-style)
 		   (c-mode-common . google-make-newline-indent))
-  #+END_SRC
+   #+END_SRC
 
-  #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   ;; C/C++ Mode -- use google c-style
   (use-package cc-mode
     :ensure nil
@@ -417,14 +425,14 @@ Provides minibuffer hints when working with Emacs Lisp.
     ;;            (setq tab-width 4)
     ;;            (setq c-basic-offset 4)))
   )
-  #+END_SRC
+   #+END_SRC
 
-  #+BEGIN_SRC  emacs-lisp :tangle yes
+   #+BEGIN_SRC  emacs-lisp :tangle yes
   (use-package modern-cpp-font-lock
 	:diminish
 	:init (modern-c++-font-lock-global-mode t)
   )
-  #+END_SRC
+   #+END_SRC
 ** Markdown
    Grip use github api Need github account try other
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -534,14 +542,14 @@ Provides minibuffer hints when working with Emacs Lisp.
    #+END_SRC
 * Advanced Configuration
 ** Icons
-To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
-and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
-find.
+   To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
+   and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
+   find.
 
-*NOTE:* if it's the first time that you install the package, you must run
-=M-x all-the-icons-install-fonts=.
+   *NOTE:* if it's the first time that you install the package, you must run
+   =M-x all-the-icons-install-fonts=.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons
   )
 
@@ -550,13 +558,13 @@ find.
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
-#+END_SRC
+   #+END_SRC
 
 ** Dashboard
 
-Always good to have a dashboard.
+   Always good to have a dashboard.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dashboard
     :ensure t
     :config
@@ -569,13 +577,13 @@ Always good to have a dashboard.
 	(setq dashboard-set-file-icons t)
 	(dashboard-setup-startup-hook)
 	)
-#+END_SRC
+   #+END_SRC
 
 ** Dired
 
-For those who didn't know, GNU Emacs is also a file explorer.
+   For those who didn't know, GNU Emacs is also a file explorer.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired
     :ensure nil
     :delight "Dired "
@@ -586,21 +594,21 @@ For those who didn't know, GNU Emacs is also a file explorer.
     (dired-listing-switches "-alh")
     (dired-ls-F-marks-symlinks nil)
     (dired-recursive-copies 'always))
-#+END_SRC
+   #+END_SRC
 
 ** Company
-=company= provides auto-completion at point and to Displays a small pop-in
-containing the candidates.
+   =company= provides auto-completion at point and to Displays a small pop-in
+   containing the candidates.
 
-#+BEGIN_QUOTE
-Company is a text completion framework for Emacs. The name stands for "complete
-anything". It uses pluggable back-ends and front-ends to retrieve and display
-completion candidates.
+   #+BEGIN_QUOTE
+   Company is a text completion framework for Emacs. The name stands for "complete
+   anything". It uses pluggable back-ends and front-ends to retrieve and display
+   completion candidates.
 
-[[http://company-mode.github.io/][Dmitry Gutov]]
-#+END_QUOTE
+   [[http://company-mode.github.io/][Dmitry Gutov]]
+   #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :defer 0.5
     :delight
@@ -624,23 +632,23 @@ completion candidates.
 
 
 
-#+END_SRC
+   #+END_SRC
 
-I use =company= with =company-box= that allows a company front-end with icons.
+   I use =company= with =company-box= that allows a company front-end with icons.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-box
     :after company
     :delight
     :hook (company-mode . company-box-mode))
-#+END_SRC
+   #+END_SRC
 
 ** Buffers
 
-Buffers can quickly become a mess. For some people, it's not a problem, but I
-like being able to find my way easily.
+   Buffers can quickly become a mess. For some people, it's not a problem, but I
+   like being able to find my way easily.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ibuffer
     :bind ("C-x C-b" . ibuffer))
 
@@ -652,15 +660,15 @@ like being able to find my way easily.
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic)))
     :hook (ibuffer . my/ibuffer-projectile))
-#+END_SRC
+   #+END_SRC
 
 ** History
 
-Provides the ability to have commands and their history saved so that whenever
-you return to work, you can re-run things as you need them. This is not a
-radical function, it is part of a good user experience.
+   Provides the ability to have commands and their history saved so that whenever
+   you return to work, you can re-run things as you need them. This is not a
+   radical function, it is part of a good user experience.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package savehist
     :ensure nil
     :custom
@@ -670,26 +678,26 @@ radical function, it is part of a good user experience.
     (savehist-file (expand-file-name (format "~/.emacs.d/cache/history")))
     (savehist-save-minibuffer-history 1)
     :config (savehist-mode 1))
-#+END_SRC
+   #+END_SRC
 
 ** Hydra
 
-Hydra allows me to display a list of all the commands implemented in the echo
-area and easily interact with them.
+   Hydra allows me to display a list of all the commands implemented in the echo
+   area and easily interact with them.
 
-#+BEGIN_QUOTE
-Once you summon the Hydra through the prefixed binding (the body + any one
-head), all heads can be called in succession with only a short extension.
+   #+BEGIN_QUOTE
+   Once you summon the Hydra through the prefixed binding (the body + any one
+   head), all heads can be called in succession with only a short extension.
 
-The Hydra is vanquished once Hercules, any binding that isn't the Hydra's head,
-arrives. Note that Hercules, besides vanquishing the Hydra, will still serve his
-original purpose, calling his proper command. This makes the Hydra very
-seamless, it's like a minor mode that disables itself auto-magically.
+   The Hydra is vanquished once Hercules, any binding that isn't the Hydra's head,
+   arrives. Note that Hercules, besides vanquishing the Hydra, will still serve his
+   original purpose, calling his proper command. This makes the Hydra very
+   seamless, it's like a minor mode that disables itself auto-magically.
 
-[[https://github.com/abo-abo/hydra][Oleh Krehel]]
-#+END_QUOTE
+   [[https://github.com/abo-abo/hydra][Oleh Krehel]]
+   #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
     :bind (("C-c L" . hydra-ledger/body)
            ("C-c b" . hydra-buffer/body)
@@ -704,14 +712,14 @@ seamless, it's like a minor mode that disables itself auto-magically.
            ("C-c u" . hydra-upload/body)
            ("C-c y" . hydra-yasnippet/body)
            ("C-c w" . hydra-windows/body)))
-#+END_SRC
+   #+END_SRC
 
 *** Hydra / Buffer
 
-Group Buffer commands.
+    Group Buffer commands.
 
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-buffer (:color blue)
     "
     ^
@@ -728,13 +736,13 @@ Group Buffer commands.
     ("l" ibuffer)
     ("n" next-buffer)
     ("p" previous-buffer))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Clock
 
-Group clock commands.
+    Group clock commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-clock (:color blue)
     "
     ^
@@ -757,13 +765,13 @@ Group clock commands.
     ("j" org-clock-goto)
     ("o" org-clock-out)
     ("r" org-clock-report))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / ERC
 
-Group ERC commands.
+    Group ERC commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-erc (:color blue)
     "
     ^
@@ -782,13 +790,13 @@ Group ERC commands.
     ("j" erc-join-channel)
     ("n" erc-channel-names)
     ("u" my/erc-count-users))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Flycheck
 
-Group Flycheck commands.
+    Group Flycheck commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-flycheck (:color blue)
     "
     ^
@@ -811,13 +819,13 @@ Group Flycheck commands.
     ("m" flycheck-mode)
     ("s" flycheck-select-checker)
     ("v" flycheck-verify-setup))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Go To
 
-Group jump-to-files commands.
+    Group jump-to-files commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-go-to-file (:color blue)
     "
     ^
@@ -859,13 +867,13 @@ Group jump-to-files commands.
     ("om" (find-file "~/.personal/other/movies.org"))
     ("op" (find-file "~/.personal/other/purchases.org"))
     ("ou" (find-file "~/.personal/other/usb.org")))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Ledger
 
-Group Ledger commands.
+    Group Ledger commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-ledger (:color blue)
     "
     ^
@@ -884,13 +892,13 @@ Group Ledger commands.
     ("C" ledger-copy-transaction-at-point)
     ("d" ledger-delete-current-transaction)
     ("r" ledger-report))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Magit
 
-Group Magit commands.
+    Group Magit commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-magit (:color blue)
     "
     ^
@@ -907,13 +915,13 @@ Group Magit commands.
     ("c" magit-clone)
     ("i" magit-init)
     ("s" magit-status))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Org
 
-Group Org commands.
+    Group Org commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-org (:color blue)
     "
     ^
@@ -944,13 +952,13 @@ Group Org commands.
     ("r" org-refile)
     ("s" org-store-link)
     ("t" org-show-todo-tree))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Projectile
 
-Group Projectile commands.
+    Group Projectile commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-projectile (:color blue)
     "
     ^
@@ -974,13 +982,13 @@ Group Projectile commands.
     ("R" projectile-replace-regexp)
     ("s" counsel-rg)
     ("S" projectile-save-project-buffers))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Spelling
 
-Group spelling commands.
+    Group spelling commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-spelling (:color blue)
     "
     ^
@@ -1003,13 +1011,13 @@ Group spelling commands.
     ("l" (message "Current language: %s (%s)" langtool-default-language ispell-current-dictionary))
     ("s" my/switch-language)
     ("w" wiki-summary))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / TypeScript
 
-Group TypeScript commands.
+    Group TypeScript commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-typescript (:color blue)
     "
     ^
@@ -1028,13 +1036,13 @@ Group TypeScript commands.
     ("j" tide-jump-to-definition)
     ("r" tide-references)
     ("R" tide-restart-server))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Upload
 
-Group upload commands.
+    Group upload commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-upload (:color blue)
     "
     ^
@@ -1049,13 +1057,13 @@ Group upload commands.
     ("b" webpaste-paste-buffer)
     ("i" imgbb-upload)
     ("r" webpaste-paste-region))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / YASnippet
 
-Group YASnippet commands.
+    Group YASnippet commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-yasnippet (:color blue)
     "
     ^
@@ -1070,13 +1078,13 @@ Group YASnippet commands.
     ("i" ivy-yasnippet)
     ("m" yas-minor-mode)
     ("n" yas-new-snippet))
-#+END_SRC
+    #+END_SRC
 
 *** Hydra / Windows
 
-Group window-related commands.
+    Group window-related commands.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-windows (:color pink)
     "
     ^
@@ -1100,21 +1108,21 @@ Group window-related commands.
     ("-" text-scale-decrease)
     ("+" text-scale-increase)
     ("=" (text-scale-increase 0)))
-#+END_SRC
+    #+END_SRC
 
 ** Ivy
 
-I used =helm= before, but I find =ivy= faster and lighter.
+   I used =helm= before, but I find =ivy= faster and lighter.
 
-#+BEGIN_QUOTE
-Ivy is a generic completion mechanism for Emacs. While it operates similarly to
-other completion schemes such as icomplete-mode, Ivy aims to be more efficient,
-smaller, simpler, and smoother to use yet highly customizable.
+   #+BEGIN_QUOTE
+   Ivy is a generic completion mechanism for Emacs. While it operates similarly to
+   other completion schemes such as icomplete-mode, Ivy aims to be more efficient,
+   smaller, simpler, and smoother to use yet highly customizable.
 
-[[https://github.com/abo-abo/ivy][Oleh Krehel]]
-#+END_QUOTE
+   [[https://github.com/abo-abo/ivy][Oleh Krehel]]
+   #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
     :after ivy
     :delight
@@ -1175,13 +1183,13 @@ smaller, simpler, and smoother to use yet highly customizable.
            ("C-r" . swiper)
            :map swiper-map
            ("M-%" . swiper-query-replace)))
-#+END_SRC
+   #+END_SRC
 ** Parentheses
 
-Managing parentheses can be painful. One of the first things you want to do is
-to change the appearance of the highlight of the parentheses pairs.
+   Managing parentheses can be painful. One of the first things you want to do is
+   to change the appearance of the highlight of the parentheses pairs.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package faces
     :ensure nil
     :custom (show-paren-delay 0)
@@ -1189,53 +1197,53 @@ to change the appearance of the highlight of the parentheses pairs.
     (set-face-background 'show-paren-match "#262b36")
     (set-face-bold 'show-paren-match t)
     (set-face-foreground 'show-paren-match "#ffffff"))
-#+END_SRC
+   #+END_SRC
 
 *** =rainbow-delimiters=
 
-#+BEGIN_QUOTE
-rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
-delimiters such as parentheses, brackets or braces according to their
-depth. Each successive level is highlighted in a different color. This makes it
-easy to spot matching delimiters, orient yourself in the code, and tell which
-statements are at a given depth.
+    #+BEGIN_QUOTE
+    rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
+    delimiters such as parentheses, brackets or braces according to their
+    depth. Each successive level is highlighted in a different color. This makes it
+    easy to spot matching delimiters, orient yourself in the code, and tell which
+    statements are at a given depth.
 
-[[https://github.com/Fanael/rainbow-delimiters][Fanael Linithien]]
-#+END_QUOTE
+    [[https://github.com/Fanael/rainbow-delimiters][Fanael Linithien]]
+    #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
-#+END_SRC
+    #+END_SRC
 
 *** =smartparens=
 
-In my opinion, it is the most powerful package to deal with the
-parenthesis. Anyway, if you don't like it, you can try taking a look at
-=paredit= or =autopair=.
+    In my opinion, it is the most powerful package to deal with the
+    parenthesis. Anyway, if you don't like it, you can try taking a look at
+    =paredit= or =autopair=.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :defer 1
     :delight
     :custom (sp-escape-quotes-after-insert nil)
     :config (smartparens-global-mode 1))
-#+END_SRC
+    #+END_SRC
 
 ** Projectile
 
-#+BEGIN_QUOTE
-Projectile is a project interaction library for Emacs. Its goal is to provide a
-nice set of features operating on a project level without introducing external
-dependencies (when feasible). For instance - finding project files has a
-portable implementation written in pure Emacs Lisp without the use of GNU find
-(but for performance sake an indexing mechanism backed by external commands
-exists as well).
+   #+BEGIN_QUOTE
+   Projectile is a project interaction library for Emacs. Its goal is to provide a
+   nice set of features operating on a project level without introducing external
+   dependencies (when feasible). For instance - finding project files has a
+   portable implementation written in pure Emacs Lisp without the use of GNU find
+   (but for performance sake an indexing mechanism backed by external commands
+   exists as well).
 
-[[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
-#+END_QUOTE
+   [[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
+   #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
     ;;:defer 1
     :custom
@@ -1255,13 +1263,13 @@ exists as well).
   (use-package counsel-projectile
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
-#+END_SRC
+   #+END_SRC
 
 ** Recent Files
 
-Provides fast access to the recent files.
+   Provides fast access to the recent files.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package recentf
     :bind ("C-c r" . recentf-open-files)
     :init (recentf-mode)
@@ -1276,25 +1284,25 @@ Provides fast access to the recent files.
     (recentf-max-saved-items 200)
     (recentf-save-file (expand-file-name (format "~/.emacs.d/cache/recentf")))
     :config (run-at-time nil (* 5 60) 'recentf-save-list))
-#+END_SRC
+   #+END_SRC
 
 ** Version Control
 
-It is quite common to work on Git repositories, so it is important to have a
-configuration that we like.
+   It is quite common to work on Git repositories, so it is important to have a
+   configuration that we like.
 
-#+BEGIN_QUOTE
-[[https://github.com/magit/magit][Magit]] is an interface to the version control system Git, implemented as an Emacs
-package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
-claim that Magit wraps and improves upon each and every Git command, it is
-complete enough to allow even experienced Git users to perform almost all of
-their daily version control tasks directly from within Emacs. While many fine
-Git clients exist, only Magit and Git itself deserve to be called porcelains.
+   #+BEGIN_QUOTE
+   [[https://github.com/magit/magit][Magit]] is an interface to the version control system Git, implemented as an Emacs
+   package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
+   claim that Magit wraps and improves upon each and every Git command, it is
+   complete enough to allow even experienced Git users to perform almost all of
+   their daily version control tasks directly from within Emacs. While many fine
+   Git clients exist, only Magit and Git itself deserve to be called porcelains.
 
-[[https://github.com/tarsius][Jonas Bernoulli]]
-#+END_QUOTE
+   [[https://github.com/tarsius][Jonas Bernoulli]]
+   #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-commit
     :after magit
     :hook (git-commit-mode . my/git-commit-auto-fill-everywhere)
@@ -1315,42 +1323,42 @@ Git clients exist, only Magit and Git itself deserve to be called porcelains.
    (use-package magit-todos
    )
 
-#+END_SRC
+   #+END_SRC
 
-In addition to that, I like to see the lines that are being modified in the file
-while it is being edited.
+   In addition to that, I like to see the lines that are being modified in the file
+   while it is being edited.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-gutter
     :defer 0.3
     :delight
     :init (global-git-gutter-mode +1))
-#+END_SRC
+   #+END_SRC
 
-Finally, one last package that I like to use with Git to easily see the changes
-made by previous commits.
+   Finally, one last package that I like to use with Git to easily see the changes
+   made by previous commits.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-timemachine
     :defer 1
     :delight)
-#+END_SRC
+   #+END_SRC
 
 ** Whitespaces
 
-It is often annoying to see unnecessary blank spaces at the end of a line or
-file. Let's get ride of them:
+   It is often annoying to see unnecessary blank spaces at the end of a line or
+   file. Let's get ride of them:
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package simple
     :ensure nil
     :hook (before-save . delete-trailing-whitespace))
-#+END_SRC
+   #+END_SRC
 ** Word Wrap
 
-I like to have lines of the same length.
+   I like to have lines of the same length.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package simple
     :ensure nil
     :delight (auto-fill-function)
@@ -1358,16 +1366,16 @@ I like to have lines of the same length.
     :hook ((prog-mode . turn-on-auto-fill)
            (text-mode . turn-on-auto-fill))
     :custom (set-mark-command-repeat-pop t))
-#+END_SRC
+   #+END_SRC
 
 ** YASnippet
 
-#+BEGIN_QUOTE
-YASnippet is a template system for Emacs. It allows you to type an abbreviation
-and automatically expand it into function templates.
-#+END_QUOTE
+   #+BEGIN_QUOTE
+   YASnippet is a template system for Emacs. It allows you to type an abbreviation
+   and automatically expand it into function templates.
+   #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet-snippets
     :after yasnippet
     :config (yasnippet-snippets-initialize))
@@ -1380,9 +1388,9 @@ and automatically expand it into function templates.
   (use-package ivy-yasnippet :after yasnippet)
   (use-package auto-yasnippet :after yasnippet)
   (use-package react-snippets :after yasnippet)
-#+END_SRC
+   #+END_SRC
 ** Number Window
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package window-numbering			;
 	:init
 	(window-numbering-mode 1)
@@ -1390,7 +1398,7 @@ and automatically expand it into function templates.
 	(setq window-numbering-assign-func
 		(lambda () (when (equal (buffer-name) "*Calculator*") 9)))
   )
-#+END_SRC
+   #+END_SRC
 ** Whole line or region
    #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package whole-line-or-region
@@ -1475,28 +1483,72 @@ and automatically expand it into function templates.
    )
    #+END_SRC
 ** Smex
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package smex
-    :init
-	(smex-initialize)
-;;    :bind (("M-x" . smex)
-;;	       ("M-X" . smex-major-mode-commands)
-;;		   ("C-c C-c M-x" . execute-extended-command)
-;;	      )
-  )
+   #+BEGIN_SRC emacs-lisp :tangle no
+       (use-package smex
+         :init
+         (smex-initialize)
+     ;;    :bind (("M-x" . smex)
+     ;;	       ("M-X" . smex-major-mode-commands)
+     ;;		   ("C-c C-c M-x" . execute-extended-command)
+     ;;	      )
+       )
 
-  (use-package helm-smex
-    :bind (("M-x" . helm-smex)
-	       ("M-X" . helm-smex-major-mode-commands)
-	      )
-  )
-#+END_SRC
+       (use-package helm-smex
+         :bind (("M-x" . helm-smex)
+                ("M-X" . helm-smex-major-mode-commands)
+               )
+       )
+   #+END_SRC
+** Compile
+   Use smart compile
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package smart-compile
+     )
+   #+END_SRC
+
+   try Quickrun
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package quickrun
+   ;; :config
+   ;; ;; Use this parameter in pod-mode
+   ;; (quickrun-add-command "c++/build"
+   ;;   '((:command . "build.sh")
+   ;;     (:default-directory . 'topdir)
+   ;;     (:exec    . "./%c"))
+   ;;    :mode 'c++-mode)
+   )
+
+   (defun git-build ()
+     " for git project compile to use ./build.sh "
+     (interactive)
+     (let* ((cmd "git rev-parse --show-toplevel")
+          (topdir (with-temp-buffer
+                    (call-process-shell-command cmd nil t nil)
+                    (goto-char (point-min))
+                    (if (re-search-forward "^\\(.+\\)$" nil t)
+                        (match-string 1)))))
+     (quickrun :source `((:command . "build.sh")
+                         (:default-directory . ,topdir)
+                         (:exec . ("./%c"))))))
+
+
+ ;;(quickrun-set-default "c" "c++/build")
+ ;;(quickrun-set-default "c++" "c++/build")
+   #+END_SRC
+** Refactor
+   Try emr
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package emr
+       :config
+       (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
+     )
+   #+END_SRC
 ** Add mutil iedit
-#+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit
     :bind (("C-c ;" . iedit-mode)
     )
   )
 
-#+END_SRC
+   #+END_SRC
 * Org-mode

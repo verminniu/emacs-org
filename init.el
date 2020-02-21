@@ -53,3 +53,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
 ;; )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (ztree yasnippet-snippets yapfify yaml-mode window-numbering whole-line-or-region vimrc-mode vdiff-magit use-package-ensure-system-package tree-mode toc-org symbol-overlay swift-mode smartparens smart-compile rmsbolt react-snippets rainbow-delimiters quickrun protobuf-mode powershell org-tree-slide org-rich-yank org-preview-html org-pomodoro org-fancy-priorities org-dashboard org-bullets ob-rust ob-ipython ob-go modern-cpp-font-lock magit-todos lua-mode lsp-ui live-py-mode ivy-yasnippet ivy-rich ivy-pass iedit ibuffer-projectile helm-smex helm-lsp grip-mode govet google-c-style golint go-tag go-rename go-playground go-impl go-gen-test go-fill-struct go-dlv git-timemachine git-gutter flymd flycheck fish-mode editorconfig dumb-jump doom-themes doom-modeline dockerfile-mode diffview diff-hl delight dashboard dap-mode csv-mode csharp-mode cquery counsel-projectile company-tabnine company-lsp company-ctags company-box cmake-font-lock ccls cask-mode bmx-mode auto-yasnippet all-the-icons-ivy all-the-icons-dired))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
