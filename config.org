@@ -680,6 +680,14 @@
     :config (savehist-mode 1))
    #+END_SRC
 
+** Which-Key
+   Use Whick-key to help
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package which-key
+     :init
+     (which-key-mode)
+   )
+   #+END_SRC
 ** Hydra
 
    Hydra allows me to display a list of all the commands implemented in the echo
