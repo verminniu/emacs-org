@@ -272,6 +272,13 @@
      :config
      (setq auto-mode-alist  (cons '(".yml$" . yaml-mode) auto-mode-alist))
      )
+
+   (use-package flycheck-yamllint
+     :after flycheck
+     :init
+     (add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup)
+   )
+
    #+END_SRC
 
 ** Protobuf
