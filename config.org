@@ -64,7 +64,7 @@
 	;;(set-terminal-coding-system 'gb2312)
 	;;(set-keyboard-coding-system 'gb2312)
 	;;(set-language-environment "Chinese-GB")
-	(prefer-coding-system 'utf-8-unix)		;
+	(prefer-coding-system 'utf-8)		;
 	;;(prefer-coding-system 'gb2312-unix)		;
 	(show-paren-mode 1)                               ; Show the parent
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
@@ -90,11 +90,28 @@
 
 ** Shell Path
    #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package exec-path-from-shell
-     :init
-     (setq exec-path-from-shell-check-startup-files nil)
-     (exec-path-from-shell-initialize)
-   )
+
+;; make Emacs use the $PATH set up by the user's shell
+(use-package exec-path-from-shell
+  :ensure t
+  :init (progn
+	  (when(not(eq system-type 'windows-nt))
+	    (setq exec-path-from-shell-variables '("PYTHONPATH" "GOPATH"))
+	    ;; when it is nil, exec-path-from-shell will read environment variable
+	    ;; from .zshenv instead of .zshrc, but makes sure that you put all
+	    ;; environment variable you need in .zshenv rather than .zshrc
+	    (setq exec-path-from-shell-check-startup-files nil) ;
+	    (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
+	    (exec-path-from-shell-initialize)
+	    )
+	  )
+  )
+
+;;   (use-package exec-path-from-shell
+;;     :init
+;;     (setq exec-path-from-shell-check-startup-files nil)
+;;     (exec-path-from-shell-initialize)
+;;   )
    #+END_SRC
 ** Theme
 
@@ -155,7 +172,10 @@
      ;; Configure LSP clients
      (use-package lsp-clients
        :ensure nil
-       :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))))
+       :init
+       (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))
+;;       (setq lsp-gopls-server-path "/usr/local/gopath//bin/gopls")
+       ))
 
    (use-package lsp-ui
      :functions my-lsp-ui-imenu-hide-mode-line
@@ -477,6 +497,16 @@
    ;;
 
  ;; Golang
+ (exec-path-from-shell-copy-env "GOPATH")
+ (exec-path-from-shell-copy-env "GOROOT")
+
+ ;; Set up before-save hooks to format buffer and add/delete imports.
+ ;; Make sure you don't have other gofmt/goimports hooks enabled.
+ (defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+ (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
  (use-package go-mode
    :bind (:map go-mode-map
 		  ([remap xref-find-definitions] . godef-jump)
@@ -493,6 +523,10 @@
    (use-package go-rename)
    (use-package golint)
    (use-package govet)
+
+;;   (lsp-register-custom-settings
+;;     '(("gopls.completeUnimported" t t)
+;;     ("gopls.staticcheck" t t)))
 
    (use-package go-impl
 	 :functions (go-packages-gopkgs go-root-and-paths go-packages-fd)
@@ -542,7 +576,7 @@
 			("C-c x" . go-run))))
 
  ;; Local Golang playground for short snippets
-(use-package go-playground
+ (use-package go-playground
   :diminish
   :commands go-playground-mode)
 
@@ -624,7 +658,8 @@
     :custom
     (company-begin-commands '(self-insert-command))
     (company-idle-delay .1)
-    (company-minimum-prefix-length 2)
+    (company-dabbrev-ignore-case t)
+    (company-minimum-prefix-length 1)
     (company-show-numbers t)
     (company-tooltip-align-annotations 't)
     (global-company-mode t)
