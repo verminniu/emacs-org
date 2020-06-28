@@ -326,6 +326,7 @@
    Lsp-mode will start py on python mode
 
    #+BEGIN_SRC shell :tangle no
+   pip install --upgrade setuptools
    pip install 'python-language-server[all]'
    pip3 install 'python-language-server[all]'
    #+END_SRC
