@@ -35,7 +35,7 @@
 	 ad-redefinition-action 'accept                   ; Silence warnings for redefinition
 	 cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
 	 display-time-default-load-average nil            ; Don't display load average
-	 fill-column 80                                   ; Set width for automatic line breaks
+	 fill-column 100                                   ; Set width for automatic line breaks
 	 mode-require-final-newline t                     ; add a newline to end of file
 	 help-window-select t                             ; Focus new help windows when opened
 	 inhibit-startup-screen t                         ; Disable start-up screen
@@ -1402,6 +1402,13 @@
    file. Let's get ride of them:
 
    #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package whitespace-cleanup-mode
+     :hook (prog-mode . whitespace-cleanup-mode)
+   )
+
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp :tangle no
   (use-package simple
     :ensure nil
     :hook (before-save . delete-trailing-whitespace))
@@ -1410,7 +1417,7 @@
 
    I like to have lines of the same length.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
   (use-package simple
     :ensure nil
     :delight (auto-fill-function)
