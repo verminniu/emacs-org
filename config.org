@@ -1546,7 +1546,7 @@
    )
    #+END_SRC
 ** Smex
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
        (use-package smex
          :init
          (smex-initialize)
@@ -1556,11 +1556,6 @@
      ;;	      )
        )
 
-       (use-package helm-smex
-         :bind (("M-x" . helm-smex)
-                ("M-X" . helm-smex-major-mode-commands)
-               )
-       )
    #+END_SRC
 ** Compile
    Use smart compile
@@ -1592,7 +1587,8 @@
                         (match-string 1)))))
      (quickrun :source `((:command . "build.sh")
                          (:default-directory . ,topdir)
-                         (:exec . ("./%c"))))))
+                         (:exec . ("./%c"))
+                         (:timeout . 1000)))))
 
 
  ;;(quickrun-set-default "c" "c++/build")
