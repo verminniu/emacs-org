@@ -120,7 +120,8 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package doom-themes
     :config
-    (load-theme 'doom-Iosvkem t)
+    (load-theme 'doom-solarized-dark t)
+    ;; (load-theme 'doom-Iosvkem t)
     ;; (load-theme 'doom-gruvbox t)
     ;; Global settings (defaults)
 	(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
