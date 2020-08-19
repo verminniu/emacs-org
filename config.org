@@ -325,6 +325,16 @@
 
 ** Python
    Lsp-mode will start py on python mode
+   
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package lsp-python-ms
+  :ensure t
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))  ; or lsp-deferred
+   
+   #+END_SRC
 
    #+BEGIN_SRC shell :tangle no
    pip install --upgrade setuptools
@@ -332,7 +342,7 @@
    pip3 install 'python-language-server[all]'
    #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
    ;; Python Mode
    ;; Install:
    ;;   pip install pyflakes
