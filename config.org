@@ -174,8 +174,22 @@
 	 (global-flycheck-mode)
    )
    #+END_SRC
-** LSP
+** Eglot
+   Other lsp client
    #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package eglot
+     :ensure t
+     :config
+     (add-hook 'c-mode-hook 'eglot-ensure)
+     (add-hook 'c++-mode-hook 'eglot-ensure)
+     (add-hook 'python-mode 'eglot-ensure)
+     (add-hook 'go-mode 'eglot-ensure)
+   )
+   
+   #+END_SRC
+
+** LSP
+   #+BEGIN_SRC emacs-lisp :tangle no
  (use-package lsp-mode
      :diminish lsp-mode
      :after yasnippet
@@ -349,7 +363,7 @@
 ** Python
    Lsp-mode will start py on python mode
    
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
    (use-package lsp-python-ms
   :ensure t
   :init (setq lsp-python-ms-auto-install-server t)
@@ -430,7 +444,7 @@
    #+END_SRC
 
    =ccls=
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
    (with-eval-after-load 'projectile
    (setq projectile-project-root-files-top-down-recurring
         (append '("compile_commands.json"
@@ -456,15 +470,6 @@
 
    #+END_SRC
 
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-   ;; company-ctags
-   (use-package company-ctags
-     :config
-     (company-ctags-auto-setup)
-   )
-
-   #+END_SRC
 
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-c-style				;
@@ -507,7 +512,16 @@
      :ensure t
      :hook ((markdown-mode org-mode) . grip-mode)
      )
-   #+END_SRC
+
+   
+   (use-package markdown-mode
+     :ensure t
+     :mode (("README\\.md\\'" . gfm-mode)
+            ("\\.md\\'" . markdown-mode)
+            ("\\.markdown\\'" . markdown-mode))
+     :init (setq markdown-command "multimarkdown"))
+
+      #+END_SRC
 
 ** GO
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -923,8 +937,8 @@
     (projectile-mode-line '(:eval (projectile-project-name)))
     :config
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-	(add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
-	(projectile-global-mode)
+    (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
+    (projectile-global-mode)
 	)
 
   (use-package counsel-projectile
