@@ -68,6 +68,28 @@
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
    #+END_SRC
 
+** Os Set
+   Set OS special config
+
+   use fullcreen on mac os, and use alt instead cmd
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   ;; check OS type
+   (cond
+     ((string-equal system-type "windows-nt") ; Microsoft Windows
+       (progn
+         (message "Microsoft Windows")))
+     ((string-equal system-type "darwin") ; Mac OS X
+       (progn
+         (setq mac-command-modifier 'control)
+         (setq mac-option-modifier 'meta)
+         (add-to-list 'default-frame-alist '(fullscreen . maximized))
+         (message "Mac OS X")
+         ))
+     ((string-equal system-type "gnu/linux") ; linux
+       (progn
+       (message "Linux"))))
+   #+END_SRC
+
 ** Customization
 
    To avoid overloading the GNU Emacs custormization =init.el= file made by the
@@ -777,6 +799,11 @@
 		   )
     :config (counsel-mode)
     :custom (counsel-rg-base-command "rg -S -M 150 --no-heading --line-number --color never %s"))
+
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode)
+  )
 
   (use-package ivy
     :delight
