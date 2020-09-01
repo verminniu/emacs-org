@@ -6,9 +6,12 @@
    In order to install packages, it is useful to configure the package sources.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                           ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                           ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+   ;;; package -- vermin's emacs conf
+   ;;; Code: 
+
+   (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                            ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
    #+END_SRC
 
 ** use-package
