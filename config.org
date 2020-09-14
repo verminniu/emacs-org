@@ -112,21 +112,21 @@
 ** Shell Path
    #+BEGIN_SRC emacs-lisp :tangle yes
 
-;; make Emacs use the $PATH set up by the user's shell
-(use-package exec-path-from-shell
-  :ensure t
-  :init (progn
-	  (when(not(eq system-type 'windows-nt))
-	    (setq exec-path-from-shell-variables '("PYTHONPATH" "GOPATH"))
-	    ;; when it is nil, exec-path-from-shell will read environment variable
-	    ;; from .zshenv instead of .zshrc, but makes sure that you put all
-	    ;; environment variable you need in .zshenv rather than .zshrc
-	    (setq exec-path-from-shell-check-startup-files nil) ;
-	    (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
+   ;; make Emacs use the $PATH set up by the user's shell
+   (use-package exec-path-from-shell
+     :ensure t
+     :init (progn
+	   (when(not(eq system-type 'windows-nt))
+	     (setq exec-path-from-shell-variables '("PYTHONPATH" "GOPATH"))
+	     ;; when it is nil, exec-path-from-shell will read environment variable
+	     ;; from .zshenv instead of .zshrc, but makes sure that you put all
+	     ;; environment variable you need in .zshenv rather than .zshrc
+	     (setq exec-path-from-shell-check-startup-files nil) ;
+	     (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
 	    (exec-path-from-shell-initialize)
 	    )
 	  )
-  )
+      )
 
 ;;   (use-package exec-path-from-shell
 ;;     :init
