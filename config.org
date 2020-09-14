@@ -185,8 +185,8 @@
      :config
      (add-hook 'c-mode-hook 'eglot-ensure)
      (add-hook 'c++-mode-hook 'eglot-ensure)
-     (add-hook 'python-mode 'eglot-ensure)
-     (add-hook 'go-mode 'eglot-ensure)
+     (add-hook 'python-mode-hook 'eglot-ensure)
+     (add-hook 'go-mode-hook 'eglot-ensure)
    )
    
    #+END_SRC
