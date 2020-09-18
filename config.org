@@ -7,7 +7,7 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
    ;;; package -- vermin's emacs conf
-   ;;; Code: 
+   ;;; Code:
 
    (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                             ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
@@ -299,6 +299,15 @@
    #+END_SRC
 
 * Languages
+** Rainbow Identifiers
+   try Rainbow Identifiers
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package rainbow-identifiers
+     :config
+     (add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
+   )
+   #+END_SRC
+
 ** Doxygen Comment
    Use srecode to genenate doxygen comment
    #+BEGIN_SRC emacs-lisp :tangle yes
