@@ -950,6 +950,7 @@
     (projectile-mode-line '(:eval (projectile-project-name)))
     :config
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (add-to-list 'projectile-globally-ignored-directories ".clangd")
     (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
     (projectile-global-mode)
 	)
