@@ -570,10 +570,14 @@
 
  ;; Set up before-save hooks to format buffer and add/delete imports.
  ;; Make sure you don't have other gofmt/goimports hooks enabled.
- (defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
- (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+ ;;(defun lsp-go-install-save-hooks ()
+ ;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
+ ;; (add-hook 'before-save-hook #'lsp-organize-imports t t))
+ ;;(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+ ;; (lsp-register-custom-settings
+ ;;   '(("gopls.completeUnimported" t t)
+ ;;     ("gopls.staticcheck" t t)))
 
  (use-package go-mode
    :bind (:map go-mode-map
@@ -586,15 +590,19 @@
 	 (setq gofmt-command "goimports"))
    (add-hook 'before-save-hook #'gofmt-before-save)
 
+   (use-package go-projectile)
    (use-package go-dlv)
    (use-package go-fill-struct)
    (use-package go-rename)
    (use-package golint)
    (use-package govet)
 
-;;   (lsp-register-custom-settings
-;;     '(("gopls.completeUnimported" t t)
-;;     ("gopls.staticcheck" t t)))
+;;   (use-package go-gopath
+;;     :bind (
+;;       :map go-mode-map
+;;       ("C-c C-e" . go-gopath-set-gopath)
+;;     )
+;;   )
 
    (use-package go-impl
 	 :functions (go-packages-gopkgs go-root-and-paths go-packages-fd)
