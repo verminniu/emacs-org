@@ -145,7 +145,7 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package doom-themes
     :config
-    (load-theme 'doom-solarized-dark t)
+    (load-theme 'doom-dark+ t)
     ;; (load-theme 'doom-Iosvkem t)
     ;; (load-theme 'doom-gruvbox t)
     ;; Global settings (defaults)
@@ -1357,6 +1357,5 @@
     :config (treemacs-set-scope-type 'Perspectives))
 
    #+END_SRC
-
 
 * Org-mode
