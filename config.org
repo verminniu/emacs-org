@@ -746,6 +746,7 @@
 ;;	(add-to-list 'company-backends #'company-dabbrev)
 	(setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
 	(setq company-dabbrev-code-other-buffers 'all)
+    (setq completion-ignore-case t)
   )
 
 
