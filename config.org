@@ -69,6 +69,7 @@
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+    (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
    #+END_SRC
 
 ** Os Set
