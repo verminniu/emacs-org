@@ -350,15 +350,6 @@
 
    #+END_SRC
 
-** Protobuf
-   Proto buf support
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package protobuf-mode
-     :config
-     (setq auto-mode-alist  (cons '(".proto$" . protobuf-mode) auto-mode-alist))
-     )
-
-   #+END_SRC
 ** Emacs Lisp
 
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -659,6 +650,16 @@
   :commands go-playground-mode)
 
    #+END_SRC
+** Protobuf
+   Proto buf support
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package protobuf-mode
+     :config
+     (setq auto-mode-alist  (cons '(".proto$" . protobuf-mode) auto-mode-alist))
+     )
+
+   #+END_SRC
+
 * Advanced Configuration
 ** Icons
    To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
