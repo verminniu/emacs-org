@@ -59,6 +59,7 @@
   ;  (cd "~/")                                         ; Move to the user directory
 	(column-number-mode 1)                            ; Show the column number
     ;;(global-linum-mode 1)
+    (setq create-lockfiles nil)                       ; disable lock file
 	(display-time-mode 1)                             ; Enable time in the mode-line
 	(fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
 	(global-hl-line-mode)                             ; Hightlight current line
@@ -1361,3 +1362,7 @@
    #+END_SRC
 
 * Org-mode
+** Add markdown to Export list
+   #+begin_src emacs-lisp :tangle yes
+   (use-package ox-qmd)
+   #+end_src
