@@ -55,6 +55,8 @@
 	 user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
 	 vc-follow-symlinks t                             ; Always follow the symlinks
 	 make-backup-files nil							  ; close backup files
+     gc-cons-threshold 100000000                      ; lsp need more memory
+     read-process-output-max (* 1024 1024)            ; 1mb
      truncate-partial-width-windows nil               ; turn off wrapping long lines
 	 view-read-only t)                                ; Always open read-only buffers in view-mode
   ;  (cd "~/")                                         ; Move to the user directory
@@ -200,7 +202,7 @@
    (setq lsp-keymap-prefix "C-c l")
 
    (use-package lsp-mode
-     :after yasnippet
+     :after (yasnippet company)
      :hook (
            (c++-mode . lsp-deferred)
            (c-mode . lsp-deferred)
@@ -212,11 +214,13 @@
             ("C-c C-d" . lsp-describe-thing-at-point))
      :init (setq lsp-auto-guess-root t)       ; Detect project root
      :config
-     (push 'company-capf company-backends)
      (setq lsp-completion-enable t
            lsp-enable-snippet t
            lsp-semantic-highlighting t
-           lsp-enable-text-document-color t)
+           lsp-idle-delay 0.500
+           lsp-enable-text-document-color t
+           lsp-completion-provider :capf)
+     (push 'company-capf company-backends)     
      )
 
    (use-package lsp-ui
@@ -337,7 +341,7 @@
 ** Python
    Lsp-mode will start py on python mode
    
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package lsp-python-ms
   :ensure t
   :init (setq lsp-python-ms-auto-install-server t)
@@ -353,7 +357,7 @@
    pip3 install 'python-language-server[all]'
    #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
    ;; Python Mode
    ;; Install:
    ;;   pip install pyflakes
