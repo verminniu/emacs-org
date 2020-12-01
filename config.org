@@ -55,6 +55,7 @@
 	 user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
 	 vc-follow-symlinks t                             ; Always follow the symlinks
 	 make-backup-files nil							  ; close backup files
+     truncate-partial-width-windows nil               ; turn off wrapping long lines
 	 view-read-only t)                                ; Always open read-only buffers in view-mode
   ;  (cd "~/")                                         ; Move to the user directory
 	(column-number-mode 1)                            ; Show the column number
@@ -196,22 +197,30 @@
 
 ** LSP
    #+BEGIN_SRC emacs-lisp :tangle yes
+   (setq lsp-keymap-prefix "C-c l")
+
    (use-package lsp-mode
      :after yasnippet
      :hook (
-           (prog-mode . lsp-deferred)
+           (c++-mode . lsp-deferred)
+           (c-mode . lsp-deferred)
+           (python-mode . lsp-deferred)
+           (go-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration)
            )
      :bind (:map lsp-mode-map
             ("C-c C-d" . lsp-describe-thing-at-point))
      :init (setq lsp-auto-guess-root t)       ; Detect project root
+     :config
+     (push 'company-capf company-backends)
+     (setq lsp-completion-enable t
+           lsp-enable-snippet t
+           lsp-semantic-highlighting t
+           lsp-enable-text-document-color t)
      )
 
    (use-package lsp-ui
      :commands lsp-ui-mode)
-
-   (use-package company-lsp
-     :init (setq company-lsp-cache-candidates 'auto))
 
    ;; Debug
    (use-package dap-mode
@@ -224,7 +233,6 @@
             (dap-mode . dap-ui-mode)
             (dap-session-created . (lambda (&_rest) (dap-hydra)))
             (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-
             (python-mode . (lambda () (require 'dap-python)))
             (ruby-mode . (lambda () (require 'dap-ruby)))
             (go-mode . (lambda () (require 'dap-go)))
@@ -238,6 +246,10 @@
    (use-package lsp-treemacs
      :commands lsp-treemacs-errors-list
    )
+
+;;   (use-package company-lsp
+;;     :config (push 'company-lsp company-backends)
+;;     )
 
    (use-package lsp-ivy
      :commands lsp-ivy-workspace-symbol
