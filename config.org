@@ -304,6 +304,12 @@
      (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
      (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
      )
+     
+   (use-package eldoc-cmake
+     :after eldoc
+     :hook (cmake-mode . eldoc-cmake-enable)
+   )
+
    #+END_SRC
 
 ** Yaml
