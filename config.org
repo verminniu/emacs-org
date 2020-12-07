@@ -274,6 +274,15 @@
    #+END_SRC
 
 * Languages
+** Shell
+   add shell support
+   #+begin_src emacs-lisp :tangle yes
+   (use-package bash-completion
+     :config
+     (bash-completion-setup)
+   )
+   #+end_src
+
 ** Rainbow Identifiers
    try Rainbow Identifiers
    #+BEGIN_SRC emacs-lisp :tangle yes
