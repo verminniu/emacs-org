@@ -1355,5 +1355,8 @@
 * Org-mode
 ** Add markdown to Export list
    #+begin_src emacs-lisp :tangle yes
-   (use-package ox-qmd)
+   ;;(use-package ox-qmd)
+   (use-package ox-gfm
+   )
+
    #+end_src
