@@ -1353,10 +1353,15 @@
    #+END_SRC
 
 * Org-mode
+** Org Common Setting
+   不转义"_"
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-export-with-sub-superscripts nil)
+   #+end_src
+
 ** Add markdown to Export list
    #+begin_src emacs-lisp :tangle yes
    ;;(use-package ox-qmd)
    (use-package ox-gfm
    )
-
    #+end_src
