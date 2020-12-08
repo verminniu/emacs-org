@@ -73,6 +73,7 @@
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+	(add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
     (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
    #+END_SRC
 
@@ -736,6 +737,8 @@
 	(setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
 	(setq company-dabbrev-code-other-buffers 'all)
     (setq completion-ignore-case t)
+    ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
+    (setq company-dabbrev-downcase nil) 
   )
 
 
