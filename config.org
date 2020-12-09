@@ -648,6 +648,17 @@
    #+END_SRC
 
 * Advanced Configuration
+** Highlight Indent
+   use indent guides
+
+   #+begin_src emacs-lisp :tangle yes
+   (use-package highlight-indent-guides
+     :hook (prog-mode . highlight-indent-guides-mode)
+     :config
+     (setq highlight-indent-guides-method 'character)
+   )
+   #+end_src
+
 ** Icons
    To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
    and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
@@ -661,8 +672,8 @@
   )
 
   (use-package all-the-icons-dired
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+    :config
+    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
    #+END_SRC
@@ -1368,3 +1379,4 @@
    (use-package ox-gfm
    )
    #+end_src
+   
