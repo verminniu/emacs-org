@@ -653,7 +653,10 @@
 
    #+begin_src emacs-lisp :tangle yes
    (use-package highlight-indent-guides
-     :hook (prog-mode . highlight-indent-guides-mode)
+     :hook (
+     (prog-mode . highlight-indent-guides-mode)
+     (protobuf-mode . highlight-indent-guides-mode)
+     )
      :config
      (setq highlight-indent-guides-method 'character)
    )
@@ -1063,7 +1066,7 @@
 
    #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package simple
     :ensure nil
     :hook (before-save . delete-trailing-whitespace))
