@@ -1,5 +1,13 @@
 #+Title:  Vermin's Emacs Configuration
 
+* Install
+** Install From Sources
+  编译参数
+  --with-nativecomp需要单独分支支持
+  #+begin_src shell
+ ./configure --with-nativecomp --with-gnutls --without-x --with-pop --with-mailutils --with-xml2 --with-json=ifavailable
+  #+end_src
+
 * Emacs Initialization
 ** Packages Sources
 
