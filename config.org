@@ -655,6 +655,35 @@
 
    #+END_SRC
 
+** k8s
+   k8s-mode
+   #+begin_src emacs-lisp :tangle yes
+   (use-package k8s-mode
+     :ensure t
+     :hook (k8s-mode . yas-minor-mode)
+     :config
+     ;; Set indent offset
+     (setq k8s-indent-offset nil)
+     ;; The site docs URL
+     (setq k8s-site-docs-url "https://kubernetes.io/docs/reference/generated/kubernetes-api/")
+     ;; The defautl API version
+     (setq k8s-site-docs-version "v1.3")
+     ;; The browser funtion to browse the docs site. Default is `browse-url-browser-function`
+     (setq k8s-search-documentation-browser-function nil)
+     ; Should be a X11 browser
+     ;(setq k8s-search-documentation-browser-function (quote browse-url-firefox))
+     )
+   #+end_src
+
+** dockerfile
+   dockerfile-mode
+   #+begin_src emacs-lisp :tangle yes
+   (use-package dockerfile-mode
+     :config
+     (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+   )
+   #+end_src
+
 * Advanced Configuration
 ** Highlight Indent
    use indent guides
