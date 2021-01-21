@@ -203,7 +203,7 @@
      (add-hook 'python-mode-hook 'eglot-ensure)
      (add-hook 'go-mode-hook 'eglot-ensure)
    )
-   
+
    #+END_SRC
 
 ** LSP
@@ -229,7 +229,7 @@
            lsp-idle-delay 0.500
            lsp-enable-text-document-color t
            lsp-completion-provider :capf)
-     (push 'company-capf company-backends)     
+     (push 'company-capf company-backends)
      )
 
    (use-package lsp-ui
@@ -310,7 +310,7 @@
      (global-srecode-minor-mode 1)
    )
    #+END_SRC
-   
+
 ** CMake
    CMake support
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -322,7 +322,7 @@
      (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
      (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
      )
-     
+
    (use-package eldoc-cmake
      :after eldoc
      :hook (cmake-mode . eldoc-cmake-enable)
@@ -364,7 +364,7 @@
 
 ** Python
    Lsp-mode will start py on python mode
-   
+
    #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package lsp-python-ms
   :ensure t
@@ -372,7 +372,7 @@
   :hook (python-mode . (lambda ()
                           (require 'lsp-python-ms)
                           (lsp))))  ; or lsp-deferred
-   
+
    #+END_SRC
 
    #+BEGIN_SRC shell :tangle no
@@ -514,7 +514,7 @@
      :hook ((markdown-mode org-mode) . grip-mode)
      )
 
-   
+
    (use-package markdown-mode
      :ensure t
      :mode (("README\\.md\\'" . gfm-mode)
@@ -686,8 +686,7 @@
 
 * Advanced Configuration
 ** Highlight Indent
-   use indent guides
-
+   charater 模式，有时候会引起换行错误，改为colum
    #+begin_src emacs-lisp :tangle yes
    (use-package highlight-indent-guides
      :hook (
@@ -695,7 +694,7 @@
      (protobuf-mode . highlight-indent-guides-mode)
      )
      :config
-     (setq highlight-indent-guides-method 'character)
+     (setq highlight-indent-guides-method 'column)
    )
    #+end_src
 
@@ -789,7 +788,7 @@
 	(setq company-dabbrev-code-other-buffers 'all)
     (setq completion-ignore-case t)
     ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
-    (setq company-dabbrev-downcase nil) 
+    (setq company-dabbrev-downcase nil)
   )
 
 
@@ -829,7 +828,7 @@
    Provides the ability to have commands and their history saved so that whenever
    you return to work, you can re-run things as you need them. This is not a
    radical function, it is part of a good user experience.
-   
+
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package savehist
     :ensure nil
@@ -1354,11 +1353,11 @@
             treemacs-user-header-line-format       nil
             treemacs-width                         35
             treemacs-workspace-switch-cleanup      nil)
-  
+
       ;; The default width and height of the icons is 22 pixels. If you are
       ;; using a Hi-DPI display, uncomment this to double the icon size.
       ;;(treemacs-resize-icons 44)
-  
+
       (treemacs-follow-mode t)
       (treemacs-filewatch-mode t)
       (treemacs-fringe-indicator-mode t)
@@ -1376,21 +1375,21 @@
           ("C-x t B"   . treemacs-bookmark)
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag)))
-  
+
   ;;;; disable evil
   ;;(use-package treemacs-evil
   ;;  :after treemacs evil
   ;;  :ensure t)
-  
+
   (use-package treemacs-projectile
     :after treemacs projectile
     :ensure t)
-  
+
   (use-package treemacs-icons-dired
     :after treemacs dired
     :ensure t
     :config (treemacs-icons-dired-mode))
-  
+
   (use-package treemacs-magit
     :after treemacs magit
     :ensure t)
@@ -1398,7 +1397,7 @@
   (use-package lsp-treemacs
     :commands lsp-treemacs-errors-list
   )
-  
+
   (use-package treemacs-persp ;;treemacs-persective if you use perspective.el vs. persp-mode
     :after treemacs persp-mode ;;or perspective vs. persp-mode
     :ensure t
@@ -1419,7 +1418,7 @@
    (use-package ox-gfm
    )
    #+end_src
-   
+
 ** TODO Org-mind-map
 ** TODO Org-roam
    https://www.orgroam.com
