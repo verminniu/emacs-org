@@ -1412,6 +1412,15 @@
    (setq org-export-with-sub-superscripts nil)
    #+end_src
 
+** Org bullets
+   #+begin_src emacs-lisp :tangle yes
+   (use-package org-bullets
+     :config
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+   )
+   #+end_src
+
+
 ** Add markdown to Export list
    #+begin_src emacs-lisp :tangle yes
    ;;(use-package ox-qmd)
