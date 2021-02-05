@@ -698,23 +698,6 @@
    )
    #+end_src
 
-** Avy
-   Navigation with Avy
-   #+begin_src emacs-lisp :tangle yes
-   (use-package avy
-     :ensure t
-     :config
-     (avy-setup-default)
-     :bind (
-           ("M-g c" . avy-goto-char)
-           ("M-g M-c" . avy-goto-char-2)
-           ("M-g f" . avy-goto-line)
-           ("M-g w" . avy-goto-word-1)
-           ("M-g e" . avy-goto-word-0)
-           )
-     )
-   #+end_src
-
 ** Icons
    To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
    and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
@@ -945,6 +928,27 @@
            :map swiper-map
            ("M-%" . swiper-query-replace)))
    #+END_SRC
+** Avy
+   Navigation with Avy
+   #+begin_src emacs-lisp :tangle yes
+   (use-package avy
+     :ensure t
+     :config
+     (avy-setup-default)
+     :bind (
+           ("M-g c" . avy-goto-char)
+           ("M-g M-c" . avy-goto-char-2)
+           ("M-g f" . avy-goto-line)
+           ("M-g w" . avy-goto-word-1)
+           ("M-g e" . avy-goto-word-0)
+           )
+     )
+
+   (use-package ivy-avy
+     :after ivy
+   )
+   #+end_src
+
 ** Parentheses
 
    Managing parentheses can be painful. One of the first things you want to do is
