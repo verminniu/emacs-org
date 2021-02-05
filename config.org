@@ -698,6 +698,21 @@
    )
    #+end_src
 
+** Avy
+   Navigation with Avy
+   #+begin_src emacs-lisp :tangle yes
+   (use-package avy
+     :ensure t
+     :config
+     ;;(avy-setup-default)
+     (global-set-key (kbd "C-:") 'avy-goto-char)
+     (global-set-key (kbd "C-'") 'avy-goto-char-2)
+     (global-set-key (kbd "M-g f") 'avy-goto-line)
+     (global-set-key (kbd "M-g w") 'avy-goto-word-1)
+     (global-set-key (kbd "M-g e") 'avy-goto-word-0)
+     )
+   #+end_src
+
 ** Icons
    To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
    and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
