@@ -156,7 +156,20 @@
    *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
    [[#Icons][all-the-icons]].
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle yes
+  (use-package doom-modeline
+    :defer 0.1
+    :config (doom-modeline-mode))
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle yes
+   (use-package srcery-theme
+     :config
+     (load-theme 'srcery t)
+   )
+   #+end_src
+
+   #+BEGIN_SRC emacs-lisp :tangle no
   (use-package doom-themes
     :config
     ;; (load-theme 'doom-dark+ t)
@@ -178,10 +191,6 @@
 	;; Corrects (and improves) org-mode's native fontification.
 	(doom-themes-org-config)
 	)
-
-  (use-package doom-modeline
-    :defer 0.1
-    :config (doom-modeline-mode))
    #+END_SRC
 
 ** FlyCheck
