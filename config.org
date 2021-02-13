@@ -166,6 +166,7 @@
    (use-package srcery-theme
      :config
      (load-theme 'srcery t)
+     (set-face-background hl-line-face "color-16")
    )
    #+end_src
 
