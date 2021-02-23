@@ -172,6 +172,7 @@
      (show-paren-mode t)
      (setq show-paren-style 'expression)
      (load-theme 'moe-dark t)
+     (set-face-background hl-line-face "color-17")
    )
    #+end_src
 
