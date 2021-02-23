@@ -149,10 +149,6 @@
 ;;   )
    #+END_SRC
 ** Theme
-
-   I'm a big fan of [[https://github.com/arcticicestudio/nord-emacs][nord-theme]] and combined with [[https://github.com/seagle0128/doom-modeline][doom-modeline]], it's just
-   happiness.
-
    *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
    [[#Icons][all-the-icons]].
 
@@ -162,7 +158,24 @@
     :config (doom-modeline-mode))
    #+end_src
 
+   #+begin_src emacs-lisp :tangle no
+   (use-package nord-theme
+     :config
+     (load-theme 'nord t)
+   )
+   #+end_src
+
    #+begin_src emacs-lisp :tangle yes
+   (use-package moe-theme
+     :config
+     (setq moe-theme-hightlight-buffer-id t)
+     (show-paren-mode t)
+     (setq show-paren-style 'expression)
+     (load-theme 'moe-dark t)
+   )
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle no
    (use-package srcery-theme
      :config
      (load-theme 'srcery t)
