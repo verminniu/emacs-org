@@ -1348,6 +1348,15 @@
   )
    #+END_SRC
 
+** Comment dwim 2
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package comment-dwim-2
+    :config
+    (global-set-key (kbd "M-;") 'comment-dwim-2)
+    (define-key org-mode-map (kbd "M-;") 'org-comment-dwim-2)
+    )
+   #+END_SRC
+
 ** Treemacs
 
    #+BEGIN_SRC emacs-lisp :tangle yes
