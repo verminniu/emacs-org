@@ -955,23 +955,23 @@
 ** Avy
    Navigation with Avy
    #+begin_src emacs-lisp :tangle yes
-   (use-package avy
-     :ensure t
-     :config
-     (avy-setup-default)
-     :bind (
-           ("M-g c" . avy-goto-char)
-           ("M-g M-c" . avy-goto-char-2)
-           ;;("M-g M-g" . avy-goto-line)
-           ("M-g g" . avy-goto-line)
-           ("M-g w" . avy-goto-word-1)
-           ("M-g e" . avy-goto-word-0)
-           )
-     )
+     (use-package avy
+       :ensure t
+       :config
+       (avy-setup-default)
+       :bind (
+             ("M-g c" . avy-goto-char)
+             ("M-g M-c" . avy-goto-char-2)
+             ;; ("M-g M-g" . avy-goto-line)
+             ("M-g g" . avy-goto-line)
+             ("M-g w" . avy-goto-word-1)
+             ("M-g e" . avy-goto-word-0)
+             )
+       )
 
-   (use-package ivy-avy
-     :after ivy
-   )
+     (use-package ivy-avy
+       :after ivy
+     )
    #+end_src
 
 ** Parentheses
@@ -1346,6 +1346,15 @@
     :bind (("C-c ;" . iedit-mode)
     )
   )
+   #+END_SRC
+
+** Comment dwim 2
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package comment-dwim-2
+    :config
+    (global-set-key (kbd "M-;") 'comment-dwim-2)
+    (define-key org-mode-map (kbd "M-;") 'org-comment-dwim-2)
+    )
    #+END_SRC
 
 ** Treemacs
