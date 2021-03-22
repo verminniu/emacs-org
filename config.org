@@ -709,6 +709,15 @@
    #+end_src
 
 * Advanced Configuration
+** Hungry delete
+   delete all space
+   #+begin_src emacs-lisp :tangle yes
+   (use-package hungry-delete
+     :config
+     (global-hungry-delete-mode)
+   )
+   #+end_src
+
 ** Highlight Indent
    charater 模式，有时候会引起换行错误，改为colum
    #+begin_src emacs-lisp :tangle yes
