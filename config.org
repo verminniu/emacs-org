@@ -1,6 +1,77 @@
 #+Title:  Vermin's Emacs Configuration
 
-* Install
+* Install                                                             :TOC_2:
+  :PROPERTIES:
+  :ID:       00907078-9F34-4120-9126-C9C66DBC962A
+  :END:
+  - [[#install-from-sources][Install From Sources]]
+- [[#emacs-initialization][Emacs Initialization]]
+  - [[#packages-sources][Packages Sources]]
+  - [[#use-package][use-package]]
+- [[#start-up][Start Up]]
+  - [[#better-defaults][Better defaults]]
+  - [[#os-set][Os Set]]
+  - [[#customization][Customization]]
+  - [[#shell-path][Shell Path]]
+  - [[#theme][Theme]]
+  - [[#flycheck][FlyCheck]]
+  - [[#eglot][Eglot]]
+  - [[#lsp][LSP]]
+  - [[#turn-off-mouse-interface][Turn off mouse interface]]
+- [[#languages][Languages]]
+  - [[#shell][Shell]]
+  - [[#rainbow-identifiers][Rainbow Identifiers]]
+  - [[#doxygen-comment][Doxygen Comment]]
+  - [[#cmake][CMake]]
+  - [[#yaml][Yaml]]
+  - [[#emacs-lisp][Emacs Lisp]]
+  - [[#python][Python]]
+  - [[#c][C++]]
+  - [[#shell-1][Shell]]
+  - [[#markdown][Markdown]]
+  - [[#go][GO]]
+  - [[#protobuf][Protobuf]]
+  - [[#k8s][k8s]]
+  - [[#dockerfile][dockerfile]]
+- [[#advanced-configuration][Advanced Configuration]]
+  - [[#hungry-delete][Hungry delete]]
+  - [[#highlight-indent][Highlight Indent]]
+  - [[#icons][Icons]]
+  - [[#dashboard][Dashboard]]
+  - [[#dired][Dired]]
+  - [[#company][Company]]
+  - [[#buffers][Buffers]]
+  - [[#history][History]]
+  - [[#which-key][Which-Key]]
+  - [[#ivy][Ivy]]
+  - [[#avy][Avy]]
+  - [[#parentheses][Parentheses]]
+  - [[#projectile][Projectile]]
+  - [[#recent-files][Recent Files]]
+  - [[#version-control][Version Control]]
+  - [[#whitespaces][Whitespaces]]
+  - [[#word-wrap][Word Wrap]]
+  - [[#yasnippet][YASnippet]]
+  - [[#number-window][Number Window]]
+  - [[#whole-line-or-region][Whole line or region]]
+  - [[#ediff][Ediff]]
+  - [[#vdiff][Vdiff]]
+  - [[#symbol-overlay][Symbol overlay]]
+  - [[#smex][Smex]]
+  - [[#compile][Compile]]
+  - [[#refactor][Refactor]]
+  - [[#add-mutil-iedit][Add mutil iedit]]
+  - [[#comment-dwim-2][Comment dwim 2]]
+  - [[#treemacs][Treemacs]]
+- [[#org-mode][Org-mode]]
+  - [[#org-common-setting][Org Common Setting]]
+  - [[#org-bullets][Org bullets]]
+  - [[#org-superstar][Org Superstar]]
+  - [[#toc-org][toc-org]]
+  - [[#add-markdown-to-export-list][Add markdown to Export list]]
+  - [[#org-mind-map][Org-mind-map]]
+  - [[#org-roam][Org-roam]]
+
 ** Install From Sources
   编译参数
   --with-nativecomp需要单独分支支持
@@ -8,7 +79,10 @@
  ./configure --with-nativecomp --with-gnutls --without-x --with-pop --with-mailutils --with-xml2 --with-json=ifavailable
   #+end_src
 
-* Emacs Initialization
+* Emacs Initialization                                                :TOC_2:
+  :PROPERTIES:
+  :ID:       3B2C19C6-F8EC-40CA-A04A-BB92BFE4A1FE
+  :END:
 ** Packages Sources
 
    In order to install packages, it is useful to configure the package sources.
@@ -36,7 +110,7 @@
   (use-package use-package-ensure-system-package :ensure t)
    #+END_SRC
 
-* Start Up
+* Start Up                                                            :TOC_2:
 ** Better defaults
 
    For a better user experience of GNU Emacs, here are the default values I use.
@@ -313,7 +387,7 @@
     (tooltip-mode -1))              ; Disable the tooltips
    #+END_SRC
 
-* Languages
+* Languages                                                           :TOC_2:
 ** Shell
    add shell support
    #+begin_src emacs-lisp :tangle yes
@@ -715,7 +789,7 @@
    )
    #+end_src
 
-* Advanced Configuration
+* Advanced Configuration                                           :TOC_3_gh:
 ** Hungry delete
    delete all space
    #+begin_src emacs-lisp :tangle yes
@@ -1476,7 +1550,7 @@
 
    #+END_SRC
 
-* Org-mode
+* Org-mode                                                         :TOC_3_gh:
 ** Org Common Setting
    不转义"_"
    #+begin_src emacs-lisp :tangle yes
@@ -1496,6 +1570,16 @@
    (use-package org-superstar
      :config
      (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+   )
+   #+end_src
+
+** toc-org
+   #+begin_src emacs-lisp :tangle yes
+   (use-package toc-org
+     :config
+     (add-hook 'org-mode-hook 'toc-org-mode)
+     (add-hook 'markdown-mode-hook 'toc-org-mode)
+     (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
    )
    #+end_src
 
