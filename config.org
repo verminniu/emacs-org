@@ -1,9 +1,7 @@
 #+Title:  Vermin's Emacs Configuration
 
-* Install                                                             :TOC_2:
-  :PROPERTIES:
-  :ID:       00907078-9F34-4120-9126-C9C66DBC962A
-  :END:
+* Table of Contents                                                :TOC_2_gh:
+- [[#install][Install]]
   - [[#install-from-sources][Install From Sources]]
 - [[#emacs-initialization][Emacs Initialization]]
   - [[#packages-sources][Packages Sources]]
@@ -67,11 +65,12 @@
   - [[#org-common-setting][Org Common Setting]]
   - [[#org-bullets][Org bullets]]
   - [[#org-superstar][Org Superstar]]
-  - [[#toc-org][toc-org]]
+  - [[#toc-org][Toc-org]]
   - [[#add-markdown-to-export-list][Add markdown to Export list]]
   - [[#org-mind-map][Org-mind-map]]
   - [[#org-roam][Org-roam]]
 
+* Install
 ** Install From Sources
   编译参数
   --with-nativecomp需要单独分支支持
@@ -79,10 +78,7 @@
  ./configure --with-nativecomp --with-gnutls --without-x --with-pop --with-mailutils --with-xml2 --with-json=ifavailable
   #+end_src
 
-* Emacs Initialization                                                :TOC_2:
-  :PROPERTIES:
-  :ID:       3B2C19C6-F8EC-40CA-A04A-BB92BFE4A1FE
-  :END:
+* Emacs Initialization
 ** Packages Sources
 
    In order to install packages, it is useful to configure the package sources.
@@ -110,7 +106,7 @@
   (use-package use-package-ensure-system-package :ensure t)
    #+END_SRC
 
-* Start Up                                                            :TOC_2:
+* Start Up
 ** Better defaults
 
    For a better user experience of GNU Emacs, here are the default values I use.
@@ -387,7 +383,7 @@
     (tooltip-mode -1))              ; Disable the tooltips
    #+END_SRC
 
-* Languages                                                           :TOC_2:
+* Languages
 ** Shell
    add shell support
    #+begin_src emacs-lisp :tangle yes
@@ -789,7 +785,7 @@
    )
    #+end_src
 
-* Advanced Configuration                                           :TOC_3_gh:
+* Advanced Configuration
 ** Hungry delete
    delete all space
    #+begin_src emacs-lisp :tangle yes
@@ -1550,7 +1546,7 @@
 
    #+END_SRC
 
-* Org-mode                                                         :TOC_3_gh:
+* Org-mode
 ** Org Common Setting
    不转义"_"
    #+begin_src emacs-lisp :tangle yes
@@ -1573,7 +1569,7 @@
    )
    #+end_src
 
-** toc-org
+** Toc-org
    #+begin_src emacs-lisp :tangle yes
    (use-package toc-org
      :config
@@ -1582,7 +1578,6 @@
      (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
    )
    #+end_src
-
 ** Add markdown to Export list
    #+begin_src emacs-lisp :tangle yes
    ;;(use-package ox-qmd)
