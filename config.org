@@ -32,6 +32,7 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#beacon][Beacon]]
   - [[#hungry-delete][Hungry delete]]
   - [[#highlight-indent][Highlight Indent]]
   - [[#icons][Icons]]
@@ -786,6 +787,16 @@
    #+end_src
 
 * Advanced Configuration
+** Beacon
+   find cursor
+   #+begin_src emacs-lisp :tangle yes
+   (use-package beacon
+     :config
+     (beacon-mode 1)
+   )
+
+   #+end_src
+
 ** Hungry delete
    delete all space
    #+begin_src emacs-lisp :tangle yes
