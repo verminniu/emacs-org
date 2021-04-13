@@ -85,12 +85,19 @@
    In order to install packages, it is useful to configure the package sources.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-   ;;; package -- vermin's emacs conf
-   ;;; Code:
+        ;;; package -- vermin's emacs conf
+        ;;; Code:
 
-   (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                            ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+        ;; (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ;;                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ;;                          ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+
+        (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
+                                 ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+                                 ("org" . "http://mirrors.cloud.tencent.com/elpa/org/")
+                                 ("marmalade" . "http://mirrors.cloud.tencent.com/elpa/marmalade/")
+                                 ("melpa-stable" . "http://mirrors.cloud.tencent.com/elpa/melpa-stable/")
+                                 ))
    #+END_SRC
 
 ** use-package
@@ -599,6 +606,15 @@
 	:init (modern-c++-font-lock-global-mode t)
   )
    #+END_SRC
+
+   #+begin_src emacs-lisp :tangle yes
+   (use-package cpp-auto-include
+     :config
+     (cpp-auto-include)
+   )
+   #+end_src
+
+
 ** Shell
    Use lsp
    #+BEGIN_SRC emacs-lisp :tangle yes
