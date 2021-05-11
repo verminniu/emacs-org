@@ -33,6 +33,7 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#move-dup][Move-dup]]
   - [[#beacon][Beacon]]
   - [[#hungry-delete][Hungry delete]]
   - [[#highlight-indent][Highlight Indent]]
@@ -804,6 +805,16 @@
    #+end_src
 
 * Advanced Configuration
+** Move-dup
+   for code move
+   #+begin_src emacs-lisp :tangle yes
+   (use-package move-dup
+     :bind (("M-p"   . move-dup-move-lines-up)
+            ("C-M-p" . move-dup-duplicate-up)
+            ("M-n"   . move-dup-move-lines-down)
+            ("C-M-n" . move-dup-duplicate-down)))
+   #+end_src
+
 ** Beacon
    find cursor
    #+begin_src emacs-lisp :tangle yes
