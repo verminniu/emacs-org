@@ -476,12 +476,25 @@
 ** Python
    Lsp-mode will start py on python mode
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   change to pyright
+   #+BEGIN_SRC emacs-lisp :tangle no
    (use-package lsp-python-ms
   :ensure t
   :init (setq lsp-python-ms-auto-install-server t)
   :hook (python-mode . (lambda ()
                           (require 'lsp-python-ms)
+                          (lsp))))  ; or lsp-deferred
+
+   #+END_SRC
+
+   Use pyright
+   #+BEGIN_SRC emacs-lisp :tangle yes
+   ;; sudo npm install -g pyright
+   ;; sudo npm update -g pyright
+   (use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 
    #+END_SRC
@@ -615,7 +628,6 @@
      (cpp-auto-include)
    )
    #+end_src
-
 
 ** Shell
    Use lsp
