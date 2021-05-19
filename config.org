@@ -55,6 +55,7 @@
   - [[#yasnippet][YASnippet]]
   - [[#number-window][Number Window]]
   - [[#current-word-highlight][Current word highlight]]
+  - [[#syntax-subword][Syntax subword]]
   - [[#whole-line-or-region][Whole line or region]]
   - [[#ediff][Ediff]]
   - [[#vdiff][Vdiff]]
@@ -1344,6 +1345,14 @@
      :config
      (add-hook 'prog-mode-hook 'current-word-highlight-mode)
    )
+   #+end_src
+
+** Syntax subword
+   #+begin_src emacs-lisp :tangle yes
+   (use-package syntax-subword
+     :init
+     (global-syntax-subword-mode)
+     )
    #+end_src
 
 ** Whole line or region
