@@ -494,8 +494,10 @@
    ;; sudo npm install -g pyright
    ;; sudo npm update -g pyright
    (use-package lsp-pyright
-  :ensure t
-  :hook (python-mode . (lambda ()
+     :ensure t
+     :config
+     (setq lsp-pyright-python-executable-cmd "python3")
+     :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 
