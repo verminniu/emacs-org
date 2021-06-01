@@ -859,15 +859,39 @@
    #+end_src
 
 ** Highlight Indent
-   charater 模式，有时候会引起换行错误，改为colum
+
    #+begin_src emacs-lisp :tangle yes
+   (use-package indent-guide
+     :config
+     (set-face-background 'indent-guide-face "cyan")
+     (indent-guide-global-mode)
+   )
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle no
+   (use-package highlight-indentation
+     :hook (
+     (prog-mode . highlight-indentation-mode)
+     (protobuf-mode . highlight-indentation-mode)
+     ;; (prog-mode . highlight-indentation-current-column-mode)
+     ;; (protobuf-mode . highlight-indentation-current-column-mode)
+     )
+     :config
+     (set-face-background 'highlight-indentation-face "green")
+     (set-face-background 'highlight-indentation-current-column-face "magenta")
+
+   )
+   #+end_src
+
+   charater 模式，有时候会引起换行错误，改为colum
+   #+begin_src emacs-lisp :tangle no
    (use-package highlight-indent-guides
      :hook (
      (prog-mode . highlight-indent-guides-mode)
      (protobuf-mode . highlight-indent-guides-mode)
      )
      :config
-     (setq highlight-indent-guides-method 'colum)
+     (setq highlight-indent-guides-method 'charater)
    )
    #+end_src
 
