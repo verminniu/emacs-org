@@ -234,10 +234,16 @@
    *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
    [[#Icons][all-the-icons]].
 
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
   (use-package doom-modeline
     :defer 0.1
     :config (doom-modeline-mode))
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle yes
+   (use-package color-theme-sanityinc-tomorrow
+     :defer 0.1
+     :config (load-theme 'sanityinc-tomorrow-night t))
    #+end_src
 
    #+begin_src emacs-lisp :tangle no
@@ -247,7 +253,7 @@
    )
    #+end_src
 
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
    (use-package moe-theme
      :config
      (setq moe-theme-hightlight-buffer-id t)
@@ -265,7 +271,7 @@
    )
    #+end_src
 
-   #+begin_src emacs-lisp :tangle no
+   #+begin_src emacs-lisp :tangle yes
    (use-package srcery-theme
      :config
      (load-theme 'srcery t)
@@ -861,7 +867,7 @@
      (protobuf-mode . highlight-indent-guides-mode)
      )
      :config
-     (setq highlight-indent-guides-method 'fill)
+     (setq highlight-indent-guides-method 'colum)
    )
    #+end_src
 
