@@ -161,6 +161,7 @@
     ;;(prefer-coding-system 'chinese-gbk)       ; linux system
 	;;(prefer-coding-system 'gb2312-unix)		;
 	(show-paren-mode 1)                               ; Show the parent
+    (menu-bar-mode 0)                                 ; disable menu bar
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
