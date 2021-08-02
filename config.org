@@ -33,6 +33,7 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#undo-tree][Undo tree]]
   - [[#move-dup][Move-dup]]
   - [[#beacon][Beacon]]
   - [[#hungry-delete][Hungry delete]]
@@ -829,6 +830,15 @@
    #+end_src
 
 * Advanced Configuration
+** Undo tree
+   better undo && redo
+   #+begin_src emacs-lisp :tangle yes
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode)
+    )
+   #+end_src
+
 ** Move-dup
    for code move
    #+begin_src emacs-lisp :tangle yes
