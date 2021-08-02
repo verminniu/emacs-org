@@ -7,6 +7,7 @@
 - [[#emacs-initialization][Emacs Initialization]]
   - [[#packages-sources][Packages Sources]]
   - [[#use-package][use-package]]
+  - [[#quelpa][Quelpa]]
 - [[#start-up][Start Up]]
   - [[#better-defaults][Better defaults]]
   - [[#os-set][Os Set]]
@@ -118,6 +119,23 @@
   (use-package delight :ensure t)
   (use-package use-package-ensure-system-package :ensure t)
    #+END_SRC
+
+** Quelpa
+   use Quelpa for use github packages
+   #+begin_src emacs-lisp :tangle yes
+   (use-package quelpa :ensure t)
+   #+end_src
+
+   暂时有点问题，后续调整
+   #+begin_src emacs-lisp :tangle no
+   (use-package quelpa-use-package
+     :after quelpa
+     :config
+     (setq use-package-ensure-function 'quelpa)
+     setq use-package-always-ensure t)
+  )
+
+   #+end_src
 
 * Start Up
 ** Better defaults
