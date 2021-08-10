@@ -43,6 +43,7 @@
   - [[#dashboard][Dashboard]]
   - [[#dired][Dired]]
   - [[#company][Company]]
+  - [[#company-tabnine][Company TabNine]]
   - [[#buffers][Buffers]]
   - [[#history][History]]
   - [[#which-key][Which-Key]]
@@ -179,7 +180,6 @@
     ;;(prefer-coding-system 'chinese-gbk)       ; linux system
 	;;(prefer-coding-system 'gb2312-unix)		;
 	(show-paren-mode 1)                               ; Show the parent
-    (menu-bar-mode 0)                                 ; disable menu bar
 	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
 	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -416,11 +416,9 @@
    I find invasive.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (when window-system
     (menu-bar-mode -1)              ; Disable the menu bar
-    (scroll-bar-mode -1)            ; Disable the scroll bar
     (tool-bar-mode -1)              ; Disable the tool bar
-    (tooltip-mode -1))              ; Disable the tooltips
+    (tooltip-mode -1)              ; Disable the tooltips
    #+END_SRC
 
 * Languages
@@ -1029,6 +1027,14 @@
     :delight
     :hook (company-mode . company-box-mode))
    #+END_SRC
+
+** Company TabNine
+   Use tabnine
+   *和lsp有冲突，都用的capf backend，暂时先关闭*
+   #+begin_src emacs-lisp :tangle no
+   ;; Run M-x company-tabnine-install-binary to install the TabNine binary for your system.
+   (use-package company-tabnine :ensure t)
+   #+end_src
 
 ** Buffers
 
