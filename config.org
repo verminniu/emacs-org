@@ -469,6 +469,12 @@
      (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
        (add-hook hook 'turn-on-elisp-slime-nav-mode))
    )
+
+   (use-package slime-company
+     :after (slime company)
+     :config (setq slime-company-completion 'fuzzy
+                   slime-company-after-completion 'slime-company-just-one-space))
+
    #+end_src
 
 ** Rainbow Identifiers
