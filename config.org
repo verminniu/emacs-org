@@ -22,7 +22,8 @@
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
 - [[#languages][Languages]]
   - [[#shell][Shell]]
-  - [[#common-lisp][Common Lisp]]
+  - [[#common-lisp----slime][Common Lisp -- slime]]
+  - [[#common-lisp----sly][Common Lisp -- sly]]
   - [[#rainbow-identifiers][Rainbow Identifiers]]
   - [[#doxygen-comment][Doxygen Comment]]
   - [[#cmake][CMake]]
@@ -454,27 +455,43 @@
    )
    #+end_src
 
-** Common Lisp
+** Common Lisp -- slime
    common lisp env
    #+begin_src emacs-lisp :tangle yes
-   ;; install sbcl first, like:
-   ;;     sudo yum install sbcl
-   (use-package slime
-     :config
-     (setq inferior-lisp-program "sbcl")
-   )
+     ;; install sbcl first, like:
+     ;;     sudo yum install sbcl               
+     (use-package slime
+       :config
+       (setq inferior-lisp-program "sbcl")
+     )
 
-   (use-package elisp-slime-nav
-     :config
-     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-       (add-hook hook 'turn-on-elisp-slime-nav-mode))
-   )
+     (use-package elisp-slime-nav
+       :config
+       (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+         (add-hook hook 'turn-on-elisp-slime-nav-mode))
+     )
 
-   (use-package slime-company
-     :after (slime company)
-     :config (setq slime-company-completion 'fuzzy
-                   slime-company-after-completion 'slime-company-just-one-space))
+     (use-package slime-company
+       :after (slime company)
+       :config (setq slime-company-completion 'fuzzy
+                     slime-company-after-completion 'slime-company-just-one-space))
 
+   #+end_src
+** Common Lisp -- sly
+   try sly
+
+   #+begin_src emacs-lisp :tangle no
+     ;; install sbcl first, like:
+     ;;     sudo yum install sbcl
+     (use-package sly
+       :hook (lisp-mode-hook . sly-editing-mode)
+       :config
+       (setq inferior-lisp-program "sbcl")
+     )
+
+     (use-package sly-quicklisp)
+     (use-package sly-named-readtables)
+     (use-package sly-macrostep)
    #+end_src
 
 ** Rainbow Identifiers
