@@ -17,6 +17,8 @@
   - [[#flycheck][FlyCheck]]
   - [[#eglot][Eglot]]
   - [[#lsp][LSP]]
+  - [[#gdb][GDB]]
+  - [[#realgud][RealGud]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
 - [[#languages][Languages]]
   - [[#shell][Shell]]
@@ -409,6 +411,26 @@
      :commands lsp-ivy-workspace-symbol
    )
    #+END_SRC
+** GDB
+   暂时先配置多窗口调试
+   #+begin_src emacs-lisp :tangle yes
+   ;; use gdb in many windows by default
+   (setq gdb-many-windows t)
+   ;; non-nil display sourcce file containing the main routine at startup
+   (setq gdb-show-main t)
+   (setq gdb-use-separate-io-buffer 1)
+   #+end_src
+
+** RealGud
+   use realgud for debug
+
+   #+begin_src emacs-lisp :tangle yes
+   ;; maybe need run M-x package-refresh-contents RET first
+   (use-package realgud
+     :ensure t
+   )
+   #+end_src
+
 ** Turn off mouse interface
 
    Since I never use the mouse with GNU Emacs, I prefer not to use certain
