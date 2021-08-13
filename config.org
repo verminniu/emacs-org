@@ -22,6 +22,7 @@
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
 - [[#languages][Languages]]
   - [[#shell][Shell]]
+  - [[#common-lisp][Common Lisp]]
   - [[#rainbow-identifiers][Rainbow Identifiers]]
   - [[#doxygen-comment][Doxygen Comment]]
   - [[#cmake][CMake]]
@@ -450,6 +451,23 @@
    (use-package bash-completion
      :config
      (bash-completion-setup)
+   )
+   #+end_src
+
+** Common Lisp
+   common lisp env
+   #+begin_src emacs-lisp :tangle yes
+   ;; install sbcl first, like:
+   ;;     sudo yum install sbcl
+   (use-package slime
+     :config
+     (setq inferior-lisp-program "sbcl")
+   )
+
+   (use-package elisp-slime-nav
+     :config
+     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+       (add-hook hook 'turn-on-elisp-slime-nav-mode))
    )
    #+end_src
 
