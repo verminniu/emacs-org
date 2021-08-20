@@ -268,13 +268,12 @@
    #+end_src
 
    telephone 更好看一点
-   #+begin_src emacs-lisp tangle no
+   #+begin_src emacs-lisp :tangle no
      (use-package powerline
        :config
        (powerline-default-theme)
        )
    #+end_src
-
 
    #+begin_src emacs-lisp :tangle yes
      (use-package moe-theme
