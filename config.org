@@ -258,13 +258,37 @@
    *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
    [[#Icons][all-the-icons]].
 
+   powerline && moe-theme is better than doom's
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package powerline
+       :config
+       (powerline-default-theme)
+       )
+     (use-package moe-theme
+       :config
+       (setq moe-theme-hightlight-buffer-id t)
+       ;; Resize titles (optional).
+       (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
+       (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+       (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+       ;; Choose a color for mode-line.(Default: blue)
+       (moe-theme-random-color)
+       (powerline-moe-theme)
+       (show-paren-mode t)
+       (setq show-paren-style 'expression)
+       (load-theme 'moe-dark t)
+       (set-face-background hl-line-face "color-17")
+       )
+   #+end_src
+
    #+begin_src emacs-lisp :tangle no
   (use-package doom-modeline
     :defer 0.1
     :config (doom-modeline-mode))
    #+end_src
 
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
    (use-package color-theme-sanityinc-tomorrow
      :defer 0.1
      :config (load-theme 'sanityinc-tomorrow-night t))
@@ -278,24 +302,6 @@
    #+end_src
 
    #+begin_src emacs-lisp :tangle no
-   (use-package moe-theme
-     :config
-     (setq moe-theme-hightlight-buffer-id t)
-     ;; Resize titles (optional).
-     (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
-     (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
-     (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
-     ;; Choose a color for mode-line.(Default: blue)
-     (moe-theme-random-color)
-
-     (show-paren-mode t)
-     (setq show-paren-style 'expression)
-     (load-theme 'moe-dark t)
-     (set-face-background hl-line-face "color-17")
-   )
-   #+end_src
-
-   #+begin_src emacs-lisp :tangle yes
    (use-package srcery-theme
      :config
      (load-theme 'srcery t)
