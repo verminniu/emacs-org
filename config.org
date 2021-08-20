@@ -416,11 +416,11 @@
 ** GDB
    暂时先配置多窗口调试
    #+begin_src emacs-lisp :tangle yes
-   ;; use gdb in many windows by default
-   (setq gdb-many-windows t)
-   ;; non-nil display sourcce file containing the main routine at startup
-   (setq gdb-show-main t)
-   (setq gdb-use-separate-io-buffer 1)
+     ;; use gdb in many windows by default
+     (setq gdb-many-windows t)
+     ;; non-nil display sourcce file containing the main routine at startup
+     ;; (setq gdb-show-main t)
+     ;; (setq gdb-use-separate-io-buffer 1)
    #+end_src
 
 ** RealGud
@@ -459,7 +459,7 @@
    common lisp env
    #+begin_src emacs-lisp :tangle yes
      ;; install sbcl first, like:
-     ;;     sudo yum install sbcl               
+     ;;     sudo yum install sbcl
      (use-package slime
        :config
        (setq inferior-lisp-program "sbcl")
@@ -1542,8 +1542,8 @@
    #+END_SRC
 
 ** Vdiff
-   Use vdiff
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   Use vdiff -- 取消，没有ediff好用
+   #+BEGIN_SRC emacs-lisp :tangle no
    (use-package vdiff
      :config
      (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
