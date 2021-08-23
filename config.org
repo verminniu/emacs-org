@@ -76,6 +76,8 @@
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
   - [[#org-bullets][Org bullets]]
+  - [[#org-ql][Org QL]]
+  - [[#org-sidebar][Org sidebar]]
   - [[#org-superstar][Org Superstar]]
   - [[#toc-org][Toc-org]]
   - [[#add-markdown-to-export-list][Add markdown to Export list]]
@@ -1772,11 +1774,28 @@
    #+end_src
 
 ** Org bullets
+   Show org-mode bullets as UTF-8 characters.
    #+begin_src emacs-lisp :tangle no
    (use-package org-bullets
      :config
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-   )
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+   #+end_src
+
+** Org QL
+   This package provides a query language for Org files. It offers two syntax styles: Lisp-like sexps and search engine-like keywords.
+   use libraries org-ql and org-ql-view.
+   #+begin_src emacs-lisp :tangle no
+   (use-package org-ql)
+   #+end_src
+
+** Org sidebar
+   Use age
+   org-sidebar-tree: Display tree-view sidebar for current Org buffer.
+   org-sidebar-tree-toggle: Toggle tree-view sidebar.
+   org-sidebar: Display the default item sidebars for the current Org buffer.
+   org-sidebar-toggle: Toggle default sidebars.
+   #+begin_src emacs-lisp :tangle yes
+   (use-package org-sidebar)
    #+end_src
 
 ** Org Superstar
