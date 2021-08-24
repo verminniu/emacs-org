@@ -1535,6 +1535,8 @@
 
      (eval-after-load "diff-mode"
        '(update-diff-colors))
+     (with-eval-after-load 'outline
+       (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
 
      ;; Usage: emacs -diff file1 file2
      (defun command-line-diff (switch)
