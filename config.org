@@ -1320,6 +1320,8 @@
    (but for performance sake an indexing mechanism backed by external commands
    exists as well).
 
+   Use build.sh to compile project with build.sh
+
    [[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
    #+END_QUOTE
 
@@ -1339,8 +1341,9 @@
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
     (add-to-list 'projectile-globally-ignored-directories ".clangd")
     (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
-    (projectile-global-mode)
-	)
+    (projectile-register-project-type 'build-proj '("build.sh")
+                                      :compile "./build.sh")
+    (projectile-global-mode))
 
   (use-package counsel-projectile
     :after (counsel projectile)
@@ -1602,14 +1605,15 @@
 
    #+END_SRC
 ** Compile
-   Use smart compile
+   projectile-compile-project 解决build.sh，暂时以下插件不需要
+   __Use smart compile__
    #+BEGIN_SRC emacs-lisp :tangle no
      (use-package smart-compile
      )
    #+END_SRC
 
    try Quickrun
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
    (use-package quickrun
    ;; :config
    ;; ;; Use this parameter in pod-mode
