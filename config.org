@@ -21,6 +21,7 @@
   - [[#realgud][RealGud]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
 - [[#languages][Languages]]
+  - [[#format-all][Format All]]
   - [[#shell][Shell]]
   - [[#common-lisp----slime][Common Lisp -- slime]]
   - [[#common-lisp----sly][Common Lisp -- sly]]
@@ -465,6 +466,12 @@
    #+END_SRC
 
 * Languages
+** Format All
+   format all languages
+   #+begin_src emacs-lisp :tangle yes
+   (use-package format-all)
+   #+end_src
+
 ** Shell
    add shell support
    #+begin_src emacs-lisp :tangle yes
@@ -585,17 +592,6 @@
 
 ** Python
    Lsp-mode will start py on python mode
-
-   change to pyright
-   #+BEGIN_SRC emacs-lisp :tangle no
-   (use-package lsp-python-ms
-  :ensure t
-  :init (setq lsp-python-ms-auto-install-server t)
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-python-ms)
-                          (lsp))))  ; or lsp-deferred
-
-   #+END_SRC
 
    Use pyright
    #+BEGIN_SRC emacs-lisp :tangle yes
