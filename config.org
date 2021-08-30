@@ -389,11 +389,10 @@
      (setq lsp-completion-enable t
            lsp-enable-snippet t
            lsp-semantic-highlighting t
-           lsp-idle-delay 0.500
+           lsp-idle-delay 0.1
            lsp-enable-text-document-color t
            lsp-completion-provider :capf)
-     (push 'company-capf company-backends)
-     )
+     (push 'company-capf company-backends))
 
    (use-package lsp-ui
      :commands lsp-ui-mode)
@@ -419,6 +418,9 @@
             (php-mode . (lambda () (require 'dap-php)))
             (elixir-mode . (lambda () (require 'dap-elixir)))
             ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
+
+   (with-eval-after-load 'lsp-mode
+     (require 'dap-cpptools))
 
    ;; `lsp-mode' and `treemacs' integration.
    (use-package lsp-treemacs
@@ -468,8 +470,26 @@
 * Languages
 ** Format All
    format all languages
+   针对python自定义一个format支持black超长行换行
+   主动打开各个语言的format，否则如果没有配置formater，会报错
    #+begin_src emacs-lisp :tangle yes
-   (use-package format-all)
+     (use-package format-all
+       :config
+       (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
+       ;; 主动打开各个mode的hook
+       (add-hook 'c-mode-hook 'format-all-mode)
+       (add-hook 'c++-mode-hook 'format-all-mode)
+       (define-format-all-formatter myblack
+         (:executable "black")
+         (:install "pip install black")
+         (:languages "Python")
+         (:features)
+         (:format (format-all--buffer-easy
+                   executable "-q" "--experimental-string-processing"
+                   (when (format-all--buffer-extension-p "pyi") "--pyi")
+                   "-")))
+       (add-hook 'python-mode-hook #'(lambda ()
+                                       (setq-local format-all-formatters '(("Python" myblack))))))
    #+end_src
 
 ** Shell
@@ -592,6 +612,7 @@
 
 ** Python
    Lsp-mode will start py on python mode
+   use [[*Format All][Format All]] to format code
 
    Use pyright
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -639,70 +660,12 @@
               (process-query-on-exit-flag (get-process "Python"))))
 
 	  ;; Live Coding in Python
-	  (use-package live-py-mode)
-
-	  ;; Format using YAPF
-	  ;; Install: pip install yapf
-	  (use-package yapfify
-        :diminish yapf-mode
-        :hook (python-mode . yapf-mode)))
+	  (use-package live-py-mode))
    #+END_SRC
+
 ** C++
    c++ lsp server
    disable cquery and ccls to use clangd as lsp server
-   cquery not support new lsp-mode
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-   (with-eval-after-load 'projectile
-   (setq projectile-project-root-files-top-down-recurring
-        (append '("compile_commands.json"
-                  ".cquery")
-                projectile-project-root-files-top-down-recurring)))
-
-   (use-package cquery
-    :commands lsp
-	:hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
-	                                                  (require 'cquery)
-													  (lsp)
-													  ))
-    :config
-	(setq cquery-executable "cquery")
-	(setq cquery-extra-args '("--log-file=~/.cquery/log/cq.log"))
-	(setq cquery-cache-dir "~/.cquery/cache")
-	(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
-	;;(setq cquery-sem-highlight-method 'overlay)
-	(setq cquery-sem-highlight-method 'font-lock)
-	(cquery-use-default-rainbow-sem-highlight)
-	)
-   #+END_SRC
-
-   =ccls=
-   #+BEGIN_SRC emacs-lisp :tangle no
-   (with-eval-after-load 'projectile
-   (setq projectile-project-root-files-top-down-recurring
-        (append '("compile_commands.json"
-                  ".ccls")
-                projectile-project-root-files-top-down-recurring)))
-
-   (use-package ccls
-    :commands lsp
-	:hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
-	                                                  (require 'ccls)
-													  (lsp)
-													  ))
-    :config
-	(setq ccls-executable "ccls")
-	(setq ccls-extra-args '("--log-file=~/.ccls/log/ccls.log"))
-	;;(setq ccls-cache-dir "~/.ccls/cache")
-	(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
-	(setq ccls-sem-highlight-method 'font-lock)
-	;; alternatively, (setq ccls-sem-highlight-method 'overlay)
-	;; For rainbow semantic highlighting
-	(ccls-use-default-rainbow-sem-highlight)
-	)
-
-   #+END_SRC
-
 
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-c-style				;
@@ -1466,6 +1429,7 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
     :defer t
+    :after lsp-mode
 	:init
 	;;(add-hook 'prog-mode-hook 'yas-minor-mode)
     (yas-global-mode 1)
