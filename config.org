@@ -451,7 +451,7 @@
    #+begin_src emacs-lisp :tangle yes
    ;; maybe need run M-x package-refresh-contents RET first
    (use-package realgud
-     :ensure nil
+     :ensure t
    )
    #+end_src
 
