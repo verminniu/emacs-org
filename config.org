@@ -465,6 +465,7 @@
     (menu-bar-mode -1)              ; Disable the menu bar
     (tool-bar-mode -1)              ; Disable the tool bar
     (tooltip-mode -1)              ; Disable the tooltips
+    (scroll-bar-mode -1)           ; Disable the scrollbar
    #+END_SRC
 
 * Languages
@@ -488,6 +489,7 @@
                    executable "-q" "--experimental-string-processing"
                    (when (format-all--buffer-extension-p "pyi") "--pyi")
                    "-")))
+       (add-hook 'python-mode-hook 'format-all-mode)
        (add-hook 'python-mode-hook #'(lambda ()
                                        (setq-local format-all-formatters '(("Python" myblack))))))
    #+end_src
