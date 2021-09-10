@@ -12,6 +12,7 @@
   - [[#better-defaults][Better defaults]]
   - [[#os-set][Os Set]]
   - [[#customization][Customization]]
+  - [[#key-binding][Key Binding]]
   - [[#shell-path][Shell Path]]
   - [[#theme][Theme]]
   - [[#flycheck][FlyCheck]]
@@ -41,6 +42,8 @@
 - [[#advanced-configuration][Advanced Configuration]]
   - [[#undo-tree][Undo tree]]
   - [[#move-dup][Move-dup]]
+  - [[#multiple-cursors][Multiple-cursors]]
+  - [[#easy-kill--easy-mark][Easy Kill && easy mark]]
   - [[#beacon][Beacon]]
   - [[#hungry-delete][Hungry delete]]
   - [[#highlight-indent][Highlight Indent]]
@@ -99,19 +102,23 @@
    In order to install packages, it is useful to configure the package sources.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-        ;;; package -- vermin's emacs conf
-        ;;; Code:
+     ;;; package -- vermin's emacs conf
+     ;;; Code:
 
-        ;; (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-        ;;                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-        ;;                          ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+     (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                              ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                              ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
 
-        (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
-                                 ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
-                                 ("org" . "http://mirrors.cloud.tencent.com/elpa/org/")
-                                 ("marmalade" . "http://mirrors.cloud.tencent.com/elpa/marmalade/")
-                                 ("melpa-stable" . "http://mirrors.cloud.tencent.com/elpa/melpa-stable/")
-                                 ))
+     ;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+     ;;                          ("melpa" . "http://elpa.emacs-china.org/melpa/")
+     ;;                          ))
+
+     ;; (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
+     ;;                          ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+     ;;                          ("org" . "http://mirrors.cloud.tencent.com/elpa/org/")
+     ;;                          ("marmalade" . "http://mirrors.cloud.tencent.com/elpa/marmalade/")
+     ;;                          ("melpa-stable" . "http://mirrors.cloud.tencent.com/elpa/melpa-stable/")
+     ;; ))
    #+END_SRC
 
 ** use-package
@@ -140,9 +147,7 @@
      :after quelpa
      :config
      (setq use-package-ensure-function 'quelpa)
-     setq use-package-always-ensure t)
-  )
-
+     (setq use-package-always-ensure t))
    #+end_src
 
 * Start Up
@@ -232,6 +237,7 @@
     (load custom-file t))
    #+END_SRC
 
+** Key Binding
 ** Shell Path
    #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -908,6 +914,75 @@
             ("M-n"   . move-dup-move-lines-down)
             ("C-M-n" . move-dup-duplicate-down)))
    #+end_src
+
+** Multiple-cursors
+   #+begin_src emacs-lisp :tangle yes
+     (use-package multiple-cursors
+       :config
+       (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+       (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+       (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+       (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+       )
+
+   #+end_src
+
+** Easy Kill && easy mark
+   M-w for kill && mark
+   #+begin_src emacs-lisp :tangle yes
+     (use-package easy-kill
+       :config
+       (global-set-key [remap kill-ring-save] 'easy-kill)
+       (global-set-key [remap mark-sexp] 'easy-mark))
+
+     (use-package easy-kill-extras
+       :after (mutiple-cursors easy-kill)
+       :config
+       ;; Upgrade `mark-word' and `mark-sexp' with easy-mark
+       ;; equivalents.
+       (global-set-key (kbd "M-@") 'easy-mark-word)
+       (global-set-key (kbd "C-M-@") 'easy-mark-sexp)
+
+       ;; `easy-mark-to-char' or `easy-mark-up-to-char' could be a good
+       ;; replacement for `zap-to-char'.
+       (global-set-key [remap zap-to-char] 'easy-mark-to-char)
+
+       ;; Integrate `expand-region' functionality with easy-kill
+       (define-key easy-kill-base-map (kbd "o") 'easy-kill-er-expand)
+       (define-key easy-kill-base-map (kbd "i") 'easy-kill-er-unexpand)
+
+       ;; Add the following tuples to `easy-kill-alist', preferrably by
+       ;; using `customize-variable'.
+       (add-to-list 'easy-kill-alist '(?^ backward-line-edge ""))
+       (add-to-list 'easy-kill-alist '(?$ forward-line-edge ""))
+       (add-to-list 'easy-kill-alist '(?b buffer ""))
+       (add-to-list 'easy-kill-alist '(?< buffer-before-point ""))
+       (add-to-list 'easy-kill-alist '(?> buffer-after-point ""))
+       (add-to-list 'easy-kill-alist '(?f string-to-char-forward ""))
+       (add-to-list 'easy-kill-alist '(?F string-up-to-char-forward ""))
+       (add-to-list 'easy-kill-alist '(?t string-to-char-backward ""))
+       (add-to-list 'easy-kill-alist '(?T string-up-to-char-backward ""))
+       (define-key mc/keymap (kbd "C-. M-C-f") 'mc/mark-next-sexps)
+       (define-key mc/keymap (kbd "C-. M-C-b") 'mc/mark-previous-sexps)
+       (define-key mc/keymap (kbd "C-. <") 'mc/mark-all-above)
+       (define-key mc/keymap (kbd "C-. >") 'mc/mark-all-below)
+
+       (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
+       (define-key mc/keymap (kbd "C-. C-k") 'mc/remove-cursors-at-eol)
+       (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
+       (define-key mc/keymap (kbd "C-. C-o") 'mc/remove-cursors-on-blank-lines)
+
+       (define-key mc/keymap (kbd "C-. C-.") 'mc/freeze-fake-cursors-dwim)
+
+       (define-key mc/keymap (kbd "C-. .")   'mc/move-to-column)
+       (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
+
+       ;; Emacs 24.4+ comes with rectangle-mark-mode.
+       (define-key rectangle-mark-mode-map (kbd "C-. C-,") 'mc/rect-rectangle-to-multiple-cursors)
+
+       (define-key cua--rectangle-keymap   (kbd "C-. C-,") 'mc/cua-rectangle-to-multiple-cursors))
+   #+end_src
+
 
 ** Beacon
    find cursor
