@@ -1549,7 +1549,8 @@
    #+end_src
 
 ** Whole line or region
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
+   use easy-kill to install this
    (use-package whole-line-or-region
      :init
 	 (whole-line-or-region-global-mode)
