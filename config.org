@@ -204,21 +204,23 @@
 
    use fullcreen on mac os, and use alt instead cmd
    #+BEGIN_SRC emacs-lisp :tangle yes
-   ;; check OS type
-   (cond
-     ((string-equal system-type "windows-nt") ; Microsoft Windows
-       (progn
-         (message "Microsoft Windows")))
-     ((string-equal system-type "darwin") ; Mac OS X
-       (progn
-         (setq mac-command-modifier 'control)
-         (setq mac-option-modifier 'meta)
-         (add-to-list 'default-frame-alist '(fullscreen . maximized))
-         (message "Mac OS X")
-         ))
-     ((string-equal system-type "gnu/linux") ; linux
-       (progn
-       (message "Linux"))))
+     ;; check OS type
+     (cond
+       ((string-equal system-type "windows-nt") ; Microsoft Windows
+         (progn
+           (scroll-bar-mode -1)
+           (message "Microsoft Windows")))
+       ((string-equal system-type "darwin") ; Mac OS X
+         (progn
+           (setq mac-command-modifier 'control)
+           (setq mac-option-modifier 'meta)
+           (scroll-bar-mode -1)
+           (add-to-list 'default-frame-alist '(fullscreen . maximized))
+           (message "Mac OS X")
+           ))
+       ((string-equal system-type "gnu/linux") ; linux
+         (progn
+         (message "Linux"))))
    #+END_SRC
 
 ** Customization
@@ -468,10 +470,10 @@
    I find invasive.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-    (menu-bar-mode -1)              ; Disable the menu bar
-    (tool-bar-mode -1)              ; Disable the tool bar
-    (tooltip-mode -1)              ; Disable the tooltips
-    (scroll-bar-mode -1)           ; Disable the scrollbar
+     (menu-bar-mode -1)              ; Disable the menu bar
+     (tool-bar-mode -1)              ; Disable the tool bar
+     (tooltip-mode -1)              ; Disable the tooltips
+     ;; (scroll-bar-mode -1)           ; Disable the scrollbar
    #+END_SRC
 
 * Languages
