@@ -240,6 +240,14 @@
    #+END_SRC
 
 ** Key Binding
+   自己适应的一些绑定
+   #+begin_src emacs-lisp :tangle yes
+   ;; use bind-key for key binding
+   (use-package bind-key)
+   ;; Use s-SPC to set mark
+   (bind-key* "M-SPC" 'set-mark-command)
+   #+end_src
+
 ** Shell Path
    #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -1194,6 +1202,9 @@
    #+END_SRC
 
 ** Which-Key
+   :PROPERTIES:
+   :ID:       e3d033d4-6c26-43e6-891b-988e8d4c9a98
+   :END:
    Use Whick-key to help
    #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package which-key
