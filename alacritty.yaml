@@ -108,7 +108,10 @@ window:
   #multiplier: 3
 
 # Font configuration
-#font:
+font:
+  normal:
+    family: JetBrains Mono
+  #  style: Regular
   # Normal (roman) font face
   #normal:
     # Font family
@@ -145,8 +148,7 @@ window:
     #style: Italic
 
   # Bold italic font face
-  #bold_italic:
-    # Font family
+  #bold_italic:    # Font family
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
@@ -168,9 +170,9 @@ window:
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the
   # right, increasing `y` moves the glyph upward.
-  #glyph_offset:
-  #  x: 0
-  #  y: 0
+  glyph_offset:
+    x: 0
+    y: 0
 
   # Thin stroke font rendering (macOS only)
   #
@@ -204,7 +206,7 @@ colors:
       foreground: '0xf8f8f2'
   line_indicator:
     foreground: None
-    background: None
+    glyph_offset: None
   selection:
     text: CellForeground
     background: '0x44475a'
