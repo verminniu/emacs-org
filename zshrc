@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/vermin/.oh-my-zsh"
+export ZSH="~/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -75,10 +75,9 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 export HISTCONTROL=erasedups
-export PATH="$PATH:/data/llvm11/bin"
+export PATH="$PATH:/data/llvm12/bin"
 export TERM=xterm-256color
 export LANG=zh_CN.utf8
-
 source /usr/local/share/antigen/antigen.zsh
 
 # 加载oh-my-zsh库
@@ -100,8 +99,11 @@ antigen bundle zsh-users/zsh-autosuggestions
 # 自动补全功能
 antigen bundle zsh-users/zsh-completions
 
+antigen bundle Aloxaf/fzf-tab
+
 # 加载主题
-antigen theme ys
+#antigen theme ys
+antigen theme romkatv/powerlevel10k
 
 # 保存更改
 antigen apply
@@ -131,3 +133,8 @@ antigen apply
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# alias emacs="emacs -nw -Q"
+#alias emacs="scl enable devtoolset-8 emacs"
