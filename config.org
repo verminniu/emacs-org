@@ -1422,6 +1422,8 @@
   (use-package smartparens
     :defer 1
     :delight
+    :init
+    (require 'smartparens-config)
     :custom (sp-escape-quotes-after-insert nil)
     :config (smartparens-global-mode 1))
     #+END_SRC
