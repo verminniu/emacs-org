@@ -1313,8 +1313,14 @@
     (counsel-projectile-mode)
   )
 
+  (use-package orderless
+    :ensure t
+    :custom (completion-styles '(orderless)))
+
   (use-package ivy
     :delight
+    :init
+    (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
     :defer 0.1
     :bind (("C-x b" . ivy-switch-buffer)
            ("C-x B" . ivy-switch-buffer-other-window)
