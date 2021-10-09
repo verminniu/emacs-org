@@ -86,6 +86,7 @@
   - [[#org-sidebar][Org sidebar]]
   - [[#org-superstar][Org Superstar]]
   - [[#org-super-agenda][Org Super Agenda]]
+  - [[#calfw][Calfw]]
   - [[#org-timeline][Org Timeline]]
   - [[#pomodoro][Pomodoro]]
   - [[#toc-org][Toc-org]]
@@ -2063,6 +2064,13 @@
   (use-package org-super-agenda
     :config
     (org-super-agenda-mode))
+#+end_src
+
+** Calfw
+#+begin_src emacs-lisp :tangle yes
+  (use-package calfw
+    :init
+    (require 'calfw-org))
 #+end_src
 
 ** Org Timeline
