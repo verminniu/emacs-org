@@ -87,6 +87,7 @@
   - [[#org-superstar][Org Superstar]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#org-timeline][Org Timeline]]
+  - [[#pomodoro][Pomodoro]]
   - [[#toc-org][Toc-org]]
   - [[#add-markdown-to-export-list][Add markdown to Export list]]
   - [[#org-mind-map][Org-mind-map]]
@@ -2069,6 +2070,23 @@
   (use-package org-timeline
     :config
     (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append))
+#+end_src
+
+** Pomodoro
+#+begin_src emacs-lisp :tangle yes
+  ;; Pomodoro
+  (use-package org-pomodoro
+    :custom-face
+    (org-pomodoro-mode-line ((t (:inherit warning))))
+    (org-pomodoro-mode-line-overtime ((t (:inherit error))))
+    (org-pomodoro-mode-line-break ((t (:inherit success))))
+    :bind (:map org-mode-map
+                ("C-c C-x m" . org-pomodoro))
+    :init
+    (with-eval-after-load 'org-agenda
+      (bind-keys :map org-agenda-mode-map
+                 ("K" . org-pomodoro)
+                 ("C-c C-x m" . org-pomodoro))))
 #+end_src
 
 ** Toc-org
