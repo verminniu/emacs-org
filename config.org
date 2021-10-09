@@ -310,100 +310,97 @@
   (use-package modus-themes
     :ensure
     :init
-    ;; Add all your customizations prior to loading the themes
     (setq modus-themes-italic-constructs t
-          modus-themes-bold-constructs nil
-          modus-themes-region '(bg-only no-extend))
+          modus-themes-slanted-constructs t
+          modus-themes-bold-constructs t
+          modus-themes-mixed-fonts t
+          modus-themes-subtle-line-numbers nil
+          modus-themes-intense-markup t
+          modus-themes-success-deuteranopia t
+          modus-themes-tabs-accented t
+          modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
 
+          modus-themes-fringes nil ; {nil,'subtle,'intense}
+
+          ;; Options for `modus-themes-lang-checkers' are either nil (the
+          ;; default), or a list of properties that may include any of those
+          ;; symbols: `straight-underline', `text-also', `background',
+          ;; `intense' OR `faint'.
+          modus-themes-lang-checkers nil
+
+          ;; Options for `modus-themes-mode-line' are either nil, or a list
+          ;; that can combine any of `3d' OR `moody', `borderless',
+          ;; `accented', `padded'.
+          modus-themes-mode-line '(padded accented borderless)
+
+          ;; Options for `modus-themes-syntax' are either nil (the default),
+          ;; or a list of properties that may include any of those symbols:
+          ;; `faint', `yellow-comments', `green-strings', `alt-syntax'
+          modus-themes-syntax nil
+
+          ;; Options for `modus-themes-hl-line' are either nil (the default),
+          ;; or a list of properties that may include any of those symbols:
+          ;; `accented', `underline', `intense'
+          modus-themes-hl-line '(underline accented)
+
+          ;; Options for `modus-themes-paren-match' are either nil (the
+          ;; default), or a list of properties that may include any of those
+          ;; symbols: `bold', `intense', `underline'
+          modus-themes-paren-match '(bold intense)
+
+          ;; Options for `modus-themes-links' are either nil (the default),
+          ;; or a list of properties that may include any of those symbols:
+          ;; `neutral-underline' OR `no-underline', `faint' OR `no-color',
+          ;; `bold', `italic', `background'
+          modus-themes-links '(neutral-underline background)
+
+          ;; Options for `modus-themes-prompts' are either nil (the
+          ;; default), or a list of properties that may include any of those
+          ;; symbols: `background', `bold', `gray', `intense', `italic'
+          modus-themes-prompts '(intense bold)
+
+          modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
+
+          modus-themes-mail-citations nil ; {nil,'faint,'monochrome}
+
+          ;; Options for `modus-themes-region' are either nil (the default),
+          ;; or a list of properties that may include any of those symbols:
+          ;; `no-extend', `bg-only', `accented'
+          modus-themes-region '(bg-only no-extend)
+
+          ;; Options for `modus-themes-diffs': nil, 'desaturated,
+          ;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
+          modus-themes-diffs 'fg-only-deuteranopia
+
+          modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
+
+          modus-themes-org-agenda ; this is an alist: read the manual or its doc string
+          '((header-block . (variable-pitch scale-title))
+            (header-date . (grayscale workaholic bold-today))
+            (event . (accented scale-small))
+            (scheduled . uniform)
+            (habit . traffic-light-deuteranopia))
+
+          modus-themes-headings ; this is an alist: read the manual or its doc string
+          '((1 . (overline background))
+            (2 . (rainbow overline))
+            (t . (no-bold)))
+
+          modus-themes-variable-pitch-ui nil
+          modus-themes-variable-pitch-headings t
+          modus-themes-scale-headings t
+          modus-themes-scale-1 1.1
+          modus-themes-scale-2 1.15
+          modus-themes-scale-3 1.21
+          modus-themes-scale-4 1.27)
+          ;; modus-themes-scale-title 1.33)
     ;; Load the theme files before enabling a theme
     (modus-themes-load-themes)
     :config
     ;; Load the theme of your choice:
     ;; (modus-themes-load-operandi) ;; light
-    (modus-themes-load-vivendi) ;; dark
-    (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs t
-        modus-themes-mixed-fonts t
-        modus-themes-subtle-line-numbers nil
-        modus-themes-intense-markup t
-        modus-themes-success-deuteranopia t
-        modus-themes-tabs-accented t
-        modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
+    (modus-themes-load-vivendi)) ;; dark
 
-        modus-themes-fringes nil ; {nil,'subtle,'intense}
-
-        ;; Options for `modus-themes-lang-checkers' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `straight-underline', `text-also', `background',
-        ;; `intense' OR `faint'.
-        modus-themes-lang-checkers nil
-
-        ;; Options for `modus-themes-mode-line' are either nil, or a list
-        ;; that can combine any of `3d' OR `moody', `borderless',
-        ;; `accented', `padded'.
-        modus-themes-mode-line '(padded accented borderless)
-
-        ;; Options for `modus-themes-syntax' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `faint', `yellow-comments', `green-strings', `alt-syntax'
-        modus-themes-syntax nil
-
-        ;; Options for `modus-themes-hl-line' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `accented', `underline', `intense'
-        modus-themes-hl-line '(underline accented)
-
-        ;; Options for `modus-themes-paren-match' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `bold', `intense', `underline'
-        modus-themes-paren-match '(bold intense)
-
-        ;; Options for `modus-themes-links' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `neutral-underline' OR `no-underline', `faint' OR `no-color',
-        ;; `bold', `italic', `background'
-        modus-themes-links '(neutral-underline background)
-
-        ;; Options for `modus-themes-prompts' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `background', `bold', `gray', `intense', `italic'
-        modus-themes-prompts '(intense bold)
-
-        modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
-
-        modus-themes-mail-citations nil ; {nil,'faint,'monochrome}
-
-        ;; Options for `modus-themes-region' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `no-extend', `bg-only', `accented'
-        modus-themes-region '(bg-only no-extend)
-
-        ;; Options for `modus-themes-diffs': nil, 'desaturated,
-        ;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
-        modus-themes-diffs 'fg-only-deuteranopia
-
-        modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
-
-        modus-themes-org-agenda ; this is an alist: read the manual or its doc string
-        '((header-block . (variable-pitch scale-title))
-          (header-date . (grayscale workaholic bold-today))
-          (event . (accented scale-small))
-          (scheduled . uniform)
-          (habit . traffic-light-deuteranopia))
-
-        modus-themes-headings ; this is an alist: read the manual or its doc string
-        '((1 . (overline background))
-          (2 . (rainbow overline))
-          (t . (no-bold)))
-
-        modus-themes-variable-pitch-ui nil
-        modus-themes-variable-pitch-headings t
-        modus-themes-scale-headings t
-        modus-themes-scale-1 1.1
-        modus-themes-scale-2 1.15
-        modus-themes-scale-3 1.21
-        modus-themes-scale-4 1.27
-        modus-themes-scale-title 1.33))
 #+end_src
 
    #+begin_src emacs-lisp :tangle no
@@ -423,57 +420,6 @@
        (set-face-background hl-line-face "color-17")
        )
    #+end_src
-
-   #+begin_src emacs-lisp :tangle no
-  (use-package doom-modeline
-    :defer 0.1
-    :config (doom-modeline-mode))
-   #+end_src
-
-   #+begin_src emacs-lisp :tangle no
-   (use-package color-theme-sanityinc-tomorrow
-     :defer 0.1
-     :config (load-theme 'sanityinc-tomorrow-night t))
-   #+end_src
-
-   #+begin_src emacs-lisp :tangle no
-   (use-package nord-theme
-     :config
-     (load-theme 'nord t)
-   )
-   #+end_src
-
-   #+begin_src emacs-lisp :tangle no
-   (use-package srcery-theme
-     :config
-     (load-theme 'srcery t)
-     (set-face-background hl-line-face "color-16")
-   )
-   #+end_src
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package doom-themes
-    :config
-    ;; (load-theme 'doom-dark+ t)
-    ;; (load-theme 'doom-Iosvkem t)
-    (load-theme 'doom-gruvbox t)
-    ;; Global settings (defaults)
-	(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-	;; Enable flashing mode-line on errors
-	(doom-themes-visual-bell-config)
-
-	;; Enable custom neotree theme (all-the-icons must be installed!)
-	;;(doom-themes-neotree-config)
-	;; or for treemacs users
-	(setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-	(doom-themes-treemacs-config)
-
-	;; Corrects (and improves) org-mode's native fontification.
-	(doom-themes-org-config)
-	)
-   #+END_SRC
 
 ** FlyCheck
    #+BEGIN_SRC emacs-lisp :tangle yes
