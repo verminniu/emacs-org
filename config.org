@@ -13,6 +13,7 @@
   - [[#os-set][Os Set]]
   - [[#customization][Customization]]
   - [[#key-binding][Key Binding]]
+  - [[#hydra][Hydra]]
   - [[#shell-path][Shell Path]]
   - [[#theme][Theme]]
   - [[#flycheck][FlyCheck]]
@@ -41,6 +42,7 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#helpful][Helpful]]
   - [[#undo-tree][Undo tree]]
   - [[#move-dup][Move-dup]]
   - [[#multiple-cursors][Multiple-cursors]]
@@ -52,7 +54,6 @@
   - [[#dashboard][Dashboard]]
   - [[#dired][Dired]]
   - [[#company][Company]]
-  - [[#company-tabnine][Company TabNine]]
   - [[#buffers][Buffers]]
   - [[#history][History]]
   - [[#which-key][Which-Key]]
@@ -70,7 +71,6 @@
   - [[#syntax-subword][Syntax subword]]
   - [[#whole-line-or-region][Whole line or region]]
   - [[#ediff][Ediff]]
-  - [[#vdiff][Vdiff]]
   - [[#symbol-overlay][Symbol overlay]]
   - [[#smex][Smex]]
   - [[#compile][Compile]]
@@ -249,6 +249,25 @@
    (bind-key* "M-SPC" 'set-mark-command)
    #+end_src
 
+** Hydra
+   use Hydra for some keybinds
+   #+begin_src emacs-lisp :tangle yes
+   (use-package major-mode-hydra
+    :init
+    (cl-defun pretty-hydra-title (title &optional icon-type icon-name
+                                        &key face height v-adjust)
+      "Add an icon in the hydra title."
+      (let ((face (or face `(:foreground ,(face-background 'highlight))))
+            (height (or height 1.0))
+            (v-adjust (or v-adjust 0.0)))
+        (concat
+         (when (and (icons-displayable-p) icon-type icon-name)
+           (let ((f (intern (format "all-the-icons-%s" icon-type))))
+             (when (fboundp f)
+               (concat
+                (apply f (list icon-name :face face :height height :v-adjust v-adjust))
+                " "))))))))
+   #+end_src
 ** Shell Path
    #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -974,6 +993,21 @@
    #+end_src
 
 * Advanced Configuration
+** Helpful
+   #+begin_src emacs-lisp :tangle yes
+   (use-package helpful
+    :ensure t
+    :pretty-hydra
+    ((:color teal :quit-key "q")
+     ("Helpful"
+      (("f" helpful-callable "callable")
+       ("v" helpful-variable "variable")
+       ("k" helpful-key "key")
+       ("c" helpful-command "command")
+       ("d" helpful-at-point "thing at point"))))
+    :bind ("C-h" . helpful-hydra/body))
+   #+end_src
+
 ** Undo tree
    better undo && redo
    #+begin_src emacs-lisp :tangle yes
@@ -1222,14 +1256,6 @@
     :delight
     :hook (company-mode . company-box-mode))
    #+END_SRC
-
-** Company TabNine
-   Use tabnine
-   *和lsp有冲突，都用的capf backend，暂时先关闭*
-   #+begin_src emacs-lisp :tangle no
-   ;; Run M-x company-tabnine-install-binary to install the TabNine binary for your system.
-   (use-package company-tabnine :ensure t)
-   #+end_src
 
 ** Buffers
 
@@ -1689,25 +1715,6 @@
    Use ztree to diff dirs
    #+BEGIN_SRC emacs-lisp :tangle yes
    (use-package ztree)
-   #+END_SRC
-
-** Vdiff
-   Use vdiff -- 取消，没有ediff好用
-   #+BEGIN_SRC emacs-lisp :tangle no
-   (use-package vdiff
-     :config
-     (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
-   )
-
-   (use-package vdiff-magit
-     :config
-     (define-key magit-mode-map "e" 'vdiff-magit-dwim)
-     (define-key magit-mode-map "E" 'vdiff-magit)
-     (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")
-     (transient-suffix-put 'magit-dispatch "e" :command 'vdiff-magit-dwim)
-     (transient-suffix-put 'magit-dispatch "E" :description "vdiff")
-     (transient-suffix-put 'magit-dispatch "E" :command 'vdiff-magit)
-   )
    #+END_SRC
 
 ** Symbol overlay
