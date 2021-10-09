@@ -81,9 +81,12 @@
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
   - [[#org-bullets][Org bullets]]
+  - [[#org-bable][Org bable]]
   - [[#org-ql][Org QL]]
   - [[#org-sidebar][Org sidebar]]
   - [[#org-superstar][Org Superstar]]
+  - [[#org-super-agenda][Org Super Agenda]]
+  - [[#org-timeline][Org Timeline]]
   - [[#toc-org][Toc-org]]
   - [[#add-markdown-to-export-list][Add markdown to Export list]]
   - [[#org-mind-map][Org-mind-map]]
@@ -252,21 +255,8 @@
 ** Hydra
    use Hydra for some keybinds
    #+begin_src emacs-lisp :tangle yes
-   (use-package major-mode-hydra
-    :init
-    (cl-defun pretty-hydra-title (title &optional icon-type icon-name
-                                        &key face height v-adjust)
-      "Add an icon in the hydra title."
-      (let ((face (or face `(:foreground ,(face-background 'highlight))))
-            (height (or height 1.0))
-            (v-adjust (or v-adjust 0.0)))
-        (concat
-         (when (and (icons-displayable-p) icon-type icon-name)
-           (let ((f (intern (format "all-the-icons-%s" icon-type))))
-             (when (fboundp f)
-               (concat
-                (apply f (list icon-name :face face :height height :v-adjust v-adjust))
-                " "))))))))
+     (use-package major-mode-hydra
+       :ensure t)
    #+end_src
 ** Shell Path
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -798,13 +788,6 @@
   )
    #+END_SRC
 
-   #+begin_src emacs-lisp :tangle yes
-   (use-package cpp-auto-include
-     :config
-     (cpp-auto-include)
-   )
-   #+end_src
-
 ** Shell
    Use lsp
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1328,7 +1311,7 @@
            ("C-x C-r" . counsel-recentf)
            ("C-x C-u" . counsel-unicode-char)
            ("C-x C-v" . counsel-set-variable)
-           ("C-c n" . counsel-imenu)
+           ("C-c C-n" . counsel-imenu)
 		   ("M-x" . counsel-M-x)
 		   )
     :config (counsel-mode)
@@ -1907,19 +1890,148 @@
 
 * Org-mode
 ** Org Common Setting
-   不转义"_"
    #+begin_src emacs-lisp :tangle yes
-   (setq org-export-with-sub-superscripts nil)
+      (use-package org
+       :ensure nil
+       :commands (org-dynamic-block-define)
+       :custom-face (org-ellipsis ((t (:foreground nil))))
+       :pretty-hydra
+       (("Basic"
+         (("a" (hot-expand "<a") "ascii")
+          ("c" (hot-expand "<c") "center")
+          ("C" (hot-expand "<C") "comment")
+          ("e" (hot-expand "<e") "example")
+          ("E" (hot-expand "<E") "export")
+          ("h" (hot-expand "<h") "html")
+          ("l" (hot-expand "<l") "latex")
+          ("n" (hot-expand "<n") "note")
+          ("o" (hot-expand "<q") "quote")
+          ("v" (hot-expand "<v") "verse"))
+         "Head"
+         (("i" (hot-expand "<i") "index")
+          ("A" (hot-expand "<A") "ASCII")
+          ("I" (hot-expand "<I") "INCLUDE")
+          ("H" (hot-expand "<H") "HTML")
+          ("L" (hot-expand "<L") "LaTeX"))
+         "Source"
+         (("s" (hot-expand "<s") "src")
+          ("m" (hot-expand "<s" "emacs-lisp") "emacs-lisp")
+          ("y" (hot-expand "<s" "python :results output") "python")
+          ("p" (hot-expand "<s" "perl") "perl")
+          ("r" (hot-expand "<s" "ruby") "ruby")
+          ("S" (hot-expand "<s" "sh") "sh")
+          ("g" (hot-expand "<s" "go :imports '\(\"fmt\"\)") "golang"))
+         "Misc"
+         (("u" (hot-expand "<s" "plantuml :file CHANGE.png") "plantuml")
+          ("Y" (hot-expand "<s" "ipython :session :exports both :results raw drawer\n$0") "ipython")
+          ("P" (progn
+                 (insert "#+HEADERS: :results output :exports both :shebang \"#!/usr/bin/env perl\"\n")
+                 (hot-expand "<s" "perl")) "Perl tangled")
+          ("<" self-insert-command "ins"))))
+       :bind (("C-c a" . org-agenda)
+              ("C-c b" . org-switchb)
+              ("C-c x" . org-capture)
+              :map org-mode-map
+              ("<" . (lambda ()
+                       "Insert org template."
+                       (interactive)
+                       (if (or (region-active-p) (looking-back "^\s*" 1))
+                           (org-hydra/body)
+                         (self-insert-command 1)))))
+       :config
+       ;; For hydra
+       (defun hot-expand (str &optional mod)
+         "Expand org template.
+     STR is a structure template string recognised by org like <s. MOD is a
+     string with additional parameters to add the begin line of the
+     structure element. HEADER string includes more parameters that are
+     prepended to the element after the #+HEADER: tag."
+         (let (text)
+           (when (region-active-p)
+             (setq text (buffer-substring (region-beginning) (region-end)))
+             (delete-region (region-beginning) (region-end)))
+           (insert str)
+           (if (fboundp 'org-try-structure-completion)
+               (org-try-structure-completion) ; < org 9
+             (progn
+               ;; New template expansion since org 9
+               (require 'org-tempo nil t)
+               (org-tempo-complete-tag)))
+           (when mod (insert mod) (forward-line))
+           (when text (insert text))))
+
+       ;; To speed up startup, don't put to init section
+       (setq org-modules nil                 ; Faster loading
+             org-todo-keywords
+             '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
+               (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
+             org-todo-keyword-faces '(("HANGUP" . warning)
+                                      ("❓" . warning))
+             org-priority-faces '((?A . error)
+                                  (?B . warning)
+                                  (?C . success))
+
+             org-tags-column -80
+             org-log-done 'time
+             org-catch-invisible-edits 'smart
+             org-startup-indented t
+             org-ellipsis (if (and (display-graphic-p) (char-displayable-p ?⏷)) "\t⏷" nil)
+             org-pretty-entities nil
+             org-export-with-sub-superscripts nil
+             org-hide-emphasis-markers t))
+
+      ;; (setq org-export-with-sub-superscripts nil)
+
    #+end_src
 
 ** Org bullets
    Show org-mode bullets as UTF-8 characters.
-   #+begin_src emacs-lisp :tangle no
-   (use-package org-bullets
-     :config
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-bullets
+       :config
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+     (use-package org-fancy-priorities
+       :ensure t
+       :hook
+       (org-mode . org-fancy-priorities-mode))
    #+end_src
 
+** Org bable
+#+begin_src emacs-lisp :tangle yes
+  ;; Babel
+  (setq org-confirm-babel-evaluate nil
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t)
+
+  (defvar load-language-list '((emacs-lisp . t)
+                               (perl . t)
+                               (python . t)
+                               (ruby . t)
+                               (js . t)
+                               (css . t)
+                               (sass . t)
+                               (C . t)
+                               (java . t)
+                               (plantuml . t)))
+
+  ;; ob-sh renamed to ob-shell since 26.1.
+  (cl-pushnew '(shell . t) load-language-list)
+
+  (use-package ob-go
+    :init (cl-pushnew '(go . t) load-language-list))
+
+  (use-package ob-rust
+    :init (cl-pushnew '(rust . t) load-language-list))
+
+  ;; Use mermadi-cli: npm install -g @mermaid-js/mermaid-cli
+  (use-package ob-mermaid
+    :init (cl-pushnew '(mermaid . t) load-language-list))
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               load-language-list)
+#+end_src
 ** Org QL
    This package provides a query language for Org files. It offers two syntax styles: Lisp-like sexps and search engine-like keywords.
    use libraries org-ql and org-ql-view.
@@ -1945,6 +2057,20 @@
    )
    #+end_src
 
+** Org Super Agenda
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-super-agenda
+    :config
+    (org-super-agenda-mode))
+#+end_src
+
+** Org Timeline
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-timeline
+    :config
+    (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append))
+#+end_src
+
 ** Toc-org
    #+begin_src emacs-lisp :tangle yes
    (use-package toc-org
@@ -1956,9 +2082,9 @@
    #+end_src
 ** Add markdown to Export list
    #+begin_src emacs-lisp :tangle yes
-   ;;(use-package ox-qmd)
-   (use-package ox-gfm
-   )
+     ;;(use-package ox-qmd)
+     (use-package ox-gfm)
+     (add-to-list 'org-export-backends 'md)
    #+end_src
 
 ** Org-mind-map
@@ -1992,5 +2118,23 @@
 
    3. run M-x org-mind-map-write
 
-** TODO Org-roam
+** Org-roam
    https://www.orgroam.com
+   #+begin_src emacs-lisp :tangle yes
+   ;; Roam
+      (use-package org-roam
+        :diminish
+        :hook (after-init . org-roam-db-autosync-enable)
+        :bind (("C-c n l" . org-roam-buffer-toggle)
+               ("C-c n f" . org-roam-node-find)
+               ("C-c n g" . org-roam-graph)
+               ("C-c n i" . org-roam-node-insert)
+               ("C-c n c" . org-roam-capture)
+               ("C-c n j" . org-roam-dailies-capture-today))
+        :init
+        (setq org-roam-v2-ack t)
+        :config
+        (unless (file-exists-p org-roam-directory)
+           (make-directory org-roam-directory)))
+   #+end_src
+p
