@@ -1987,6 +1987,8 @@
                            (org-hydra/body)
                          (self-insert-command 1)))))
        :config
+       ;; shifttab when open org files
+       (add-hook 'org-mode-hook (lambda () (org-shifttab)))
        ;; For hydra
        (defun hot-expand (str &optional mod)
          "Expand org template.
