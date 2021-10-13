@@ -2116,7 +2116,7 @@
 
 ** Calfw
 #+begin_src emacs-lisp :tangle yes
-  (use-package calfw
+  (use-package calfw-org
     :init
     (require 'calfw-org))
 #+end_src
