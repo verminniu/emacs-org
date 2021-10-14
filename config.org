@@ -42,6 +42,8 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#saveplace][Saveplace]]
+  - [[#bing-dict][Bing-dict]]
   - [[#helpful][Helpful]]
   - [[#undo-tree][Undo tree]]
   - [[#move-dup][Move-dup]]
@@ -341,7 +343,7 @@
           ;; Options for `modus-themes-hl-line' are either nil (the default),
           ;; or a list of properties that may include any of those symbols:
           ;; `accented', `underline', `intense'
-          modus-themes-hl-line '(underline accented)
+          modus-themes-hl-line '(underline accented intense)
 
           ;; Options for `modus-themes-paren-match' are either nil (the
           ;; default), or a list of properties that may include any of those
@@ -370,7 +372,7 @@
 
           ;; Options for `modus-themes-diffs': nil, 'desaturated,
           ;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
-          modus-themes-diffs 'fg-only-deuteranopia
+          modus-themes-diffs 'desaturated
 
           modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
 
@@ -1024,20 +1026,33 @@
    #+end_src
 
 * Advanced Configuration
+** Saveplace
+每次打开文件回到上次光标位置
+#+begin_src  emacs-lisp :tangle yes
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
+#+end_src
+** Bing-dict
+#+begin_src emacs-lisp :tangle yes
+(use-package bing-dict
+  :config
+  (global-set-key (kbd "C-c d") 'bing-dict-brief))
+#+end_src
 ** Helpful
-   #+begin_src emacs-lisp :tangle yes
-   (use-package helpful
-    :ensure t
-    :pretty-hydra
-    ((:color teal :quit-key "q")
-     ("Helpful"
-      (("f" helpful-callable "callable")
-       ("v" helpful-variable "variable")
-       ("k" helpful-key "key")
-       ("c" helpful-command "command")
-       ("d" helpful-at-point "thing at point"))))
-    :bind ("C-h" . helpful-hydra/body))
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package helpful
+   :ensure t
+   :pretty-hydra
+   ((:color teal :quit-key "q")
+    ("Helpful"
+     (("f" helpful-callable "callable")
+      ("v" helpful-variable "variable")
+      ("k" helpful-key "key")
+      ("c" helpful-command "command")
+      ("d" helpful-at-point "thing at point"))))
+   :bind ("C-h" . helpful-hydra/body))
+#+end_src
 
 ** Undo tree
    better undo && redo
