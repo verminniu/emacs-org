@@ -1,0 +1,85 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# 以下为mac的环境变量设置
+alias vscode='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
+alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+alias ec='emacsclient -t'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias l.='ls -d .* --color=auto'
+alias ll='ls -l --color=auto'
+alias ls='ls --color=auto'
+alias mkproj='echo > .projectile'
+alias vi='vim'
+alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+
+export PATH="/usr/local/opt/gettext/bin:$PATH"
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+
+# mysql client
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/mysql-client/lib"
+export CPPFLAGS="-I/usr/local/opt/mysql-client/include"
+export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
+
+export LDFLAGS="-L/usr/local/opt/gettext/lib"
+export CPPFLAGS="-I/usr/local/opt/gettext/include"
+
+export LDFLAGS="-L/usr/local/opt/llvm/lib"
+export CPPFLAGS="-I/usr/local/opt/llvm/include"
+
+export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH="/Users/verminniu/Library/Python/3.7/bin:$PATH"
+
+export GO111MODULE=on
+export GOPROXY=https://goproxy.cn
+export GOPATH="/usr/local/gopath/"
+export PATH="$GOPATH/bin:$PATH"
+
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+export HISTCONTROL=erasedups
+
+# 以下为zsh配置
+# Manual Install:
+#     ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+#     mkdir -p "$(dirname $ZINIT_HOME)"
+#     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+source "${ZINIT_HOME}/zinit.zsh"
+
+
+# zstyle ':completion:*' menu yes select search
+
+# 加载 powerlevel10k 主题
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+zinit ice svn
+zinit snippet OMZP::gitfast
+# 很奇怪，加了这个以后，fzf-tab好了，先备用
+zinit ice svn
+zinit snippet OMZP::git
+
+zinit ice svn
+zinit snippet OMZP::macos
+
+# 打开tab提示
+zinit light Aloxaf/fzf-tab
+
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+
+[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
