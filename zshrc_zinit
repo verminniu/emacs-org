@@ -1,30 +1,53 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 
-# install:
-#     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+# 以下为mac的环境变量设置
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias l.='ls -d .* --color=auto'
+alias ll='ls -l --color=auto'
+alias ls='ls --color=auto'
+alias mkproj='echo > .projectile'
+alias vi='vim'
+alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 
-# 下面都是zinit配置
-source ~/.zinit/bin/zinit.zsh
+export GO111MODULE=on
+export GOPROXY=https://goproxy.cn
+export GOPATH="/usr/local/gopath/"
+export PATH="$GOPATH/bin:$PATH"
+
+export HISTCONTROL=erasedups
+export PATH="$PATH:/data/llvm13/bin"
+export TERM=xterm-256color
+export LANG=zh_CN.utf8
+
+# 以下为zsh配置
+# Manual Install:
+#     ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+#     mkdir -p "$(dirname $ZINIT_HOME)"
+#     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+source "${ZINIT_HOME}/zinit.zsh"
+
+
+# zstyle ':completion:*' menu yes select search
 
 # 加载 powerlevel10k 主题
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-# zinit light zinit-zsh/z-a-bin-gem-node
-zinit light zinit-zsh/z-a-meta-plugins
+zinit ice svn
+zinit snippet OMZP::gitfast
+# 很奇怪，加了这个以后，fzf-tab好了，先备用
+zinit ice svn
+zinit snippet OMZP::git
 
-# Installs total of 22 plugins
-zinit for annexes zsh-users+fast console-tools fuzzy ext-git
+zinit ice svn
+zinit snippet OMZP::macos
 
-# 快速目录跳转
-zinit ice lucid wait='1'
-zinit light skywind3000/z.lua
-
+# 打开tab提示
 zinit light Aloxaf/fzf-tab
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+
+[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
