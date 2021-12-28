@@ -53,6 +53,9 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 # zstyle ':completion:*' menu yes select search
 
+autoload -Uz compinit
+compinit
+
 # 加载 powerlevel10k 主题
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
@@ -65,11 +68,12 @@ zinit snippet OMZP::git
 zinit ice svn
 zinit snippet OMZP::macos
 
-# 打开tab提示
-zinit light Aloxaf/fzf-tab
+zinit load unixorn/fzf-zsh-plugin
 
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-syntax-highlighting
+zinit load Aloxaf/fzf-tab
+
+zinit load zsh-users/zsh-completions
+zinit load zsh-users/zsh-autosuggestions
+zinit load zsh-users/zsh-syntax-highlighting
 
 [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh

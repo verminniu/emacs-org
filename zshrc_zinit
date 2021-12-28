@@ -41,6 +41,9 @@ source "${ZINIT_HOME}/zinit.zsh"
 # 加载 powerlevel10k 主题
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
+autoload -Uz compinit
+compinit
+
 zinit ice svn
 zinit snippet OMZP::gitfast
 # 很奇怪，加了这个以后，fzf-tab好了，先备用
