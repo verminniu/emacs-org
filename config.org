@@ -77,7 +77,7 @@
   - [[#smex][Smex]]
   - [[#compile][Compile]]
   - [[#refactor][Refactor]]
-  - [[#add-mutil-iedit][Add mutil iedit]]
+  - [[#add-multi-iedit][Add multi iedit]]
   - [[#comment-dwim-2][Comment dwim 2]]
   - [[#treemacs][Treemacs]]
 - [[#org-mode][Org-mode]]
@@ -1096,7 +1096,7 @@
        (global-set-key [remap mark-sexp] 'easy-mark))
 
      (use-package easy-kill-extras
-       :after (mutiple-cursors easy-kill)
+       :after (multiple-cursors easy-kill)
        :config
        ;; Upgrade `mark-word' and `mark-sexp' with easy-mark
        ;; equivalents.
@@ -1138,9 +1138,8 @@
        (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
 
        ;; Emacs 24.4+ comes with rectangle-mark-mode.
-       (define-key rectangle-mark-mode-map (kbd "C-. C-,") 'mc/rect-rectangle-to-multiple-cursors)
+       (define-key rectangle-mark-mode-map (kbd "C-. C-,") 'mc/rect-rectangle-to-multiple-cursors))
 
-       (define-key cua--rectangle-keymap   (kbd "C-. C-,") 'mc/cua-rectangle-to-multiple-cursors))
    #+end_src
 
 ** Beacon
@@ -1833,7 +1832,7 @@
        (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
      )
    #+END_SRC
-** Add mutil iedit
+** Add multi iedit
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit
     :bind (("C-c ;" . iedit-mode)
