@@ -98,215 +98,215 @@
 
 * Install
 ** Install From Sources
-  编译参数
-  --with-nativecomp需要单独分支支持
-  #+begin_src shell
- ./configure --with-nativecomp --with-gnutls --without-x --with-pop --with-mailutils --with-xml2 --with-json=ifavailable
-  #+end_src
+编译参数
+--with-nativecomp需要单独分支支持
+#+begin_src shell
+  ./configure --with-nativecomp --with-gnutls --without-x --with-pop --with-mailutils --with-xml2 --with-json=ifavailable
+#+end_src
 
 * Emacs Initialization
 ** Packages Sources
 
-   In order to install packages, it is useful to configure the package sources.
+In order to install packages, it is useful to configure the package sources.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;;; package -- vermin's emacs conf
-     ;;; Code:
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; package -- vermin's emacs conf
+  ;;; Code:
 
-     (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                              ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                              ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+  (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                           ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                           ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
 
-     ;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-     ;;                          ("melpa" . "http://elpa.emacs-china.org/melpa/")
-     ;;                          ))
+  ;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+  ;;                          ("melpa" . "http://elpa.emacs-china.org/melpa/")
+  ;;                          ))
 
-     ;; (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
-     ;;                          ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
-     ;;                          ("org" . "http://mirrors.cloud.tencent.com/elpa/org/")
-     ;;                          ("marmalade" . "http://mirrors.cloud.tencent.com/elpa/marmalade/")
-     ;;                          ("melpa-stable" . "http://mirrors.cloud.tencent.com/elpa/melpa-stable/")
-     ;; ))
-   #+END_SRC
+  ;; (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
+  ;;                          ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+  ;;                          ("org" . "http://mirrors.cloud.tencent.com/elpa/org/")
+  ;;                          ("marmalade" . "http://mirrors.cloud.tencent.com/elpa/marmalade/")
+  ;;                          ("melpa-stable" . "http://mirrors.cloud.tencent.com/elpa/melpa-stable/")
+  ;; ))
+#+END_SRC
 
 ** use-package
 
-   To be able to manage its configuration with =use-package= it is necessary to
-   first install it, if you don't already.
+To be able to manage its configuration with =use-package= it is necessary to
+first install it, if you don't already.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
 
   (use-package delight :ensure t)
   (use-package use-package-ensure-system-package :ensure t)
-   #+END_SRC
+#+END_SRC
 
 ** Quelpa
-   use Quelpa for use github packages
-   #+begin_src emacs-lisp :tangle yes
-   (use-package quelpa :ensure t)
-   #+end_src
+use Quelpa for use github packages
+#+begin_src emacs-lisp :tangle yes
+  (use-package quelpa :ensure t)
+#+end_src
 
-   暂时有点问题，后续调整
-   #+begin_src emacs-lisp :tangle no
-   (use-package quelpa-use-package
-     :after quelpa
-     :config
-     (setq use-package-ensure-function 'quelpa)
-     (setq use-package-always-ensure t))
-   #+end_src
+暂时有点问题，后续调整
+#+begin_src emacs-lisp :tangle no
+  (use-package quelpa-use-package
+    :after quelpa
+    :config
+    (setq use-package-ensure-function 'quelpa)
+    (setq use-package-always-ensure t))
+#+end_src
 
 * Start Up
 ** Better defaults
 
-   For a better user experience of GNU Emacs, here are the default values I use.
+For a better user experience of GNU Emacs, here are the default values I use.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-	(setq-default
-	 ad-redefinition-action 'accept                   ; Silence warnings for redefinition
-	 cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
-	 display-time-default-load-average nil            ; Don't display load average
-	 fill-column 100                                   ; Set width for automatic line breaks
-	 mode-require-final-newline t                     ; add a newline to end of file
-	 help-window-select t                             ; Focus new help windows when opened
-	 inhibit-startup-screen t                         ; Disable start-up screen
-	 initial-scratch-message ""                       ; Empty the initial *scratch* buffer
-	 kill-ring-max 128                                ; Maximum length of kill ring
-	 load-prefer-newer t                              ; Prefers the newest version of a file
-	 mark-ring-max 128                                ; Maximum length of mark ring
-	 scroll-conservatively most-positive-fixnum       ; Always scroll by one line
-	 select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
-	 indent-tabs-mode nil                             ; Space to tab
-	 tab-width 4                                      ; Set width for tabs
-	 use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
-	 user-full-name "Vermin"                          ; Set the full name of the current user
-	 user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
-	 vc-follow-symlinks t                             ; Always follow the symlinks
-	 make-backup-files nil							  ; close backup files
-     gc-cons-threshold 100000000                      ; lsp need more memory
-     read-process-output-max (* 1024 1024)            ; 1mb
-     truncate-partial-width-windows nil               ; turn off wrapping long lines
-	 view-read-only t)                                ; Always open read-only buffers in view-mode
-  ;  (cd "~/")                                         ; Move to the user directory
-	(column-number-mode 1)                            ; Show the column number
-    ;;(global-linum-mode 1)
-    (setq create-lockfiles nil)                       ; disable lock file
-	(display-time-mode 1)                             ; Enable time in the mode-line
-	(fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
-	(global-hl-line-mode)                             ; Hightlight current line
-	(prefer-coding-system 'utf-8-unix)		;
-    ;;(prefer-coding-system 'chinese-gbk)       ; linux system
-	;;(prefer-coding-system 'gb2312-unix)		;
-	(show-paren-mode 1)                               ; Show the parent
-	(add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
-	(add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
-	(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-	(add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
-    (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default
+   ad-redefinition-action 'accept                   ; Silence warnings for redefinition
+   cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
+   display-time-default-load-average nil            ; Don't display load average
+   fill-column 100                                   ; Set width for automatic line breaks
+   mode-require-final-newline t                     ; add a newline to end of file
+   help-window-select t                             ; Focus new help windows when opened
+   inhibit-startup-screen t                         ; Disable start-up screen
+   initial-scratch-message ""                       ; Empty the initial *scratch* buffer
+   kill-ring-max 128                                ; Maximum length of kill ring
+   load-prefer-newer t                              ; Prefers the newest version of a file
+   mark-ring-max 128                                ; Maximum length of mark ring
+   scroll-conservatively most-positive-fixnum       ; Always scroll by one line
+   select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
+   indent-tabs-mode nil                             ; Space to tab
+   tab-width 4                                      ; Set width for tabs
+   use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
+   user-full-name "Vermin"                          ; Set the full name of the current user
+   user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
+   vc-follow-symlinks t                             ; Always follow the symlinks
+   make-backup-files nil							  ; close backup files
+   gc-cons-threshold 100000000                      ; lsp need more memory
+   read-process-output-max (* 1024 1024)            ; 1mb
+   truncate-partial-width-windows nil               ; turn off wrapping long lines
+   view-read-only t)                                ; Always open read-only buffers in view-mode
+                                          ;  (cd "~/")                                         ; Move to the user directory
+  (column-number-mode 1)                            ; Show the column number
+  ;;(global-linum-mode 1)
+  (setq create-lockfiles nil)                       ; disable lock file
+  (display-time-mode 1)                             ; Enable time in the mode-line
+  (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
+  (global-hl-line-mode)                             ; Hightlight current line
+  (prefer-coding-system 'utf-8-unix)		;
+  ;;(prefer-coding-system 'chinese-gbk)       ; linux system
+  ;;(prefer-coding-system 'gb2312-unix)		;
+  (show-paren-mode 1)                               ; Show the parent
+  (add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
+  (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
+#+END_SRC
 
 ** Os Set
-   Set OS special config
+Set OS special config
 
-   use fullcreen on mac os, and use alt instead cmd
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; check OS type
-     (cond
-       ((string-equal system-type "windows-nt") ; Microsoft Windows
-         (progn
-           (scroll-bar-mode -1)
-           (message "Microsoft Windows")))
-       ((string-equal system-type "darwin") ; Mac OS X
-         (progn
-           (setq mac-command-modifier 'control)
-           (setq mac-option-modifier 'meta)
-           (scroll-bar-mode -1)
-           (add-to-list 'default-frame-alist '(fullscreen . maximized))
-           (message "Mac OS X")
-           ))
-       ((string-equal system-type "gnu/linux") ; linux
-         (progn
-         (message "Linux"))))
-   #+END_SRC
+use fullcreen on mac os, and use alt instead cmd
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; check OS type
+  (cond
+   ((string-equal system-type "windows-nt") ; Microsoft Windows
+    (progn
+      (scroll-bar-mode -1)
+      (message "Microsoft Windows")))
+   ((string-equal system-type "darwin") ; Mac OS X
+    (progn
+      (setq mac-command-modifier 'control)
+      (setq mac-option-modifier 'meta)
+      (scroll-bar-mode -1)
+      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+      (message "Mac OS X")
+      ))
+   ((string-equal system-type "gnu/linux") ; linux
+    (progn
+      (message "Linux"))))
+#+END_SRC
 
 ** Customization
 
-   To avoid overloading the GNU Emacs custormization =init.el= file made by the
-   user with the UI, I add the generated code in a separate file.
+To avoid overloading the GNU Emacs custormization =init.el= file made by the
+user with the UI, I add the generated code in a separate file.
 
-   I also made sure to follow the XDG base directory specification for the
-   =auto-save-file= folder, in order to keep my =~/.emacs.d= folder clean.
+I also made sure to follow the XDG base directory specification for the
+=auto-save-file= folder, in order to keep my =~/.emacs.d= folder clean.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default
    auto-save-list-file-name (expand-file-name (format "~/.emacs.d/data/auto-save-list"))
    custom-file (expand-file-name (format "~/.emacs.d/data/custom.el")))
   (when (file-exists-p custom-file)
     (load custom-file t))
-   #+END_SRC
+#+END_SRC
 
 ** Key Binding
-   自己适应的一些绑定
-   #+begin_src emacs-lisp :tangle yes
-   ;; use bind-key for key binding
-   (use-package bind-key)
-   ;; Use s-SPC to set mark
-   (bind-key* "M-SPC" 'set-mark-command)
-   #+end_src
+自己适应的一些绑定
+#+begin_src emacs-lisp :tangle yes
+  ;; use bind-key for key binding
+  (use-package bind-key)
+  ;; Use s-SPC to set mark
+  (bind-key* "M-SPC" 'set-mark-command)
+#+end_src
 
 ** Hydra
-   use Hydra for some keybinds
-   #+begin_src emacs-lisp :tangle yes
-     (use-package major-mode-hydra
-       :ensure t)
-   #+end_src
+use Hydra for some keybinds
+#+begin_src emacs-lisp :tangle yes
+  (use-package major-mode-hydra
+    :ensure t)
+#+end_src
 ** Shell Path
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
 
-   ;; make Emacs use the $PATH set up by the user's shell
-   (use-package exec-path-from-shell
-     :ensure t
-     :init (progn
-	   (when(not(eq system-type 'windows-nt))
-	     (setq exec-path-from-shell-variables '("PYTHONPATH" "GOPATH"))
-	     ;; when it is nil, exec-path-from-shell will read environment variable
-	     ;; from .zshenv instead of .zshrc, but makes sure that you put all
-	     ;; environment variable you need in .zshenv rather than .zshrc
-	     (setq exec-path-from-shell-check-startup-files nil) ;
-	     (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
-	    (exec-path-from-shell-initialize)
-	    )
-	  )
-      )
+  ;; make Emacs use the $PATH set up by the user's shell
+  (use-package exec-path-from-shell
+    :ensure t
+    :init (progn
+            (when(not(eq system-type 'windows-nt))
+              (setq exec-path-from-shell-variables '("PYTHONPATH" "GOPATH"))
+              ;; when it is nil, exec-path-from-shell will read environment variable
+              ;; from .zshenv instead of .zshrc, but makes sure that you put all
+              ;; environment variable you need in .zshenv rather than .zshrc
+              (setq exec-path-from-shell-check-startup-files nil) ;
+              (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
+              (exec-path-from-shell-initialize)
+              )
+            )
+    )
 
-;;   (use-package exec-path-from-shell
-;;     :init
-;;     (setq exec-path-from-shell-check-startup-files nil)
-;;     (exec-path-from-shell-initialize)
-;;   )
-   #+END_SRC
+  ;;   (use-package exec-path-from-shell
+  ;;     :init
+  ;;     (setq exec-path-from-shell-check-startup-files nil)
+  ;;     (exec-path-from-shell-initialize)
+  ;;   )
+#+END_SRC
 ** Theme
-   *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
-   [[#Icons][all-the-icons]].
+*NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
+[[#Icons][all-the-icons]].
 
-   +powerline+ telephone-line && moe-theme is better than doom's
++powerline+ telephone-line && moe-theme is better than doom's
 
-   #+begin_src emacs-lisp :tangle yes
-   (use-package telephone-line
-     :config
-     (telephone-line-mode 1)
-     )
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package telephone-line
+    :config
+    (telephone-line-mode 1)
+    )
+#+end_src
 
-   telephone 更好看一点
-   #+begin_src emacs-lisp :tangle no
-     (use-package powerline
-       :config
-       (powerline-default-theme)
-       )
-   #+end_src
+telephone 更好看一点
+#+begin_src emacs-lisp :tangle no
+  (use-package powerline
+    :config
+    (powerline-default-theme)
+    )
+#+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (use-package modus-themes
@@ -396,7 +396,7 @@
           modus-themes-scale-2 1.15
           modus-themes-scale-3 1.21
           modus-themes-scale-4 1.27)
-          ;; modus-themes-scale-title 1.33)
+    ;; modus-themes-scale-title 1.33)
     ;; Load the theme files before enabling a theme
     (modus-themes-load-themes)
     :config
@@ -406,841 +406,841 @@
 
 #+end_src
 
-   #+begin_src emacs-lisp :tangle no
-     (use-package moe-theme
-       :config
-       (setq moe-theme-hightlight-buffer-id t)
-       ;; Resize titles (optional).
-       (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
-       (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
-       (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
-       ;; Choose a color for mode-line.(Default: blue)
-       (moe-theme-random-color)
-       ;; (powerline-moe-theme)
-       (show-paren-mode t)
-       (setq show-paren-style 'expression)
-       (load-theme 'moe-dark t)
-       (set-face-background hl-line-face "color-17")
-       )
-   #+end_src
+#+begin_src emacs-lisp :tangle no
+  (use-package moe-theme
+    :config
+    (setq moe-theme-hightlight-buffer-id t)
+    ;; Resize titles (optional).
+    (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
+    (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+    (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+    ;; Choose a color for mode-line.(Default: blue)
+    (moe-theme-random-color)
+    ;; (powerline-moe-theme)
+    (show-paren-mode t)
+    (setq show-paren-style 'expression)
+    (load-theme 'moe-dark t)
+    (set-face-background hl-line-face "color-17")
+    )
+#+end_src
 
 ** FlyCheck
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package flycheck
-     :init
-	 (global-flycheck-mode)
-   )
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck
+    :init
+    (global-flycheck-mode)
+    )
+#+END_SRC
 ** Eglot
-   Other lsp client
-   #+BEGIN_SRC emacs-lisp :tangle no
-   (use-package eglot
-     :ensure t
-     :config
-     (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-     (add-hook 'c-mode-hook 'eglot-ensure)
-     (add-hook 'c++-mode-hook 'eglot-ensure)
-     (add-hook 'python-mode-hook 'eglot-ensure)
-     (add-hook 'go-mode-hook 'eglot-ensure)
-   )
+Other lsp client
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package eglot
+    :ensure t
+    :config
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+    (add-hook 'c-mode-hook 'eglot-ensure)
+    (add-hook 'c++-mode-hook 'eglot-ensure)
+    (add-hook 'python-mode-hook 'eglot-ensure)
+    (add-hook 'go-mode-hook 'eglot-ensure)
+    )
 
-   #+END_SRC
+#+END_SRC
 
 ** Citre
-   部分情况下，服务不一定能编译通过，lsp无法使用，可以采用ctags补全部分
-   另外citre-peak很好用
-   #+begin_quote
-   M-n, M-p: Next/prev line.
-   M-N, M-P: Next/prev definition.
-   M-l j: Jump to the definition.
-   C-g: Close the peek window.
-   #+end_quote
-   https://github.com/universal-ctags/citre
+部分情况下，服务不一定能编译通过，lsp无法使用，可以采用ctags补全部分
+另外citre-peak很好用
+#+begin_quote
+M-n, M-p: Next/prev line.
+M-N, M-P: Next/prev definition.
+M-l j: Jump to the definition.
+C-g: Close the peek window.
+#+end_quote
+https://github.com/universal-ctags/citre
 
 
-   #+begin_src emacs-lisp :tangle yes
-     (use-package citre
-       :defer t
-       :init
-       ;; This is needed in `:init' block for lazy load to work.
-       (require 'citre-config)
-       ;; Bind your frequently used commands.  Alternatively, you can define them
-       ;; in `citre-mode-map' so you can only use them when `citre-mode' is enabled.
-       (global-set-key (kbd "C-x c j") 'citre-jump)
-       (global-set-key (kbd "C-x c J") 'citre-jump-back)
-       (global-set-key (kbd "C-x c p") 'citre-ace-peek)
-       (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
-       :config
-       (setq
-        ;; Set these if readtags/ctags is not in your path.
-        ;; citre-readtags-program "/path/to/readtags"
-        ;; citre-ctags-program "/path/to/ctags"
-        ;; Set this if you use project management plugin like projectile.  It's
-        ;; used for things like displaying paths relatively, see its docstring.
-        citre-project-root-function #'projectile-project-root
-        ;; Set this if you want to always use one location to create a tags file.
-        citre-default-create-tags-file-location 'global-cache
-        ;; See the "Create tags file" section above to know these options
-        citre-use-project-root-when-creating-tags t
-        citre-prompt-language-for-ctags-command t
-        ;; By default, when you open any file, and a tags file can be found for it,
-        ;; `citre-mode' is automatically enabled.  If you only want this to work for
-        ;; certain modes (like `prog-mode'), set it like this.
-        citre-auto-enable-citre-mode-modes '(prog-mode)))
+#+begin_src emacs-lisp :tangle yes
+  (use-package citre
+    :defer t
+    :init
+    ;; This is needed in `:init' block for lazy load to work.
+    (require 'citre-config)
+    ;; Bind your frequently used commands.  Alternatively, you can define them
+    ;; in `citre-mode-map' so you can only use them when `citre-mode' is enabled.
+    (global-set-key (kbd "C-x c j") 'citre-jump)
+    (global-set-key (kbd "C-x c J") 'citre-jump-back)
+    (global-set-key (kbd "C-x c p") 'citre-ace-peek)
+    (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
+    :config
+    (setq
+     ;; Set these if readtags/ctags is not in your path.
+     ;; citre-readtags-program "/path/to/readtags"
+     ;; citre-ctags-program "/path/to/ctags"
+     ;; Set this if you use project management plugin like projectile.  It's
+     ;; used for things like displaying paths relatively, see its docstring.
+     citre-project-root-function #'projectile-project-root
+     ;; Set this if you want to always use one location to create a tags file.
+     citre-default-create-tags-file-location 'global-cache
+     ;; See the "Create tags file" section above to know these options
+     citre-use-project-root-when-creating-tags t
+     citre-prompt-language-for-ctags-command t
+     ;; By default, when you open any file, and a tags file can be found for it,
+     ;; `citre-mode' is automatically enabled.  If you only want this to work for
+     ;; certain modes (like `prog-mode'), set it like this.
+     citre-auto-enable-citre-mode-modes '(prog-mode)))
 #+end_src
 
 ** LSP
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (setq lsp-keymap-prefix "C-c l")
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq lsp-keymap-prefix "C-c l")
 
-   (use-package lsp-mode
-     :after (yasnippet company)
-     :hook (
+  (use-package lsp-mode
+    :after (yasnippet company)
+    :hook (
            (c++-mode . lsp-deferred)
            (c-mode . lsp-deferred)
            (python-mode . lsp-deferred)
            (go-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration)
            )
-     :bind (:map lsp-mode-map
-            ("C-c C-d" . lsp-describe-thing-at-point))
-     :init (setq lsp-auto-guess-root t)       ; Detect project root
-     :config
-     (setq lsp-completion-enable t
-           lsp-enable-snippet t
-           lsp-semantic-highlighting t
-           lsp-idle-delay 0.1
-           lsp-enable-text-document-color t
-           lsp-completion-provider :capf)
-     (push 'company-capf company-backends))
+    :bind (:map lsp-mode-map
+                ("C-c C-d" . lsp-describe-thing-at-point))
+    :init (setq lsp-auto-guess-root t)       ; Detect project root
+    :config
+    (setq lsp-completion-enable t
+          lsp-enable-snippet t
+          lsp-semantic-highlighting t
+          lsp-idle-delay 0.1
+          lsp-enable-text-document-color t
+          lsp-completion-provider :capf)
+    (push 'company-capf company-backends))
 
-   (use-package lsp-ui
-     :commands lsp-ui-mode)
+  (use-package lsp-ui
+    :commands lsp-ui-mode)
 
-   ;; Debug
-   (use-package dap-mode
-     :diminish
-     :functions dap-hydra/nil
-     :bind (:map lsp-mode-map
-            ("<f5>" . dap-debug)
-            ("M-<f5>" . dap-hydra))
-     :config
-           (setq dap-python-executable "python3")
-     :hook ((after-init . dap-mode)
-            (dap-mode . dap-ui-mode)
-            (dap-session-created . (lambda (&_rest) (dap-hydra)))
-            (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-            (python-mode . (lambda () (require 'dap-python)))
-            (ruby-mode . (lambda () (require 'dap-ruby)))
-            (go-mode . (lambda () (require 'dap-go)))
-            (java-mode . (lambda () (require 'dap-java)))
-            ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
-            (php-mode . (lambda () (require 'dap-php)))
-            (elixir-mode . (lambda () (require 'dap-elixir)))
-            ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
+  ;; Debug
+  (use-package dap-mode
+    :diminish
+    :functions dap-hydra/nil
+    :bind (:map lsp-mode-map
+                ("<f5>" . dap-debug)
+                ("M-<f5>" . dap-hydra))
+    :config
+    (setq dap-python-executable "python3")
+    :hook ((after-init . dap-mode)
+           (dap-mode . dap-ui-mode)
+           (dap-session-created . (lambda (&_rest) (dap-hydra)))
+           (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+           (python-mode . (lambda () (require 'dap-python)))
+           (ruby-mode . (lambda () (require 'dap-ruby)))
+           (go-mode . (lambda () (require 'dap-go)))
+           (java-mode . (lambda () (require 'dap-java)))
+           ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+           (php-mode . (lambda () (require 'dap-php)))
+           (elixir-mode . (lambda () (require 'dap-elixir)))
+           ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
 
-   (with-eval-after-load 'lsp-mode
-     (require 'dap-cpptools))
+  (with-eval-after-load 'lsp-mode
+    (require 'dap-cpptools))
 
-   ;; `lsp-mode' and `treemacs' integration.
-   (use-package lsp-treemacs
-     :commands lsp-treemacs-errors-list
-   )
+  ;; `lsp-mode' and `treemacs' integration.
+  (use-package lsp-treemacs
+    :commands lsp-treemacs-errors-list
+    )
 
-;;   (use-package company-lsp
-;;     :config (push 'company-lsp company-backends)
-;;     )
+  ;;   (use-package company-lsp
+  ;;     :config (push 'company-lsp company-backends)
+  ;;     )
 
-   (use-package lsp-ivy
-     :commands lsp-ivy-workspace-symbol
-   )
-   #+END_SRC
+  (use-package lsp-ivy
+    :commands lsp-ivy-workspace-symbol
+    )
+#+END_SRC
 ** GDB
-   暂时先配置多窗口调试
-   #+begin_src emacs-lisp :tangle yes
-     ;; use gdb in many windows by default
-     (setq gdb-many-windows t)
-     ;; non-nil display sourcce file containing the main routine at startup
-     ;; (setq gdb-show-main t)
-     ;; (setq gdb-use-separate-io-buffer 1)
-   #+end_src
+暂时先配置多窗口调试
+#+begin_src emacs-lisp :tangle yes
+  ;; use gdb in many windows by default
+  (setq gdb-many-windows t)
+  ;; non-nil display sourcce file containing the main routine at startup
+  ;; (setq gdb-show-main t)
+  ;; (setq gdb-use-separate-io-buffer 1)
+#+end_src
 
 ** RealGud
-   use realgud for debug
+use realgud for debug
 
-   #+begin_src emacs-lisp :tangle yes
-   ;; maybe need run M-x package-refresh-contents RET first
-   (use-package realgud
-     :ensure t
-   )
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  ;; maybe need run M-x package-refresh-contents RET first
+  (use-package realgud
+    :ensure t
+    )
+#+end_src
 
 ** Turn off mouse interface
 
-   Since I never use the mouse with GNU Emacs, I prefer not to use certain
-   graphical elements as seen as the menu bar, toolbar, scrollbar and tooltip that
-   I find invasive.
+Since I never use the mouse with GNU Emacs, I prefer not to use certain
+graphical elements as seen as the menu bar, toolbar, scrollbar and tooltip that
+I find invasive.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (menu-bar-mode -1)              ; Disable the menu bar
-     (tool-bar-mode -1)              ; Disable the tool bar
-     (tooltip-mode -1)              ; Disable the tooltips
-     ;; (scroll-bar-mode -1)           ; Disable the scrollbar
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (menu-bar-mode -1)              ; Disable the menu bar
+  (tool-bar-mode -1)              ; Disable the tool bar
+  (tooltip-mode -1)              ; Disable the tooltips
+  ;; (scroll-bar-mode -1)           ; Disable the scrollbar
+#+END_SRC
 
 * Languages
 ** Format All
-   format all languages
-   针对python自定义一个format支持black超长行换行
-   主动打开各个语言的format，否则如果没有配置formater，会报错
-   #+begin_src emacs-lisp :tangle yes
-     (use-package format-all
-       :config
-       (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
-       ;; 主动打开各个mode的hook
-       (add-hook 'emacs-lisp-mode-hook 'format-all-mode)
-       (add-hook 'protobuf-mode-hook 'format-all-mode)
-       (define-format-all-formatter g-clang-format
-         (:executable "clang-format")
-         (:install
-          (macos "brew install clang-format")
-          (windows "scoop install llvm"))
-         (:languages "C" "C++")
-         (:features region)
-         (:format
-          (format-all--buffer-easy
-           executable
-           "-style=google"
-           "-assume-filename"
-           (or (buffer-file-name)
-               (cdr (assoc language
-                           '(("C"               . ".c")
-                             ("C++"             . ".cpp")))))
-           (when region
-             (list "--offset" (number-to-string (1- (car region)))
-                   "--length" (number-to-string (- (cdr region) (car region))))))))
-       (add-hook 'c-mode-hook 'format-all-mode)
-       (add-hook 'c++-mode-hook 'format-all-mode)
-       (add-hook 'c-mode-hook #'(lambda ()
-                                  (setq-local format-all-formatters '(("C++" g-clang-format)))))
-       (add-hook 'c++-mode-hook #'(lambda ()
-                                  (setq-local format-all-formatters '(("C++" g-clang-format)))))
-       (define-format-all-formatter myblack
-         (:executable "black")
-         (:install "pip install black")
-         (:languages "Python")
-         (:features)
-         (:format (format-all--buffer-easy
-                   executable "-q" "--experimental-string-processing"
-                   (when (format-all--buffer-extension-p "pyi") "--pyi")
-                   "-")))
-       (add-hook 'python-mode-hook 'format-all-mode)
-       (add-hook 'python-mode-hook #'(lambda ()
-       (setq-local format-all-formatters '(("Python" myblack))))))
-   #+end_src
+format all languages
+针对python自定义一个format支持black超长行换行
+主动打开各个语言的format，否则如果没有配置formater，会报错
+#+begin_src emacs-lisp :tangle yes
+  (use-package format-all
+    :config
+    (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
+    ;; 主动打开各个mode的hook
+    (add-hook 'emacs-lisp-mode-hook 'format-all-mode)
+    (add-hook 'protobuf-mode-hook 'format-all-mode)
+    (define-format-all-formatter g-clang-format
+      (:executable "clang-format")
+      (:install
+       (macos "brew install clang-format")
+       (windows "scoop install llvm"))
+      (:languages "C" "C++")
+      (:features region)
+      (:format
+       (format-all--buffer-easy
+        executable
+        "-style=google"
+        "-assume-filename"
+        (or (buffer-file-name)
+            (cdr (assoc language
+                        '(("C"               . ".c")
+                          ("C++"             . ".cpp")))))
+        (when region
+          (list "--offset" (number-to-string (1- (car region)))
+                "--length" (number-to-string (- (cdr region) (car region))))))))
+    (add-hook 'c-mode-hook 'format-all-mode)
+    (add-hook 'c++-mode-hook 'format-all-mode)
+    (add-hook 'c-mode-hook #'(lambda ()
+                               (setq-local format-all-formatters '(("C++" g-clang-format)))))
+    (add-hook 'c++-mode-hook #'(lambda ()
+                                 (setq-local format-all-formatters '(("C++" g-clang-format)))))
+    (define-format-all-formatter myblack
+      (:executable "black")
+      (:install "pip install black")
+      (:languages "Python")
+      (:features)
+      (:format (format-all--buffer-easy
+                executable "-q" "--experimental-string-processing"
+                (when (format-all--buffer-extension-p "pyi") "--pyi")
+                "-")))
+    (add-hook 'python-mode-hook 'format-all-mode)
+    (add-hook 'python-mode-hook #'(lambda ()
+                                    (setq-local format-all-formatters '(("Python" myblack))))))
+#+end_src
 
 ** Shell
-   add shell support
-   #+begin_src emacs-lisp :tangle yes
-   (use-package bash-completion
-     :config
-     (bash-completion-setup)
-   )
-   #+end_src
+add shell support
+#+begin_src emacs-lisp :tangle yes
+  (use-package bash-completion
+    :config
+    (bash-completion-setup)
+    )
+#+end_src
 
 ** Common Lisp -- slime
-   common lisp env
-   #+begin_src emacs-lisp :tangle yes
-     ;; install sbcl first, like:
-     ;;     sudo yum install sbcl
-     (use-package slime
-       :config
-       (setq inferior-lisp-program "sbcl")
-     )
+common lisp env
+#+begin_src emacs-lisp :tangle yes
+  ;; install sbcl first, like:
+  ;;     sudo yum install sbcl
+  (use-package slime
+    :config
+    (setq inferior-lisp-program "sbcl")
+    )
 
-     (use-package elisp-slime-nav
-       :config
-       (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-         (add-hook hook 'turn-on-elisp-slime-nav-mode))
-     )
+  (use-package elisp-slime-nav
+    :config
+    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+      (add-hook hook 'turn-on-elisp-slime-nav-mode))
+    )
 
-     (use-package slime-company
-       :after (slime company)
-       :config (setq slime-company-completion 'fuzzy
-                     slime-company-after-completion 'slime-company-just-one-space))
+  (use-package slime-company
+    :after (slime company)
+    :config (setq slime-company-completion 'fuzzy
+                  slime-company-after-completion 'slime-company-just-one-space))
 
-   #+end_src
+#+end_src
 ** Common Lisp -- sly
-   try sly
+try sly
 
-   #+begin_src emacs-lisp :tangle no
-     ;; install sbcl first, like:
-     ;;     sudo yum install sbcl
-     (use-package sly
-       :hook (lisp-mode-hook . sly-editing-mode)
-       :config
-       (setq inferior-lisp-program "sbcl")
-     )
+#+begin_src emacs-lisp :tangle no
+  ;; install sbcl first, like:
+  ;;     sudo yum install sbcl
+  (use-package sly
+    :hook (lisp-mode-hook . sly-editing-mode)
+    :config
+    (setq inferior-lisp-program "sbcl")
+    )
 
-     (use-package sly-quicklisp)
-     (use-package sly-named-readtables)
-     (use-package sly-macrostep)
-   #+end_src
+  (use-package sly-quicklisp)
+  (use-package sly-named-readtables)
+  (use-package sly-macrostep)
+#+end_src
 
 ** Rainbow Identifiers
-   try Rainbow Identifiers
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package rainbow-identifiers
-     :config
-     (add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
-   )
-   #+END_SRC
+try Rainbow Identifiers
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-identifiers
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
+    )
+#+END_SRC
 
 ** Doxygen Comment
-   Use srecode to genenate doxygen comment
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package srecode
-     :config
-     (semantic-mode)
-     (global-srecode-minor-mode 1)
-   )
-   #+END_SRC
+Use srecode to genenate doxygen comment
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package srecode
+    :config
+    (semantic-mode)
+    (global-srecode-minor-mode 1)
+    )
+#+END_SRC
 
 ** CMake
-   CMake support
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package cmake-mode
-     )
+CMake support
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package cmake-mode
+    )
 
-   (use-package cmake-font-lock
-     :config
-     (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
-     (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
-     )
+  (use-package cmake-font-lock
+    :config
+    (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
+    (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
+    )
 
-   (use-package eldoc-cmake
-     :after eldoc
-     :hook (cmake-mode . eldoc-cmake-enable)
-   )
+  (use-package eldoc-cmake
+    :after eldoc
+    :hook (cmake-mode . eldoc-cmake-enable)
+    )
 
-   #+END_SRC
+#+END_SRC
 
 ** Yaml
-   Yaml mode support
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package yaml-mode
-     :config
-     (setq auto-mode-alist  (cons '(".yml$" . yaml-mode) auto-mode-alist))
-     )
+Yaml mode support
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package yaml-mode
+    :config
+    (setq auto-mode-alist  (cons '(".yml$" . yaml-mode) auto-mode-alist))
+    )
 
-   (use-package flycheck-yamllint
-     :after flycheck
-     :init
-     (add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup)
-   )
+  (use-package flycheck-yamllint
+    :after flycheck
+    :init
+    (add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup)
+    )
 
-   #+END_SRC
+#+END_SRC
 
 ** Emacs Lisp
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elisp-mode :ensure nil :delight "ξ ")
-   #+END_SRC
+#+END_SRC
 
 *** Eldoc
 
-    Provides minibuffer hints when working with Emacs Lisp.
+Provides minibuffer hints when working with Emacs Lisp.
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eldoc
     :delight
     :hook (emacs-lisp-mode . eldoc-mode))
-    #+END_SRC
+#+END_SRC
 
 ** Python
-   Lsp-mode will start py on python mode
-   use [[*Format All][Format All]] to format code
+Lsp-mode will start py on python mode
+use [[*Format All][Format All]] to format code
 
-   Use pyright
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   ;; sudo npm install -g pyright
-   ;; sudo npm update -g pyright
-   (use-package lsp-pyright
-     :ensure t
-     :config
-     (setq lsp-pyright-python-executable-cmd "python3")
-     :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
+Use pyright
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; sudo npm install -g pyright
+  ;; sudo npm update -g pyright
+  (use-package lsp-pyright
+    :ensure t
+    :config
+    (setq lsp-pyright-python-executable-cmd "python3")
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp))))  ; or lsp-deferred
 
-   #+END_SRC
+#+END_SRC
 
-   #+BEGIN_SRC shell :tangle no
-   pip install --upgrade setuptools
-   pip install 'python-language-server[all]'
-   pip3 install 'python-language-server[all]'
-   #+END_SRC
+#+BEGIN_SRC shell :tangle no
+  pip install --upgrade setuptools
+  pip install 'python-language-server[all]'
+  pip3 install 'python-language-server[all]'
+#+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   ;; Python Mode
-   ;; Install:
-   ;;   pip install pyflakes
-   ;;   pip install autopep8
-   ;;   change to python3
-   (use-package python
-     :ensure nil
-	 :defines gud-pdb-command-name pdb-path
-	 :config
-	 ;; Disable readline based native completion
-	 (setq python-shell-completion-native-enable nil)
-	 (setq python-indent-offset 4
-        python-sort-imports-on-save t
-        python-shell-interpreter "python3"
-        pippel-python-command "python3"
-        importmagic-python-interpreter "python3"
-        flycheck-python-pylint-executable "pylint"
-        flycheck-python-flake8-executable "flake8")
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Python Mode
+  ;; Install:
+  ;;   pip install pyflakes
+  ;;   pip install autopep8
+  ;;   change to python3
+  (use-package python
+    :ensure nil
+    :defines gud-pdb-command-name pdb-path
+    :config
+    ;; Disable readline based native completion
+    (setq python-shell-completion-native-enable nil)
+    (setq python-indent-offset 4
+          python-sort-imports-on-save t
+          python-shell-interpreter "python3"
+          pippel-python-command "python3"
+          importmagic-python-interpreter "python3"
+          flycheck-python-pylint-executable "pylint"
+          flycheck-python-flake8-executable "flake8")
 
-	 (add-hook 'inferior-python-mode-hook
-            (lambda ()
-              ;; (bind-key "C-c C-z" #'kill-buffer-and-window inferior-python-mode-map)
-              (process-query-on-exit-flag (get-process "Python"))))
+    (add-hook 'inferior-python-mode-hook
+              (lambda ()
+                ;; (bind-key "C-c C-z" #'kill-buffer-and-window inferior-python-mode-map)
+                (process-query-on-exit-flag (get-process "Python"))))
 
-	  ;; Live Coding in Python
-	  (use-package live-py-mode))
-   #+END_SRC
+    ;; Live Coding in Python
+    (use-package live-py-mode))
+#+END_SRC
 
 ** C++
-   c++ lsp server
-   disable cquery and ccls to use clangd as lsp server
+c++ lsp server
+disable cquery and ccls to use clangd as lsp server
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-c-style				;
-	:hook ((c-mode c++-mode) . google-set-c-style)
-		   (c-mode-common . google-make-newline-indent))
-   #+END_SRC
+    :hook ((c-mode c++-mode) . google-set-c-style)
+    (c-mode-common . google-make-newline-indent))
+#+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; C/C++ Mode -- use google c-style
   (use-package cc-mode
     :ensure nil
-	:bind (:map c-mode-base-map
+    :bind (:map c-mode-base-map
                 ("C-c c" . compile))
-	;;:hook (c-mode-common . (lambda ()
+    ;;:hook (c-mode-common . (lambda ()
     ;;            (c-set-style "k&r")
     ;;            (setq tab-width 4)
     ;;            (setq c-basic-offset 4)))
-  )
-   #+END_SRC
+    )
+#+END_SRC
 
-   #+BEGIN_SRC  emacs-lisp :tangle yes
+#+BEGIN_SRC  emacs-lisp :tangle yes
   (use-package modern-cpp-font-lock
-	:diminish
-	:init (modern-c++-font-lock-global-mode t)
-  )
-   #+END_SRC
+    :diminish
+    :init (modern-c++-font-lock-global-mode t)
+    )
+#+END_SRC
 
 ** Shell
-   Use lsp
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   ;; npm i -g bash-language-server
-   #+END_SRC
+Use lsp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; npm i -g bash-language-server
+#+END_SRC
 ** Markdown
-   Grip use github api Need github account try other
-   #+BEGIN_SRC emacs-lisp :tangle no
-   ;; try grip-mode
-   ;; Grip install:
-   ;;      Python
-   ;:      pip install grip
-   (use-package grip-mode
-     :ensure t
-     :hook ((markdown-mode org-mode) . grip-mode)
-     )
+Grip use github api Need github account try other
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; try grip-mode
+  ;; Grip install:
+  ;;      Python
+                                          ;:      pip install grip
+  (use-package grip-mode
+    :ensure t
+    :hook ((markdown-mode org-mode) . grip-mode)
+    )
 
 
-   (use-package markdown-mode
-     :ensure t
-     :mode (("README\\.md\\'" . gfm-mode)
-            ("\\.md\\'" . markdown-mode)
-            ("\\.markdown\\'" . markdown-mode))
-     :init (setq markdown-command "multimarkdown"))
+  (use-package markdown-mode
+    :ensure t
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
 
-      #+END_SRC
+#+END_SRC
 
 ** GO
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   ;;; Commentary:
-   ;;
-   ;; Golang configurations.
-   ;;       export GO111MODULE=on
-   ;;       export GOPROXY=https://goproxy.cn
-   ;;       export GOPATH="/usr/local/gopath/"
-   ;;       export PATH="$GOPATH/bin:$PATH"
-   ;;       go get golang.org/x/tools/gopls@latest
-   ;;
-   ;; Go packages:
-   ;; go get -u github.com/mdempsky/gocode
-   ;; go get -u github.com/rogpeppe/godef
-   ;; go get -u golang.org/x/tools/cmd/gopls
-   ;; go get -u golang.org/x/tools/cmd/goimports
-   ;; go get -u golang.org/x/tools/cmd/gorename
-   ;; go get -u golang.org/x/tools/cmd/gotype
-   ;; go get -u golang.org/x/tools/cmd/godoc
-   ;; go get -u github.com/go-delve/delve/cmd/dlv
-   ;; go get -u github.com/josharian/impl
-   ;; go get -u github.com/cweill/gotests/...
-   ;; go get -u github.com/fatih/gomodifytags
-   ;; go get -u github.com/davidrjenni/reftools/cmd/fillstruct
-   ;; go get -u github.com/uudashr/gopkgs/cmd/gopkgs
-   ;; go get -u onnef.co/go/tools/...
-   ;;
+#+BEGIN_SRC emacs-lisp :tangle yes
+     ;;; Commentary:
+  ;;
+  ;; Golang configurations.
+  ;;       export GO111MODULE=on
+  ;;       export GOPROXY=https://goproxy.cn
+  ;;       export GOPATH="/usr/local/gopath/"
+  ;;       export PATH="$GOPATH/bin:$PATH"
+  ;;       go get golang.org/x/tools/gopls@latest
+  ;;
+  ;; Go packages:
+  ;; go get -u github.com/mdempsky/gocode
+  ;; go get -u github.com/rogpeppe/godef
+  ;; go get -u golang.org/x/tools/cmd/gopls
+  ;; go get -u golang.org/x/tools/cmd/goimports
+  ;; go get -u golang.org/x/tools/cmd/gorename
+  ;; go get -u golang.org/x/tools/cmd/gotype
+  ;; go get -u golang.org/x/tools/cmd/godoc
+  ;; go get -u github.com/go-delve/delve/cmd/dlv
+  ;; go get -u github.com/josharian/impl
+  ;; go get -u github.com/cweill/gotests/...
+  ;; go get -u github.com/fatih/gomodifytags
+  ;; go get -u github.com/davidrjenni/reftools/cmd/fillstruct
+  ;; go get -u github.com/uudashr/gopkgs/cmd/gopkgs
+  ;; go get -u onnef.co/go/tools/...
+  ;;
 
- ;; Golang
- (exec-path-from-shell-copy-env "GOPATH")
- (exec-path-from-shell-copy-env "GOROOT")
+  ;; Golang
+  (exec-path-from-shell-copy-env "GOPATH")
+  (exec-path-from-shell-copy-env "GOROOT")
 
- ;; Set up before-save hooks to format buffer and add/delete imports.
- ;; Make sure you don't have other gofmt/goimports hooks enabled.
- ;;(defun lsp-go-install-save-hooks ()
- ;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
- ;; (add-hook 'before-save-hook #'lsp-organize-imports t t))
- ;;(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+  ;; Set up before-save hooks to format buffer and add/delete imports.
+  ;; Make sure you don't have other gofmt/goimports hooks enabled.
+  ;;(defun lsp-go-install-save-hooks ()
+  ;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  ;; (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  ;;(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
- ;; (lsp-register-custom-settings
- ;;   '(("gopls.completeUnimported" t t)
- ;;     ("gopls.staticcheck" t t)))
+  ;; (lsp-register-custom-settings
+  ;;   '(("gopls.completeUnimported" t t)
+  ;;     ("gopls.staticcheck" t t)))
 
- (use-package go-mode
-   :bind (:map go-mode-map
-		  ([remap xref-find-definitions] . godef-jump)
-		  ("C-c R" . go-remove-unused-imports)
-		  ("<f1>" . godoc-at-point))
-   :config
-   ;; Format with `goimports' if possible, otherwise using `gofmt'
-   (when (executable-find "goimports")
-	 (setq gofmt-command "goimports"))
-   (add-hook 'before-save-hook #'gofmt-before-save)
+  (use-package go-mode
+    :bind (:map go-mode-map
+                ([remap xref-find-definitions] . godef-jump)
+                ("C-c R" . go-remove-unused-imports)
+                ("<f1>" . godoc-at-point))
+    :config
+    ;; Format with `goimports' if possible, otherwise using `gofmt'
+    (when (executable-find "goimports")
+      (setq gofmt-command "goimports"))
+    (add-hook 'before-save-hook #'gofmt-before-save)
 
-   (use-package go-projectile)
-   (use-package go-dlv)
-   (use-package go-fill-struct)
-   (use-package go-rename)
-   (use-package golint)
-   (use-package govet)
+    (use-package go-projectile)
+    (use-package go-dlv)
+    (use-package go-fill-struct)
+    (use-package go-rename)
+    (use-package golint)
+    (use-package govet)
 
-;;   (use-package go-gopath
-;;     :bind (
-;;       :map go-mode-map
-;;       ("C-c C-e" . go-gopath-set-gopath)
-;;     )
-;;   )
+    ;;   (use-package go-gopath
+    ;;     :bind (
+    ;;       :map go-mode-map
+    ;;       ("C-c C-e" . go-gopath-set-gopath)
+    ;;     )
+    ;;   )
 
-   (use-package go-impl
-	 :functions (go-packages-gopkgs go-root-and-paths go-packages-fd)
-	 :config
-	 ;; `go-packages-native', remiplement it.
-	 (cond
-	  ((executable-find "gopkgs")
-	   (defun go-packages-gopkgs()
-		 "Return a list of all Go packages, using `gopkgs'."
-		 (sort (process-lines "gopkgs") #'string<))
-	   (setq go-packages-function #'go-packages-gopkgs))
-	  ((executable-find "fd")
-	   (defun go-packages-fd ()
-		 "Return a list of all installed Go packages, using `fd'."
-		 (sort
-		  (delete-dups
-		   (cl-mapcan
-			'(lambda (topdir)
-			   (let ((pkgdir (concat topdir "/pkg/")))
-				 (--> (shell-command-to-string (concat "fd -e a . " pkgdir))
-					  (split-string it "\n")
-					  (-map (lambda (str)
-							  (--> (string-remove-prefix pkgdir str)
-								   (string-trim-left it ".*?/")
-								   (string-remove-suffix ".a" it)
-								   )
-							  ) it))))
-			(go-root-and-paths)))
-		  #'string<))
-	   (setq go-packages-function #'go-packages-fd))))
+    (use-package go-impl
+      :functions (go-packages-gopkgs go-root-and-paths go-packages-fd)
+      :config
+      ;; `go-packages-native', remiplement it.
+      (cond
+       ((executable-find "gopkgs")
+        (defun go-packages-gopkgs()
+          "Return a list of all Go packages, using `gopkgs'."
+          (sort (process-lines "gopkgs") #'string<))
+        (setq go-packages-function #'go-packages-gopkgs))
+       ((executable-find "fd")
+        (defun go-packages-fd ()
+          "Return a list of all installed Go packages, using `fd'."
+          (sort
+           (delete-dups
+            (cl-mapcan
+             '(lambda (topdir)
+                (let ((pkgdir (concat topdir "/pkg/")))
+                  (--> (shell-command-to-string (concat "fd -e a . " pkgdir))
+                       (split-string it "\n")
+                       (-map (lambda (str)
+                               (--> (string-remove-prefix pkgdir str)
+                                    (string-trim-left it ".*?/")
+                                    (string-remove-suffix ".a" it)
+                                    )
+                               ) it))))
+             (go-root-and-paths)))
+           #'string<))
+        (setq go-packages-function #'go-packages-fd))))
 
-   (use-package go-tag
-	 :bind (:map go-mode-map
-			("C-c t" . go-tag-add)
-			("C-c T" . go-tag-remove))
-	 :config (setq go-tag-args (list "-transform" "camelcase")))
+    (use-package go-tag
+      :bind (:map go-mode-map
+                  ("C-c t" . go-tag-add)
+                  ("C-c T" . go-tag-remove))
+      :config (setq go-tag-args (list "-transform" "camelcase")))
 
-   (use-package go-gen-test
-	 :bind (:map go-mode-map
-			("C-c C-t" . go-gen-test-dwim)))
+    (use-package go-gen-test
+      :bind (:map go-mode-map
+                  ("C-c C-t" . go-gen-test-dwim)))
 
-   (use-package gotest
-	 :bind (:map go-mode-map
-			("C-c a" . go-test-current-project)
-			("C-c m" . go-test-current-file)
-			("C-c ." . go-test-current-test)
-			("C-c x" . go-run))))
+    (use-package gotest
+      :bind (:map go-mode-map
+                  ("C-c a" . go-test-current-project)
+                  ("C-c m" . go-test-current-file)
+                  ("C-c ." . go-test-current-test)
+                  ("C-c x" . go-run))))
 
- ;; Local Golang playground for short snippets
- (use-package go-playground
-  :diminish
-  :commands go-playground-mode)
+  ;; Local Golang playground for short snippets
+  (use-package go-playground
+    :diminish
+    :commands go-playground-mode)
 
-   #+END_SRC
+#+END_SRC
 ** Protobuf
-   Proto buf support
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package protobuf-mode
-     :config
-     (setq auto-mode-alist  (cons '(".proto$" . protobuf-mode) auto-mode-alist))
-     )
+Proto buf support
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package protobuf-mode
+    :config
+    (setq auto-mode-alist  (cons '(".proto$" . protobuf-mode) auto-mode-alist))
+    )
 
-   #+END_SRC
+#+END_SRC
 
 ** k8s
-   k8s-mode
-   #+begin_src emacs-lisp :tangle yes
-   (use-package k8s-mode
-     :ensure t
-     :hook (k8s-mode . yas-minor-mode)
-     :config
-     ;; Set indent offset
-     (setq k8s-indent-offset nil)
-     ;; The site docs URL
-     (setq k8s-site-docs-url "https://kubernetes.io/docs/reference/generated/kubernetes-api/")
-     ;; The defautl API version
-     (setq k8s-site-docs-version "v1.3")
-     ;; The browser funtion to browse the docs site. Default is `browse-url-browser-function`
-     (setq k8s-search-documentation-browser-function nil)
-     ; Should be a X11 browser
-     ;(setq k8s-search-documentation-browser-function (quote browse-url-firefox))
-     )
-   #+end_src
+k8s-mode
+#+begin_src emacs-lisp :tangle yes
+  (use-package k8s-mode
+    :ensure t
+    :hook (k8s-mode . yas-minor-mode)
+    :config
+    ;; Set indent offset
+    (setq k8s-indent-offset nil)
+    ;; The site docs URL
+    (setq k8s-site-docs-url "https://kubernetes.io/docs/reference/generated/kubernetes-api/")
+    ;; The defautl API version
+    (setq k8s-site-docs-version "v1.3")
+    ;; The browser funtion to browse the docs site. Default is `browse-url-browser-function`
+    (setq k8s-search-documentation-browser-function nil)
+                                          ; Should be a X11 browser
+                                          ;(setq k8s-search-documentation-browser-function (quote browse-url-firefox))
+    )
+#+end_src
 
 ** dockerfile
-   dockerfile-mode
-   #+begin_src emacs-lisp :tangle yes
-   (use-package dockerfile-mode
-     :config
-     (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
-   )
-   #+end_src
+dockerfile-mode
+#+begin_src emacs-lisp :tangle yes
+  (use-package dockerfile-mode
+    :config
+    (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+    )
+#+end_src
 
 * Advanced Configuration
 ** Saveplace
 每次打开文件回到上次光标位置
 #+begin_src  emacs-lisp :tangle yes
-(use-package saveplace
-  :ensure nil
-  :hook (after-init . save-place-mode))
+  (use-package saveplace
+    :ensure nil
+    :hook (after-init . save-place-mode))
 #+end_src
 ** Bing-dict
 #+begin_src emacs-lisp :tangle yes
-(use-package bing-dict
-  :config
-  (global-set-key (kbd "C-c d") 'bing-dict-brief))
+  (use-package bing-dict
+    :config
+    (global-set-key (kbd "C-c d") 'bing-dict-brief))
 #+end_src
 ** Helpful
 #+begin_src emacs-lisp :tangle yes
   (use-package helpful
-   :ensure t
-   :pretty-hydra
-   ((:color teal :quit-key "q")
-    ("Helpful"
-     (("f" helpful-callable "callable")
-      ("v" helpful-variable "variable")
-      ("k" helpful-key "key")
-      ("c" helpful-command "command")
-      ("d" helpful-at-point "thing at point"))))
-   :bind ("C-h" . helpful-hydra/body))
+    :ensure t
+    :pretty-hydra
+    ((:color teal :quit-key "q")
+     ("Helpful"
+      (("f" helpful-callable "callable")
+       ("v" helpful-variable "variable")
+       ("k" helpful-key "key")
+       ("c" helpful-command "command")
+       ("d" helpful-at-point "thing at point"))))
+    :bind ("C-h" . helpful-hydra/body))
 #+end_src
 
 ** Undo tree
-   better undo && redo
-   #+begin_src emacs-lisp :tangle yes
+better undo && redo
+#+begin_src emacs-lisp :tangle yes
   (use-package undo-tree
     :config
     (global-undo-tree-mode)
     )
-   #+end_src
+#+end_src
 
 ** Move-dup
-   for code move
-   #+begin_src emacs-lisp :tangle yes
-   (use-package move-dup
-     :bind (("M-p"   . move-dup-move-lines-up)
-            ("C-M-p" . move-dup-duplicate-up)
-            ("M-n"   . move-dup-move-lines-down)
-            ("C-M-n" . move-dup-duplicate-down)))
-   #+end_src
+for code move
+#+begin_src emacs-lisp :tangle yes
+  (use-package move-dup
+    :bind (("M-p"   . move-dup-move-lines-up)
+           ("C-M-p" . move-dup-duplicate-up)
+           ("M-n"   . move-dup-move-lines-down)
+           ("C-M-n" . move-dup-duplicate-down)))
+#+end_src
 
 ** Multiple-cursors
-   #+begin_src emacs-lisp :tangle yes
-     (use-package multiple-cursors
-       :config
-       (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-       (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-       (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-       (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-       )
+#+begin_src emacs-lisp :tangle yes
+  (use-package multiple-cursors
+    :config
+    (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+    (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+    )
 
-   #+end_src
+#+end_src
 
 ** Easy Kill && easy mark
-   M-w for kill && mark
-   #+begin_src emacs-lisp :tangle yes
-     (use-package easy-kill
-       :config
-       (global-set-key [remap kill-ring-save] 'easy-kill)
-       (global-set-key [remap mark-sexp] 'easy-mark))
+M-w for kill && mark
+#+begin_src emacs-lisp :tangle yes
+  (use-package easy-kill
+    :config
+    (global-set-key [remap kill-ring-save] 'easy-kill)
+    (global-set-key [remap mark-sexp] 'easy-mark))
 
-     (use-package easy-kill-extras
-       :after (multiple-cursors easy-kill)
-       :config
-       ;; Upgrade `mark-word' and `mark-sexp' with easy-mark
-       ;; equivalents.
-       (global-set-key (kbd "M-@") 'easy-mark-word)
-       (global-set-key (kbd "C-M-@") 'easy-mark-sexp)
+  (use-package easy-kill-extras
+    :after (multiple-cursors easy-kill)
+    :config
+    ;; Upgrade `mark-word' and `mark-sexp' with easy-mark
+    ;; equivalents.
+    (global-set-key (kbd "M-@") 'easy-mark-word)
+    (global-set-key (kbd "C-M-@") 'easy-mark-sexp)
 
-       ;; `easy-mark-to-char' or `easy-mark-up-to-char' could be a good
-       ;; replacement for `zap-to-char'.
-       (global-set-key [remap zap-to-char] 'easy-mark-to-char)
+    ;; `easy-mark-to-char' or `easy-mark-up-to-char' could be a good
+    ;; replacement for `zap-to-char'.
+    (global-set-key [remap zap-to-char] 'easy-mark-to-char)
 
-       ;; Integrate `expand-region' functionality with easy-kill
-       (define-key easy-kill-base-map (kbd "o") 'easy-kill-er-expand)
-       (define-key easy-kill-base-map (kbd "i") 'easy-kill-er-unexpand)
+    ;; Integrate `expand-region' functionality with easy-kill
+    (define-key easy-kill-base-map (kbd "o") 'easy-kill-er-expand)
+    (define-key easy-kill-base-map (kbd "i") 'easy-kill-er-unexpand)
 
-       ;; Add the following tuples to `easy-kill-alist', preferrably by
-       ;; using `customize-variable'.
-       (add-to-list 'easy-kill-alist '(?^ backward-line-edge ""))
-       (add-to-list 'easy-kill-alist '(?$ forward-line-edge ""))
-       (add-to-list 'easy-kill-alist '(?b buffer ""))
-       (add-to-list 'easy-kill-alist '(?< buffer-before-point ""))
-       (add-to-list 'easy-kill-alist '(?> buffer-after-point ""))
-       (add-to-list 'easy-kill-alist '(?f string-to-char-forward ""))
-       (add-to-list 'easy-kill-alist '(?F string-up-to-char-forward ""))
-       (add-to-list 'easy-kill-alist '(?t string-to-char-backward ""))
-       (add-to-list 'easy-kill-alist '(?T string-up-to-char-backward ""))
-       (define-key mc/keymap (kbd "C-. M-C-f") 'mc/mark-next-sexps)
-       (define-key mc/keymap (kbd "C-. M-C-b") 'mc/mark-previous-sexps)
-       (define-key mc/keymap (kbd "C-. <") 'mc/mark-all-above)
-       (define-key mc/keymap (kbd "C-. >") 'mc/mark-all-below)
+    ;; Add the following tuples to `easy-kill-alist', preferrably by
+    ;; using `customize-variable'.
+    (add-to-list 'easy-kill-alist '(?^ backward-line-edge ""))
+    (add-to-list 'easy-kill-alist '(?$ forward-line-edge ""))
+    (add-to-list 'easy-kill-alist '(?b buffer ""))
+    (add-to-list 'easy-kill-alist '(?< buffer-before-point ""))
+    (add-to-list 'easy-kill-alist '(?> buffer-after-point ""))
+    (add-to-list 'easy-kill-alist '(?f string-to-char-forward ""))
+    (add-to-list 'easy-kill-alist '(?F string-up-to-char-forward ""))
+    (add-to-list 'easy-kill-alist '(?t string-to-char-backward ""))
+    (add-to-list 'easy-kill-alist '(?T string-up-to-char-backward ""))
+    (define-key mc/keymap (kbd "C-. M-C-f") 'mc/mark-next-sexps)
+    (define-key mc/keymap (kbd "C-. M-C-b") 'mc/mark-previous-sexps)
+    (define-key mc/keymap (kbd "C-. <") 'mc/mark-all-above)
+    (define-key mc/keymap (kbd "C-. >") 'mc/mark-all-below)
 
-       (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
-       (define-key mc/keymap (kbd "C-. C-k") 'mc/remove-cursors-at-eol)
-       (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
-       (define-key mc/keymap (kbd "C-. C-o") 'mc/remove-cursors-on-blank-lines)
+    (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
+    (define-key mc/keymap (kbd "C-. C-k") 'mc/remove-cursors-at-eol)
+    (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
+    (define-key mc/keymap (kbd "C-. C-o") 'mc/remove-cursors-on-blank-lines)
 
-       (define-key mc/keymap (kbd "C-. C-.") 'mc/freeze-fake-cursors-dwim)
+    (define-key mc/keymap (kbd "C-. C-.") 'mc/freeze-fake-cursors-dwim)
 
-       (define-key mc/keymap (kbd "C-. .")   'mc/move-to-column)
-       (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
+    (define-key mc/keymap (kbd "C-. .")   'mc/move-to-column)
+    (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
 
-       ;; Emacs 24.4+ comes with rectangle-mark-mode.
-       (define-key rectangle-mark-mode-map (kbd "C-. C-,") 'mc/rect-rectangle-to-multiple-cursors))
+    ;; Emacs 24.4+ comes with rectangle-mark-mode.
+    (define-key rectangle-mark-mode-map (kbd "C-. C-,") 'mc/rect-rectangle-to-multiple-cursors))
 
-   #+end_src
+#+end_src
 
 ** Beacon
-   find cursor
-   #+begin_src emacs-lisp :tangle yes
-   (use-package beacon
-     :config
-     (beacon-mode 1)
-   )
+find cursor
+#+begin_src emacs-lisp :tangle yes
+  (use-package beacon
+    :config
+    (beacon-mode 1)
+    )
 
-   #+end_src
+#+end_src
 
 ** Hungry delete
-   delete all space
-   #+begin_src emacs-lisp :tangle yes
-   (use-package hungry-delete
-     :config
-     (global-hungry-delete-mode)
-   )
-   #+end_src
+delete all space
+#+begin_src emacs-lisp :tangle yes
+  (use-package hungry-delete
+    :config
+    (global-hungry-delete-mode)
+    )
+#+end_src
 
 ** Highlight Indent
 
-   #+begin_src emacs-lisp :tangle yes
-   (use-package indent-guide
-     :config
-     (set-face-background 'indent-guide-face "cyan")
-     (indent-guide-global-mode)
-   )
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package indent-guide
+    :config
+    (set-face-background 'indent-guide-face "cyan")
+    (indent-guide-global-mode)
+    )
+#+end_src
 
-   #+begin_src emacs-lisp :tangle no
-   (use-package highlight-indentation
-     :hook (
-     (prog-mode . highlight-indentation-mode)
-     (protobuf-mode . highlight-indentation-mode)
-     ;; (prog-mode . highlight-indentation-current-column-mode)
-     ;; (protobuf-mode . highlight-indentation-current-column-mode)
-     )
-     :config
-     (set-face-background 'highlight-indentation-face "green")
-     (set-face-background 'highlight-indentation-current-column-face "magenta")
+#+begin_src emacs-lisp :tangle no
+  (use-package highlight-indentation
+    :hook (
+           (prog-mode . highlight-indentation-mode)
+           (protobuf-mode . highlight-indentation-mode)
+           ;; (prog-mode . highlight-indentation-current-column-mode)
+           ;; (protobuf-mode . highlight-indentation-current-column-mode)
+           )
+    :config
+    (set-face-background 'highlight-indentation-face "green")
+    (set-face-background 'highlight-indentation-current-column-face "magenta")
 
-   )
-   #+end_src
+    )
+#+end_src
 
-   charater 模式，有时候会引起换行错误，改为colum
-   #+begin_src emacs-lisp :tangle no
-   (use-package highlight-indent-guides
-     :hook (
-     (prog-mode . highlight-indent-guides-mode)
-     (protobuf-mode . highlight-indent-guides-mode)
-     )
-     :config
-     (setq highlight-indent-guides-method 'charater)
-   )
-   #+end_src
+charater 模式，有时候会引起换行错误，改为colum
+#+begin_src emacs-lisp :tangle no
+  (use-package highlight-indent-guides
+    :hook (
+           (prog-mode . highlight-indent-guides-mode)
+           (protobuf-mode . highlight-indent-guides-mode)
+           )
+    :config
+    (setq highlight-indent-guides-method 'charater)
+    )
+#+end_src
 
 ** Icons
-   To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
-   and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
-   find.
+To integrate icons with =doom-modeline=, =switch-to-buffer=, =counsel-find-file=
+and many other functions; [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] is just the best package that you can
+find.
 
-   *NOTE:* if it's the first time that you install the package, you must run
-   =M-x all-the-icons-install-fonts=.
+*NOTE:* if it's the first time that you install the package, you must run
+=M-x all-the-icons-install-fonts=.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons
-  )
+    )
 
   (use-package all-the-icons-dired
     :config
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  )
+    )
 
-   #+END_SRC
+#+END_SRC
 
 ** Dashboard
 
-   Always good to have a dashboard.
+Always good to have a dashboard.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dashboard
     :ensure t
     :config
-	(setq dashboard-items '((recents  . 30)
-                        (bookmarks . 5)
-                        (projects . 15)
-                        (agenda . 5)
-                        (registers . 5)))
-	(setq dashboard-set-heading-icons t)
-	(setq dashboard-set-file-icons t)
-	(dashboard-setup-startup-hook)
-	)
-   #+END_SRC
+    (setq dashboard-items '((recents  . 30)
+                            (bookmarks . 5)
+                            (projects . 15)
+                            (agenda . 5)
+                            (registers . 5)))
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (dashboard-setup-startup-hook)
+    )
+#+END_SRC
 
 ** Dired
 
-   For those who didn't know, GNU Emacs is also a file explorer.
+For those who didn't know, GNU Emacs is also a file explorer.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired
     :ensure nil
     :delight "Dired "
@@ -1251,26 +1251,26 @@
     (dired-listing-switches "-alh")
     (dired-ls-F-marks-symlinks nil)
     (dired-recursive-copies 'always))
-   #+END_SRC
+#+END_SRC
 
 ** Company
-   =company= provides auto-completion at point and to Displays a small pop-in
-   containing the candidates.
+=company= provides auto-completion at point and to Displays a small pop-in
+containing the candidates.
 
-   #+BEGIN_QUOTE
-   Company is a text completion framework for Emacs. The name stands for "complete
-   anything". It uses pluggable back-ends and front-ends to retrieve and display
-   completion candidates.
+#+BEGIN_QUOTE
+Company is a text completion framework for Emacs. The name stands for "complete
+anything". It uses pluggable back-ends and front-ends to retrieve and display
+completion candidates.
 
-   [[http://company-mode.github.io/][Dmitry Gutov]]
-   #+END_QUOTE
+[[http://company-mode.github.io/][Dmitry Gutov]]
+#+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :defer 0.5
     :delight
-	:init
-	(add-hook 'after-init-hook 'global-company-mode)
+    :init
+    (add-hook 'after-init-hook 'global-company-mode)
     :custom
     (company-begin-commands '(self-insert-command))
     (company-idle-delay .1)
@@ -1282,34 +1282,34 @@
     :config
     (define-key company-active-map (kbd "C-n") 'company-select-next)
     (define-key company-active-map (kbd "C-p") 'company-select-previous)
-;;	(delete 'company-dabbrev 'company-backends)
-;;	(add-to-list 'company-backends #'company-dabbrev)
-	(setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
-	(setq company-dabbrev-code-other-buffers 'all)
+    ;;	(delete 'company-dabbrev 'company-backends)
+    ;;	(add-to-list 'company-backends #'company-dabbrev)
+    (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
+    (setq company-dabbrev-code-other-buffers 'all)
     (setq completion-ignore-case t)
-    ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
+                                          ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
     (setq company-dabbrev-downcase nil)
-  )
+    )
 
 
 
-   #+END_SRC
+#+END_SRC
 
-   I use =company= with =company-box= that allows a company front-end with icons.
+I use =company= with =company-box= that allows a company front-end with icons.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-box
     :after company
     :delight
     :hook (company-mode . company-box-mode))
-   #+END_SRC
+#+END_SRC
 
 ** Buffers
 
-   Buffers can quickly become a mess. For some people, it's not a problem, but I
-   like being able to find my way easily.
+Buffers can quickly become a mess. For some people, it's not a problem, but I
+like being able to find my way easily.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ibuffer
     :bind ("C-x C-b" . ibuffer))
 
@@ -1321,15 +1321,15 @@
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic)))
     :hook (ibuffer . my/ibuffer-projectile))
-   #+END_SRC
+#+END_SRC
 
 ** History
 
-   Provides the ability to have commands and their history saved so that whenever
-   you return to work, you can re-run things as you need them. This is not a
-   radical function, it is part of a good user experience.
+Provides the ability to have commands and their history saved so that whenever
+you return to work, you can re-run things as you need them. This is not a
+radical function, it is part of a good user experience.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package savehist
     :ensure nil
     :custom
@@ -1339,52 +1339,52 @@
     (savehist-file (expand-file-name (format "~/.emacs.d/cache/history")))
     (savehist-save-minibuffer-history 1)
     :config (savehist-mode 1))
-   #+END_SRC
+#+END_SRC
 
 ** Which-Key
-   :PROPERTIES:
-   :ID:       e3d033d4-6c26-43e6-891b-988e8d4c9a98
-   :END:
-   Use Whick-key to help
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package which-key
-     :init
-     (which-key-mode)
-   )
-   #+END_SRC
+:PROPERTIES:
+:ID:       e3d033d4-6c26-43e6-891b-988e8d4c9a98
+:END:
+Use Whick-key to help
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package which-key
+    :init
+    (which-key-mode)
+    )
+#+END_SRC
 ** Ivy
 
-   I used =helm= before, but I find =ivy= faster and lighter.
+I used =helm= before, but I find =ivy= faster and lighter.
 
-   #+BEGIN_QUOTE
-   Ivy is a generic completion mechanism for Emacs. While it operates similarly to
-   other completion schemes such as icomplete-mode, Ivy aims to be more efficient,
-   smaller, simpler, and smoother to use yet highly customizable.
+#+BEGIN_QUOTE
+Ivy is a generic completion mechanism for Emacs. While it operates similarly to
+other completion schemes such as icomplete-mode, Ivy aims to be more efficient,
+smaller, simpler, and smoother to use yet highly customizable.
 
-   [[https://github.com/abo-abo/ivy][Oleh Krehel]]
-   #+END_QUOTE
+[[https://github.com/abo-abo/ivy][Oleh Krehel]]
+#+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
     :after ivy
     :delight
     :bind (
-	       ("C-x C-d" . counsel-dired-jump)
+           ("C-x C-d" . counsel-dired-jump)
            ("C-x C-h" . counsel-minibuffer-history)
            ("C-x C-l" . counsel-find-library)
            ("C-x C-r" . counsel-recentf)
            ("C-x C-u" . counsel-unicode-char)
            ("C-x C-v" . counsel-set-variable)
            ("C-c C-n" . counsel-imenu)
-		   ("M-x" . counsel-M-x)
-		   )
+           ("M-x" . counsel-M-x)
+           )
     :config (counsel-mode)
     :custom (counsel-rg-base-command "rg -S -M 150 --no-heading --line-number --color never %s"))
 
   (use-package counsel-projectile
     :config
     (counsel-projectile-mode)
-  )
+    )
 
   (use-package orderless
     :ensure t
@@ -1436,35 +1436,35 @@
            ("C-r" . swiper)
            :map swiper-map
            ("M-%" . swiper-query-replace)))
-   #+END_SRC
+#+END_SRC
 ** Avy
-   Navigation with Avy
-   #+begin_src emacs-lisp :tangle yes
-     (use-package avy
-       :ensure t
-       :config
-       (avy-setup-default)
-       :bind (
-             ("M-g c" . avy-goto-char)
-             ("M-g M-c" . avy-goto-char-2)
-             ;; ("M-g M-g" . avy-goto-line)
-             ("M-g g" . avy-goto-line)
-             ("M-g w" . avy-goto-word-1)
-             ("M-g e" . avy-goto-word-0)
-             )
-       )
+Navigation with Avy
+#+begin_src emacs-lisp :tangle yes
+  (use-package avy
+    :ensure t
+    :config
+    (avy-setup-default)
+    :bind (
+           ("M-g c" . avy-goto-char)
+           ("M-g M-c" . avy-goto-char-2)
+           ;; ("M-g M-g" . avy-goto-line)
+           ("M-g g" . avy-goto-line)
+           ("M-g w" . avy-goto-word-1)
+           ("M-g e" . avy-goto-word-0)
+           )
+    )
 
-     (use-package ivy-avy
-       :after ivy
-     )
-   #+end_src
+  (use-package ivy-avy
+    :after ivy
+    )
+#+end_src
 
 ** Parentheses
 
-   Managing parentheses can be painful. One of the first things you want to do is
-   to change the appearance of the highlight of the parentheses pairs.
+Managing parentheses can be painful. One of the first things you want to do is
+to change the appearance of the highlight of the parentheses pairs.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package faces
     :ensure nil
     :custom (show-paren-delay 0)
@@ -1472,32 +1472,32 @@
     (set-face-background 'show-paren-match "#262b36")
     (set-face-bold 'show-paren-match t)
     (set-face-foreground 'show-paren-match "#ffffff"))
-   #+END_SRC
+#+END_SRC
 
 *** =rainbow-delimiters=
 
-    #+BEGIN_QUOTE
-    rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
-    delimiters such as parentheses, brackets or braces according to their
-    depth. Each successive level is highlighted in a different color. This makes it
-    easy to spot matching delimiters, orient yourself in the code, and tell which
-    statements are at a given depth.
+#+BEGIN_QUOTE
+rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
+delimiters such as parentheses, brackets or braces according to their
+depth. Each successive level is highlighted in a different color. This makes it
+easy to spot matching delimiters, orient yourself in the code, and tell which
+statements are at a given depth.
 
-    [[https://github.com/Fanael/rainbow-delimiters][Fanael Linithien]]
-    #+END_QUOTE
+[[https://github.com/Fanael/rainbow-delimiters][Fanael Linithien]]
+#+END_QUOTE
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
-    #+END_SRC
+#+END_SRC
 
 *** =smartparens=
 
-    In my opinion, it is the most powerful package to deal with the
-    parenthesis. Anyway, if you don't like it, you can try taking a look at
-    =paredit= or =autopair=.
+In my opinion, it is the most powerful package to deal with the
+parenthesis. Anyway, if you don't like it, you can try taking a look at
+=paredit= or =autopair=.
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :defer 1
     :delight
@@ -1505,24 +1505,24 @@
     (require 'smartparens-config)
     :custom (sp-escape-quotes-after-insert nil)
     :config (smartparens-global-mode 1))
-    #+END_SRC
+#+END_SRC
 
 ** Projectile
 
-   #+BEGIN_QUOTE
-   Projectile is a project interaction library for Emacs. Its goal is to provide a
-   nice set of features operating on a project level without introducing external
-   dependencies (when feasible). For instance - finding project files has a
-   portable implementation written in pure Emacs Lisp without the use of GNU find
-   (but for performance sake an indexing mechanism backed by external commands
-   exists as well).
+#+BEGIN_QUOTE
+Projectile is a project interaction library for Emacs. Its goal is to provide a
+nice set of features operating on a project level without introducing external
+dependencies (when feasible). For instance - finding project files has a
+portable implementation written in pure Emacs Lisp without the use of GNU find
+(but for performance sake an indexing mechanism backed by external commands
+exists as well).
 
-   Use build.sh to compile project with build.sh
+Use build.sh to compile project with build.sh
 
-   [[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
-   #+END_QUOTE
+[[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
+#+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
     ;;:defer 1
     :custom
@@ -1545,13 +1545,13 @@
   (use-package counsel-projectile
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
-   #+END_SRC
+#+END_SRC
 
 ** Recent Files
 
-   Provides fast access to the recent files.
+Provides fast access to the recent files.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package recentf
     :bind ("C-c r" . recentf-open-files)
     :init (recentf-mode)
@@ -1566,25 +1566,25 @@
     (recentf-max-saved-items 200)
     (recentf-save-file (expand-file-name (format "~/.emacs.d/cache/recentf")))
     :config (run-at-time nil (* 5 60) 'recentf-save-list))
-   #+END_SRC
+#+END_SRC
 
 ** Version Control
 
-   It is quite common to work on Git repositories, so it is important to have a
-   configuration that we like.
+It is quite common to work on Git repositories, so it is important to have a
+configuration that we like.
 
-   #+BEGIN_QUOTE
-   [[https://github.com/magit/magit][Magit]] is an interface to the version control system Git, implemented as an Emacs
-   package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
-   claim that Magit wraps and improves upon each and every Git command, it is
-   complete enough to allow even experienced Git users to perform almost all of
-   their daily version control tasks directly from within Emacs. While many fine
-   Git clients exist, only Magit and Git itself deserve to be called porcelains.
+#+BEGIN_QUOTE
+[[https://github.com/magit/magit][Magit]] is an interface to the version control system Git, implemented as an Emacs
+package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
+claim that Magit wraps and improves upon each and every Git command, it is
+complete enough to allow even experienced Git users to perform almost all of
+their daily version control tasks directly from within Emacs. While many fine
+Git clients exist, only Magit and Git itself deserve to be called porcelains.
 
-   [[https://github.com/tarsius][Jonas Bernoulli]]
-   #+END_QUOTE
+[[https://github.com/tarsius][Jonas Bernoulli]]
+#+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-commit
     :after magit
     :hook (git-commit-mode . my/git-commit-auto-fill-everywhere)
@@ -1597,57 +1597,57 @@
 
   (use-package magit :defer 0.3)
 
-   (use-package hl-todo
-     :init
-	 (add-hook 'after-init-hook 'global-hl-todo-mode)
-   )
+  (use-package hl-todo
+    :init
+    (add-hook 'after-init-hook 'global-hl-todo-mode)
+    )
 
-   (use-package magit-todos
-   )
+  (use-package magit-todos
+    )
 
-   #+END_SRC
+#+END_SRC
 
-   In addition to that, I like to see the lines that are being modified in the file
-   while it is being edited.
+In addition to that, I like to see the lines that are being modified in the file
+while it is being edited.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-gutter
     :defer 0.3
     :delight
     :init (global-git-gutter-mode +1))
-   #+END_SRC
+#+END_SRC
 
-   Finally, one last package that I like to use with Git to easily see the changes
-   made by previous commits.
+Finally, one last package that I like to use with Git to easily see the changes
+made by previous commits.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-timemachine
     :defer 1
     :delight)
-   #+END_SRC
+#+END_SRC
 
 ** Whitespaces
 
-   It is often annoying to see unnecessary blank spaces at the end of a line or
-   file. Let's get ride of them:
+It is often annoying to see unnecessary blank spaces at the end of a line or
+file. Let's get ride of them:
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package whitespace-cleanup-mode
-     :hook (prog-mode . whitespace-cleanup-mode)
-   )
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package whitespace-cleanup-mode
+    :hook (prog-mode . whitespace-cleanup-mode)
+    )
 
-   #+END_SRC
+#+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package simple
     :ensure nil
     :hook (before-save . delete-trailing-whitespace))
-   #+END_SRC
+#+END_SRC
 ** Word Wrap
 
-   I like to have lines of the same length.
+I like to have lines of the same length.
 
-   #+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package simple
     :ensure nil
     :delight (auto-fill-function)
@@ -1655,21 +1655,21 @@
     :hook ((prog-mode . turn-on-auto-fill)
            (text-mode . turn-on-auto-fill))
     :custom (set-mark-command-repeat-pop t))
-   #+END_SRC
+#+END_SRC
 
 ** YASnippet
 
-   #+BEGIN_QUOTE
-   YASnippet is a template system for Emacs. It allows you to type an abbreviation
-   and automatically expand it into function templates.
-   #+END_QUOTE
+#+BEGIN_QUOTE
+YASnippet is a template system for Emacs. It allows you to type an abbreviation
+and automatically expand it into function templates.
+#+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
     :defer t
     :after lsp-mode
-	:init
-	;;(add-hook 'prog-mode-hook 'yas-minor-mode)
+    :init
+    ;;(add-hook 'prog-mode-hook 'yas-minor-mode)
     (yas-global-mode 1)
     )
 
@@ -1680,65 +1680,65 @@
   (use-package ivy-yasnippet :after yasnippet)
   (use-package auto-yasnippet :after yasnippet)
   (use-package react-snippets :after yasnippet)
-   #+END_SRC
+#+END_SRC
 ** Number Window
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package window-numbering			;
-	:init
-	(window-numbering-mode 1)
-	:config
-	(setq window-numbering-assign-func
-		(lambda () (when (equal (buffer-name) "*Calculator*") 9)))
-  )
-   #+END_SRC
+    :init
+    (window-numbering-mode 1)
+    :config
+    (setq window-numbering-assign-func
+          (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
+    )
+#+END_SRC
 ** Current word highlight
-   #+begin_src emacs-lisp :tangle no
-   (use-package current-word-highlight
-     :config
-     (add-hook 'prog-mode-hook 'current-word-highlight-mode)
-   )
-   #+end_src
+#+begin_src emacs-lisp :tangle no
+  (use-package current-word-highlight
+    :config
+    (add-hook 'prog-mode-hook 'current-word-highlight-mode)
+    )
+#+end_src
 
 ** Syntax subword
-   #+begin_src emacs-lisp :tangle yes
-   (use-package syntax-subword
-     :init
-     (global-syntax-subword-mode)
-     )
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package syntax-subword
+    :init
+    (global-syntax-subword-mode)
+    )
+#+end_src
 
 ** Whole line or region
-   #+BEGIN_SRC emacs-lisp :tangle no
-   use easy-kill to install this
-   (use-package whole-line-or-region
-     :init
-	 (whole-line-or-region-global-mode)
-   )
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle no
+  use easy-kill to install this
+  (use-package whole-line-or-region
+    :init
+    (whole-line-or-region-global-mode)
+    )
+#+END_SRC
 
 ** Ediff
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package ediff
-     :config
-     (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-     (setq ediff-split-window-function 'split-window-horizontally)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ediff
+    :config
+    (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+    (setq ediff-split-window-function 'split-window-horizontally)
 
-     (defun update-diff-colors ()
-     "update the colors for diff faces"
-     (set-face-attribute 'diff-added nil
-                      :foreground "white" :background "blue")
-     (set-face-attribute 'diff-removed nil
-                      :foreground "white" :background "red3")
-     (set-face-attribute 'diff-changed nil
-                      :foreground "white" :background "purple"))
+    (defun update-diff-colors ()
+      "update the colors for diff faces"
+      (set-face-attribute 'diff-added nil
+                          :foreground "white" :background "blue")
+      (set-face-attribute 'diff-removed nil
+                          :foreground "white" :background "red3")
+      (set-face-attribute 'diff-changed nil
+                          :foreground "white" :background "purple"))
 
-     (eval-after-load "diff-mode"
-       '(update-diff-colors))
-     (with-eval-after-load 'outline
-       (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
+    (eval-after-load "diff-mode"
+      '(update-diff-colors))
+    (with-eval-after-load 'outline
+      (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
 
-     ;; Usage: emacs -diff file1 file2
-     (defun command-line-diff (switch)
+    ;; Usage: emacs -diff file1 file2
+    (defun command-line-diff (switch)
       (let ((file1 (pop command-line-args-left))
             (file2 (pop command-line-args-left)))
         (ediff file1 file2)))
@@ -1748,111 +1748,111 @@
     ;; turn off whitespace checking:
     (setq ediff-diff-options "-w")
     )
-   #+END_SRC
+#+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package diff-hl
-     :init
-     (global-diff-hl-mode)
-   )
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package diff-hl
+    :init
+    (global-diff-hl-mode)
+    )
 
-   (use-package diffview)
-   #+END_SRC
+  (use-package diffview)
+#+END_SRC
 
-   Use ztree to diff dirs
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package ztree)
-   #+END_SRC
+Use ztree to diff dirs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ztree)
+#+END_SRC
 
 ** Symbol overlay
-   hight light symbol in different color
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package symbol-overlay
-     :bind (("M-i" . symbol-overlay-put)
-	        ("M-n" . symbol-overlay-jump-next)
-			("M-p" . symbol-overlay-jump-prev)
-	       )
-   )
-   #+END_SRC
+hight light symbol in different color
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package symbol-overlay
+    :bind (("M-i" . symbol-overlay-put)
+           ("M-n" . symbol-overlay-jump-next)
+           ("M-p" . symbol-overlay-jump-prev)
+           )
+    )
+#+END_SRC
 ** Smex
-   #+BEGIN_SRC emacs-lisp :tangle yes
-       (use-package smex
-         :init
-         (smex-initialize)
-     ;;    :bind (("M-x" . smex)
-     ;;	       ("M-X" . smex-major-mode-commands)
-     ;;		   ("C-c C-c M-x" . execute-extended-command)
-     ;;	      )
-       )
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smex
+    :init
+    (smex-initialize)
+    ;;    :bind (("M-x" . smex)
+    ;;	       ("M-X" . smex-major-mode-commands)
+    ;;		   ("C-c C-c M-x" . execute-extended-command)
+    ;;	      )
+    )
 
-   #+END_SRC
+#+END_SRC
 ** Compile
-   projectile-compile-project 解决build.sh，暂时以下插件不需要
-   __Use smart compile__
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package smart-compile
-     )
-   #+END_SRC
+projectile-compile-project 解决build.sh，暂时以下插件不需要
+__Use smart compile__
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package smart-compile
+    )
+#+END_SRC
 
-   try Quickrun
-   #+BEGIN_SRC emacs-lisp :tangle no
-   (use-package quickrun
-   ;; :config
-   ;; ;; Use this parameter in pod-mode
-   ;; (quickrun-add-command "c++/build"
-   ;;   '((:command . "build.sh")
-   ;;     (:default-directory . 'topdir)
-   ;;     (:exec    . "./%c"))
-   ;;    :mode 'c++-mode)
-   )
+try Quickrun
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package quickrun
+    ;; :config
+    ;; ;; Use this parameter in pod-mode
+    ;; (quickrun-add-command "c++/build"
+    ;;   '((:command . "build.sh")
+    ;;     (:default-directory . 'topdir)
+    ;;     (:exec    . "./%c"))
+    ;;    :mode 'c++-mode)
+    )
 
-   (defun git-build ()
-     " for git project compile to use ./build.sh "
-     (interactive)
-     (let* ((cmd "git rev-parse --show-toplevel")
-          (topdir (with-temp-buffer
-                    (call-process-shell-command cmd nil t nil)
-                    (goto-char (point-min))
-                    (if (re-search-forward "^\\(.+\\)$" nil t)
-                        (match-string 1)))))
-     (quickrun :source `((:command . "build.sh")
-                         (:default-directory . ,topdir)
-                         (:exec . ("./%c"))
-                         (:timeout . 1000)))))
+  (defun git-build ()
+    " for git project compile to use ./build.sh "
+    (interactive)
+    (let* ((cmd "git rev-parse --show-toplevel")
+           (topdir (with-temp-buffer
+                     (call-process-shell-command cmd nil t nil)
+                     (goto-char (point-min))
+                     (if (re-search-forward "^\\(.+\\)$" nil t)
+                         (match-string 1)))))
+      (quickrun :source `((:command . "build.sh")
+                          (:default-directory . ,topdir)
+                          (:exec . ("./%c"))
+                          (:timeout . 1000)))))
 
 
- ;;(quickrun-set-default "c" "c++/build")
- ;;(quickrun-set-default "c++" "c++/build")
-   #+END_SRC
+  ;;(quickrun-set-default "c" "c++/build")
+  ;;(quickrun-set-default "c++" "c++/build")
+#+END_SRC
 ** Refactor
-   Try emr
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package emr
-       :config
-       (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
-     )
-   #+END_SRC
+Try emr
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emr
+    :config
+    (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
+    )
+#+END_SRC
 ** Add multi iedit
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit
     :bind (("C-c ;" . iedit-mode)
+           )
     )
-  )
-   #+END_SRC
+#+END_SRC
 
 ** Comment dwim 2
-   #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package comment-dwim-2
     :config
     (global-set-key (kbd "M-;") 'comment-dwim-2)
     (define-key org-mode-map (kbd "M-;") 'org-comment-dwim-2)
     )
-   #+END_SRC
+#+END_SRC
 
 ** Treemacs
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package treemacs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package treemacs
     :ensure t
     :defer t
     :init
@@ -1943,85 +1943,85 @@
 
   (use-package lsp-treemacs
     :commands lsp-treemacs-errors-list
-  )
+    )
 
   (use-package treemacs-persp ;;treemacs-persective if you use perspective.el vs. persp-mode
     :after treemacs persp-mode ;;or perspective vs. persp-mode
     :ensure t
     :config (treemacs-set-scope-type 'Perspectives))
 
-   #+END_SRC
+#+END_SRC
 
 * Org-mode
 ** Org Common Setting
-   #+begin_src emacs-lisp :tangle yes
-     (use-package org
-       :ensure nil
-       :commands (org-dynamic-block-define)
-       :custom-face (org-ellipsis ((t (:foreground nil))))
-       :bind (("C-c a" . org-agenda)
-              ("C-c b" . org-switchb)
-              ("C-c x" . org-capture))
-       :config
-       (require 'org-tempo)
-       ;; shifttab when open org files
-       (add-hook 'org-mode-hook (lambda () (org-shifttab)))
-       ;; For hydra
-       (defun hot-expand (str &optional mod)
-         "Expand org template.
-     STR is a structure template string recognised by org like <s. MOD is a
-     string with additional parameters to add the begin line of the
-     structure element. HEADER string includes more parameters that are
-     prepended to the element after the #+HEADER: tag."
-         (let (text)
-           (when (region-active-p)
-             (setq text (buffer-substring (region-beginning) (region-end)))
-             (delete-region (region-beginning) (region-end)))
-           (insert str)
-           (if (fboundp 'org-try-structure-completion)
-               (org-try-structure-completion) ; < org 9
-             (progn
-               ;; New template expansion since org 9
-               (require 'org-tempo nil t)
-               (org-tempo-complete-tag)))
-           (when mod (insert mod) (forward-line))
-           (when text (insert text))))
+#+begin_src emacs-lisp :tangle yes
+  (use-package org
+    :ensure nil
+    :commands (org-dynamic-block-define)
+    :custom-face (org-ellipsis ((t (:foreground nil))))
+    :bind (("C-c a" . org-agenda)
+           ("C-c b" . org-switchb)
+           ("C-c x" . org-capture))
+    :config
+    (require 'org-tempo)
+    ;; shifttab when open org files
+    (add-hook 'org-mode-hook (lambda () (org-shifttab)))
+    ;; For hydra
+    (defun hot-expand (str &optional mod)
+      "Expand org template.
+  STR is a structure template string recognised by org like <s. MOD is a
+  string with additional parameters to add the begin line of the
+  structure element. HEADER string includes more parameters that are
+  prepended to the element after the #+HEADER: tag."
+      (let (text)
+        (when (region-active-p)
+          (setq text (buffer-substring (region-beginning) (region-end)))
+          (delete-region (region-beginning) (region-end)))
+        (insert str)
+        (if (fboundp 'org-try-structure-completion)
+            (org-try-structure-completion) ; < org 9
+          (progn
+            ;; New template expansion since org 9
+            (require 'org-tempo nil t)
+            (org-tempo-complete-tag)))
+        (when mod (insert mod) (forward-line))
+        (when text (insert text))))
 
-       ;; To speed up startup, don't put to init section
-       (setq org-modules nil                 ; Faster loading
-             org-todo-keywords
-             '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
-               (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
-             org-todo-keyword-faces '(("HANGUP" . warning)
-                                      ("❓" . warning))
-             org-priority-faces '((?A . error)
-                                  (?B . warning)
-                                  (?C . success))
+    ;; To speed up startup, don't put to init section
+    (setq org-modules nil                 ; Faster loading
+          org-todo-keywords
+          '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
+            (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
+          org-todo-keyword-faces '(("HANGUP" . warning)
+                                   ("❓" . warning))
+          org-priority-faces '((?A . error)
+                               (?B . warning)
+                               (?C . success))
 
-             org-tags-column -80
-             org-log-done 'time
-             org-catch-invisible-edits 'smart
-             org-startup-indented t
-             org-ellipsis (if (and (display-graphic-p) (char-displayable-p ?⏷)) "\t⏷" nil)
-             org-pretty-entities nil
-             org-export-with-sub-superscripts nil
-             org-hide-emphasis-markers t))
+          org-tags-column -80
+          org-log-done 'time
+          org-catch-invisible-edits 'smart
+          org-startup-indented t
+          org-ellipsis (if (and (display-graphic-p) (char-displayable-p ?⏷)) "\t⏷" nil)
+          org-pretty-entities nil
+          org-export-with-sub-superscripts nil
+          org-hide-emphasis-markers t))
 
-   #+end_src
+#+end_src
 
 ** Org bullets
-   Show org-mode bullets as UTF-8 characters.
+Show org-mode bullets as UTF-8 characters.
 
-   #+begin_src emacs-lisp :tangle yes
-     (use-package org-bullets
-       :config
-       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-     (use-package org-fancy-priorities
-       :ensure t
-       :hook
-       (org-mode . org-fancy-priorities-mode))
-   #+end_src
+  (use-package org-fancy-priorities
+    :ensure t
+    :hook
+    (org-mode . org-fancy-priorities-mode))
+#+end_src
 
 ** Org bable
 #+begin_src emacs-lisp :tangle yes
@@ -2058,29 +2058,29 @@
                                load-language-list)
 #+end_src
 ** Org QL
-   This package provides a query language for Org files. It offers two syntax styles: Lisp-like sexps and search engine-like keywords.
-   use libraries org-ql and org-ql-view.
-   #+begin_src emacs-lisp :tangle no
-   (use-package org-ql)
-   #+end_src
+This package provides a query language for Org files. It offers two syntax styles: Lisp-like sexps and search engine-like keywords.
+use libraries org-ql and org-ql-view.
+#+begin_src emacs-lisp :tangle no
+  (use-package org-ql)
+#+end_src
 
 ** Org sidebar
-   Use age
-   org-sidebar-tree: Display tree-view sidebar for current Org buffer.
-   org-sidebar-tree-toggle: Toggle tree-view sidebar.
-   org-sidebar: Display the default item sidebars for the current Org buffer.
-   org-sidebar-toggle: Toggle default sidebars.
-   #+begin_src emacs-lisp :tangle yes
-   (use-package org-sidebar)
-   #+end_src
+Use age
+org-sidebar-tree: Display tree-view sidebar for current Org buffer.
+org-sidebar-tree-toggle: Toggle tree-view sidebar.
+org-sidebar: Display the default item sidebars for the current Org buffer.
+org-sidebar-toggle: Toggle default sidebars.
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-sidebar)
+#+end_src
 
 ** Org Superstar
-   #+begin_src emacs-lisp :tangle yes
-   (use-package org-superstar
-     :config
-     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-   )
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-superstar
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+    )
+#+end_src
 
 ** Org Super Agenda
 #+begin_src emacs-lisp :tangle yes
@@ -2122,68 +2122,68 @@
 #+end_src
 
 ** Toc-org
-   #+begin_src emacs-lisp :tangle yes
-   (use-package toc-org
-     :config
-     (add-hook 'org-mode-hook 'toc-org-mode)
-     (add-hook 'markdown-mode-hook 'toc-org-mode)
-     (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
-   )
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  (use-package toc-org
+    :config
+    (add-hook 'org-mode-hook 'toc-org-mode)
+    (add-hook 'markdown-mode-hook 'toc-org-mode)
+    (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
+    )
+#+end_src
 ** Add markdown to Export list
-   #+begin_src emacs-lisp :tangle yes
-     ;;(use-package ox-qmd)
-     (use-package ox-gfm)
-     (add-to-list 'org-export-backends 'md)
-   #+end_src
+#+begin_src emacs-lisp :tangle yes
+  ;;(use-package ox-qmd)
+  (use-package ox-gfm)
+  (add-to-list 'org-export-backends 'md)
+#+end_src
 
 ** Org-mind-map
-   export org to mind-map with Graphviz
+export org to mind-map with Graphviz
 
-   1. install Graphviz
-   #+begin_src shell :tangle no
-   brew install graphviz
-   #+end_src
+      1. install Graphviz
+         #+begin_src shell :tangle no
+           brew install graphviz
+         #+end_src
 
-   2. install org-mind-map
-   #+begin_src emacs-lisp :tangle yes
-   ;; This is an Emacs package that creates graphviz directed graphs from
-   ;; the headings of an org file
-   (use-package org-mind-map
-     :init
-     (require 'ox-org)
-     :ensure t
-     ;; Uncomment the below if 'ensure-system-packages` is installed
-     ;;:ensure-system-package (gvgen . graphviz)
-     :config
-     (setq org-mind-map-engine "dot")       ; Default. Directed Graph
-     ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-     ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-     ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-     ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-     ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-     ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-     )
-   #+end_src
+         2. install org-mind-map
+         #+begin_src emacs-lisp :tangle yes
+           ;; This is an Emacs package that creates graphviz directed graphs from
+           ;; the headings of an org file
+           (use-package org-mind-map
+             :init
+             (require 'ox-org)
+             :ensure t
+             ;; Uncomment the below if 'ensure-system-packages` is installed
+             ;;:ensure-system-package (gvgen . graphviz)
+             :config
+             (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+             ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+             ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+             ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+             ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+             ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+             ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+             )
+         #+end_src
 
-   3. run M-x org-mind-map-write
+         3. run M-x org-mind-map-write
 
 ** Org-roam
-   https://www.orgroam.com
-   #+begin_src emacs-lisp :tangle yes
-   ;; Roam
-      (use-package org-roam
-        :diminish
-        :hook (after-init . org-roam-db-autosync-enable)
-        :bind (("C-c n l" . org-roam-buffer-toggle)
-               ("C-c n f" . org-roam-node-find)
-               ("C-c n g" . org-roam-graph)
-               ("C-c n i" . org-roam-node-insert)
-               ("C-c n c" . org-roam-capture)
-               ("C-c n j" . org-roam-dailies-capture-today))
-        :init
-        (setq org-roam-v2-ack t)
-        :config
-        (unless (file-exists-p org-roam-directory)
-           (make-directory org-roam-directory)))
-   #+end_src
+https://www.orgroam.com
+#+begin_src emacs-lisp :tangle yes
+  ;; Roam
+  (use-package org-roam
+    :diminish
+    :hook (after-init . org-roam-db-autosync-enable)
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ("C-c n j" . org-roam-dailies-capture-today))
+    :init
+    (setq org-roam-v2-ack t)
+    :config
+    (unless (file-exists-p org-roam-directory)
+      (make-directory org-roam-directory)))
+#+end_src
