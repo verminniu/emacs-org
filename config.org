@@ -433,7 +433,7 @@ telephone 更好看一点
 #+END_SRC
 ** Eglot
 Other lsp client
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eglot
     :ensure t
     :config
@@ -490,7 +490,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -1667,7 +1667,7 @@ and automatically expand it into function templates.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
     :defer t
-    :after lsp-mode
+    ;; :after lsp-mode
     :init
     ;;(add-hook 'prog-mode-hook 'yas-minor-mode)
     (yas-global-mode 1)
