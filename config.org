@@ -17,8 +17,9 @@
   - [[#shell-path][Shell Path]]
   - [[#theme][Theme]]
   - [[#flycheck][FlyCheck]]
-  - [[#eglot][Eglot]]
   - [[#citre][Citre]]
+  - [[#nox][Nox]]
+  - [[#eglot][Eglot]]
   - [[#lsp][LSP]]
   - [[#gdb][GDB]]
   - [[#realgud][RealGud]]
@@ -115,6 +116,7 @@ In order to install packages, it is useful to configure the package sources.
 
   (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                           ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
                            ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
 
   ;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
@@ -149,13 +151,14 @@ use Quelpa for use github packages
   (use-package quelpa :ensure t)
 #+end_src
 
-暂时有点问题，后续调整
-#+begin_src emacs-lisp :tangle no
-  (use-package quelpa-use-package
-    :after quelpa
-    :config
-    (setq use-package-ensure-function 'quelpa)
-    (setq use-package-always-ensure t))
+#+begin_src emacs-lisp :tangle yes
+  (quelpa
+   '(quelpa-use-package
+     :fetcher git
+     :url "https://github.com/quelpa/quelpa-use-package.git"))
+  (require 'quelpa-use-package)
+  ;; (setq use-package-ensure-function 'quelpa)
+
 #+end_src
 
 * Start Up
@@ -431,22 +434,6 @@ telephone 更好看一点
     (global-flycheck-mode)
     )
 #+END_SRC
-** Eglot
-Other lsp client
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package project)
-  (use-package eglot
-    :ensure t
-    :config
-    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-    (add-hook 'c-mode-hook 'eglot-ensure)
-    (add-hook 'c++-mode-hook 'eglot-ensure)
-    (add-hook 'python-mode-hook 'eglot-ensure)
-    (add-hook 'go-mode-hook 'eglot-ensure)
-    )
-
-#+END_SRC
-
 ** Citre
 部分情况下，服务不一定能编译通过，lsp无法使用，可以采用ctags补全部分
 另外citre-peak很好用
@@ -457,7 +444,6 @@ M-l j: Jump to the definition.
 C-g: Close the peek window.
 #+end_quote
 https://github.com/universal-ctags/citre
-
 
 #+begin_src emacs-lisp :tangle yes
   (use-package citre
@@ -490,7 +476,50 @@ https://github.com/universal-ctags/citre
      citre-auto-enable-citre-mode-modes '(prog-mode)))
 #+end_src
 
+** Nox
+补全不太稳定 - 观望中
+#+begin_src emacs-lisp :tangle no
+  (use-package posframe)
+  (use-package nox
+    :quelpa ((nox :fetcher github :repo "manateelazycat/nox") :upgrade t))
+  (dolist (hook (list
+                 'js-mode-hook
+                 'rust-mode-hook
+                 'python-mode-hook
+                 'ruby-mode-hook
+                 'java-mode-hook
+                 'sh-mode-hook
+                 'php-mode-hook
+                 'c-mode-common-hook
+                 'c-mode-hook
+                 'csharp-mode-hook
+                 'c++-mode-hook
+                 'haskell-mode-hook
+                 ))
+    (add-hook hook '(lambda () (nox-ensure))))
+#+end_src
+
+** Eglot
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package project)
+  (use-package eglot
+    :ensure t
+    :after project
+    :config
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+    (add-hook 'c-mode-hook 'eglot-ensure)
+    (add-hook 'c++-mode-hook 'eglot-ensure)
+    (add-hook 'python-mode-hook 'eglot-ensure)
+    (add-hook 'go-mode-hook 'eglot-ensure)
+    (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
+    (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+#+END_SRC
+
 ** LSP
+查找引用有点不好用，暂时先用eglot
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
