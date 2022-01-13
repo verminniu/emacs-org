@@ -434,6 +434,7 @@ telephone 更好看一点
 ** Eglot
 Other lsp client
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package project)
   (use-package eglot
     :ensure t
     :config
