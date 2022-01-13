@@ -1208,13 +1208,11 @@ find.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons
-    )
+    :if (display-graphic-p))
 
   (use-package all-the-icons-dired
     :config
-    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-    )
-
+    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 #+END_SRC
 
 ** Dashboard
