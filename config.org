@@ -116,8 +116,7 @@ In order to install packages, it is useful to configure the package sources.
 
   (setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                           ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-                           ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+                           ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
   ;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
   ;;                          ("melpa" . "http://elpa.emacs-china.org/melpa/")
@@ -125,7 +124,6 @@ In order to install packages, it is useful to configure the package sources.
 
   ;; (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
   ;;                          ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
-  ;;                          ("org" . "http://mirrors.cloud.tencent.com/elpa/org/")
   ;;                          ("marmalade" . "http://mirrors.cloud.tencent.com/elpa/marmalade/")
   ;;                          ("melpa-stable" . "http://mirrors.cloud.tencent.com/elpa/melpa-stable/")
   ;; ))
@@ -151,7 +149,7 @@ use Quelpa for use github packages
   (use-package quelpa :ensure t)
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (quelpa
    '(quelpa-use-package
      :fetcher git
