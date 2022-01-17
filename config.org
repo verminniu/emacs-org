@@ -16,6 +16,9 @@
   - [[#hydra][Hydra]]
   - [[#shell-path][Shell Path]]
   - [[#theme][Theme]]
+  - [[#company][Company]]
+  - [[#turn-off-mouse-interface][Turn off mouse interface]]
+- [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
   - [[#citre][Citre]]
   - [[#nox][Nox]]
@@ -23,8 +26,6 @@
   - [[#lsp][LSP]]
   - [[#gdb][GDB]]
   - [[#realgud][RealGud]]
-  - [[#turn-off-mouse-interface][Turn off mouse interface]]
-- [[#languages][Languages]]
   - [[#format-all][Format All]]
   - [[#shell][Shell]]
   - [[#common-lisp----slime][Common Lisp -- slime]]
@@ -56,7 +57,6 @@
   - [[#icons][Icons]]
   - [[#dashboard][Dashboard]]
   - [[#dired][Dired]]
-  - [[#company][Company]]
   - [[#buffers][Buffers]]
   - [[#history][History]]
   - [[#which-key][Which-Key]]
@@ -425,6 +425,70 @@ telephone 更好看一点
     )
 #+end_src
 
+** Company
+=company= provides auto-completion at point and to Displays a small pop-in
+containing the candidates.
+
+#+BEGIN_QUOTE
+Company is a text completion framework for Emacs. The name stands for "complete
+anything". It uses pluggable back-ends and front-ends to retrieve and display
+completion candidates.
+
+[[http://company-mode.github.io/][Dmitry Gutov]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company
+    :defer 0.5
+    :delight
+    :init
+    (add-hook 'after-init-hook 'global-company-mode)
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .1)
+    (company-dabbrev-ignore-case t)
+    (company-minimum-prefix-length 1)
+    (company-show-numbers t)
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t)
+    :config
+    (define-key company-active-map (kbd "C-n") 'company-select-next)
+    (define-key company-active-map (kbd "C-p") 'company-select-previous)
+    ;;	(delete 'company-dabbrev 'company-backends)
+    ;;	(add-to-list 'company-backends #'company-dabbrev)
+    (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
+    (setq company-dabbrev-code-other-buffers 'all)
+    (setq completion-ignore-case t)
+                                          ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
+    (setq company-dabbrev-downcase nil)
+    )
+
+
+
+#+END_SRC
+
+I use =company= with =company-box= that allows a company front-end with icons.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-box
+    :after company
+    :delight
+    :hook (company-mode . company-box-mode))
+#+END_SRC
+** Turn off mouse interface
+
+Since I never use the mouse with GNU Emacs, I prefer not to use certain
+graphical elements as seen as the menu bar, toolbar, scrollbar and tooltip that
+I find invasive.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (menu-bar-mode -1)              ; Disable the menu bar
+  (tool-bar-mode -1)              ; Disable the tool bar
+  (tooltip-mode -1)              ; Disable the tooltips
+  ;; (scroll-bar-mode -1)           ; Disable the scrollbar
+#+END_SRC
+
+* Languages
 ** FlyCheck
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck
@@ -473,7 +537,6 @@ https://github.com/universal-ctags/citre
      ;; certain modes (like `prog-mode'), set it like this.
      citre-auto-enable-citre-mode-modes '(prog-mode)))
 #+end_src
-
 ** Nox
 补全不太稳定 - 观望中
 #+begin_src emacs-lisp :tangle no
@@ -496,7 +559,6 @@ https://github.com/universal-ctags/citre
                  ))
     (add-hook hook '(lambda () (nox-ensure))))
 #+end_src
-
 ** Eglot
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -515,7 +577,6 @@ https://github.com/universal-ctags/citre
     (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 #+END_SRC
-
 ** LSP
 查找引用有点不好用，暂时先用eglot
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -592,7 +653,6 @@ https://github.com/universal-ctags/citre
   ;; (setq gdb-show-main t)
   ;; (setq gdb-use-separate-io-buffer 1)
 #+end_src
-
 ** RealGud
 use realgud for debug
 
@@ -602,21 +662,6 @@ use realgud for debug
     :ensure t
     )
 #+end_src
-
-** Turn off mouse interface
-
-Since I never use the mouse with GNU Emacs, I prefer not to use certain
-graphical elements as seen as the menu bar, toolbar, scrollbar and tooltip that
-I find invasive.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (menu-bar-mode -1)              ; Disable the menu bar
-  (tool-bar-mode -1)              ; Disable the tool bar
-  (tooltip-mode -1)              ; Disable the tooltips
-  ;; (scroll-bar-mode -1)           ; Disable the scrollbar
-#+END_SRC
-
-* Languages
 ** Format All
 format all languages
 针对python自定义一个format支持black超长行换行
@@ -698,6 +743,7 @@ common lisp env
                   slime-company-after-completion 'slime-company-just-one-space))
 
 #+end_src
+
 ** Common Lisp -- sly
 try sly
 
@@ -1277,57 +1323,6 @@ For those who didn't know, GNU Emacs is also a file explorer.
     (dired-listing-switches "-alh")
     (dired-ls-F-marks-symlinks nil)
     (dired-recursive-copies 'always))
-#+END_SRC
-
-** Company
-=company= provides auto-completion at point and to Displays a small pop-in
-containing the candidates.
-
-#+BEGIN_QUOTE
-Company is a text completion framework for Emacs. The name stands for "complete
-anything". It uses pluggable back-ends and front-ends to retrieve and display
-completion candidates.
-
-[[http://company-mode.github.io/][Dmitry Gutov]]
-#+END_QUOTE
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company
-    :defer 0.5
-    :delight
-    :init
-    (add-hook 'after-init-hook 'global-company-mode)
-    :custom
-    (company-begin-commands '(self-insert-command))
-    (company-idle-delay .1)
-    (company-dabbrev-ignore-case t)
-    (company-minimum-prefix-length 1)
-    (company-show-numbers t)
-    (company-tooltip-align-annotations 't)
-    (global-company-mode t)
-    :config
-    (define-key company-active-map (kbd "C-n") 'company-select-next)
-    (define-key company-active-map (kbd "C-p") 'company-select-previous)
-    ;;	(delete 'company-dabbrev 'company-backends)
-    ;;	(add-to-list 'company-backends #'company-dabbrev)
-    (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
-    (setq company-dabbrev-code-other-buffers 'all)
-    (setq completion-ignore-case t)
-                                          ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
-    (setq company-dabbrev-downcase nil)
-    )
-
-
-
-#+END_SRC
-
-I use =company= with =company-box= that allows a company front-end with icons.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company-box
-    :after company
-    :delight
-    :hook (company-mode . company-box-mode))
 #+END_SRC
 
 ** Buffers
