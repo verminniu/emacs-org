@@ -461,6 +461,7 @@ completion candidates.
     (setq completion-ignore-case t)
                                           ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
     (setq company-dabbrev-downcase nil)
+    (add-to-list 'company-backends '(company-capf :with company-dabbrev))
     )
 
 
