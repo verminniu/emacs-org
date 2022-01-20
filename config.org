@@ -16,6 +16,7 @@
   - [[#hydra][Hydra]]
   - [[#shell-path][Shell Path]]
   - [[#theme][Theme]]
+  - [[#corfu][Corfu]]
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
 - [[#languages][Languages]]
@@ -425,6 +426,75 @@ telephone 更好看一点
     )
 #+end_src
 
+** Corfu
+据说快不少比company，后续尝试下
+#+begin_src emacs-lisp :tangle no
+  (use-package corfu
+    ;; Optional customizations
+    ;; :custom
+    ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    ;; (corfu-auto t)                 ;; Enable auto completion
+    ;; (corfu-commit-predicate nil)   ;; Do not commit selected candidates on next input
+    ;; (corfu-quit-at-boundary t)     ;; Automatically quit at word boundary
+    ;; (corfu-quit-no-match t)        ;; Automatically quit if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
+    ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+    ;; You may want to enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.
+    ;; This is recommended since dabbrev can be used globally (M-/).
+    :init
+    (corfu-global-mode))
+
+  (use-package kind-icon
+    :ensure t
+    :after corfu
+    :custom
+    (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+  ;; Optionally use the `orderless' completion style. See `+orderless-dispatch'
+  ;; in the Consult wiki for an advanced Orderless style dispatcher.
+  ;; Enable `partial-completion' for files to allow path expansion.
+  ;; You may prefer to use `initials' instead of `partial-completion'.
+  (use-package orderless
+    :init
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+    (setq completion-styles '(orderless)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles . (partial-completion))))))
+
+  ;; Use dabbrev with Corfu!
+  (use-package dabbrev
+    ;; Swap M-/ and C-M-/
+    :bind (("M-/" . dabbrev-completion)
+           ("C-M-/" . dabbrev-expand)))
+
+  ;; A few more useful configurations...
+  (use-package emacs
+    :init
+    ;; TAB cycle if there are only few candidates
+    (setq completion-cycle-threshold 3)
+
+    ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+    ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
+
+#+end_src
 ** Company
 =company= provides auto-completion at point and to Displays a small pop-in
 containing the candidates.
@@ -438,31 +508,32 @@ completion candidates.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company
-    :defer 0.5
-    :delight
-    :init
-    (add-hook 'after-init-hook 'global-company-mode)
-    :custom
-    (company-begin-commands '(self-insert-command))
-    (company-idle-delay .1)
-    (company-dabbrev-ignore-case t)
-    (company-minimum-prefix-length 1)
-    (company-show-numbers t)
-    (company-tooltip-align-annotations 't)
-    (global-company-mode t)
-    :config
-    (define-key company-active-map (kbd "C-n") 'company-select-next)
-    (define-key company-active-map (kbd "C-p") 'company-select-previous)
-    ;;	(delete 'company-dabbrev 'company-backends)
-    ;;	(add-to-list 'company-backends #'company-dabbrev)
-    (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
-    (setq company-dabbrev-code-other-buffers 'all)
-    (setq completion-ignore-case t)
-                                          ; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
-    (setq company-dabbrev-downcase nil)
-    (add-to-list 'company-backends '(company-capf :with company-dabbrev))
-    )
+    (use-package company
+      :defer 0.5
+      :delight
+      :init
+      (add-hook 'after-init-hook 'global-company-mode)
+      :custom
+      (company-begin-commands '(self-insert-command))
+      (company-idle-delay .1)
+      (company-dabbrev-ignore-case t)
+      (company-minimum-prefix-length 1)
+      (company-show-numbers t)
+      (company-tooltip-align-annotations 't)
+      (global-company-mode t)
+      :config
+      (define-key company-active-map (kbd "C-n") 'company-select-next)
+      (define-key company-active-map (kbd "C-p") 'company-select-previous)
+      ;;	(delete 'company-dabbrev 'company-backends)
+      ;;	(add-to-list 'company-backends #'company-dabbrev)
+      (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
+      (setq company-dabbrev-code-other-buffers 'all)
+      (setq completion-ignore-case t)
+      ;; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
+      (setq company-dabbrev-downcase nil)
+      ;; 合并capf 和dabbrev
+      (add-to-list 'company-backends '(company-capf :with company-dabbrev))
+      )
 
 
 
