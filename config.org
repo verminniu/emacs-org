@@ -19,6 +19,7 @@
   - [[#corfu][Corfu]]
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
+  - [[#projectile][Projectile]]
 - [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
   - [[#citre][Citre]]
@@ -64,7 +65,6 @@
   - [[#ivy][Ivy]]
   - [[#avy][Avy]]
   - [[#parentheses][Parentheses]]
-  - [[#projectile][Projectile]]
   - [[#recent-files][Recent Files]]
   - [[#version-control][Version Control]]
   - [[#whitespaces][Whitespaces]]
@@ -559,7 +559,45 @@ I find invasive.
   (tooltip-mode -1)              ; Disable the tooltips
   ;; (scroll-bar-mode -1)           ; Disable the scrollbar
 #+END_SRC
+** Projectile
 
+#+BEGIN_QUOTE
+Projectile is a project interaction library for Emacs. Its goal is to provide a
+nice set of features operating on a project level without introducing external
+dependencies (when feasible). For instance - finding project files has a
+portable implementation written in pure Emacs Lisp without the use of GNU find
+(but for performance sake an indexing mechanism backed by external commands
+exists as well).
+
+Use build.sh to compile project with build.sh
+
+[[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package projectile
+    ;;:defer 1
+    :custom
+    (projectile-cache-file (expand-file-name (format "~/.emacs.d/cache/projectile.cache")))
+    (projectile-globally-ignored-file-suffixes '(".o" ".a"))
+    (projectile-completion-system 'ivy)
+    (projectile-enable-caching t)
+    ;;(projectile-keymap-prefix (kbd "C-c p"))
+    (projectile-require-project nil)
+    (projectile-known-projects-file (expand-file-name (format "~/.emacs.d/cache/projectile-bookmarks.eld")))
+    (projectile-mode-line '(:eval (projectile-project-name)))
+    :config
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (add-to-list 'projectile-globally-ignored-directories ".clangd")
+    (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
+    (projectile-register-project-type 'build-proj '("build.sh")
+                                      :compile "./build.sh")
+    (projectile-global-mode))
+
+  (use-package counsel-projectile
+    :after (counsel projectile)
+    :config (counsel-projectile-mode 1))
+#+END_SRC
 * Languages
 ** FlyCheck
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1361,6 +1399,17 @@ find.
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 #+END_SRC
 
+尝试下
+#+begin_src emacs-lisp :tangle yes
+  (use-package all-the-icons-ivy-rich
+    :ensure t
+    :after projectile
+    :init (all-the-icons-ivy-rich-mode 1))
+
+  (use-package ivy-rich
+    :ensure t
+    :init (ivy-rich-mode 1))
+#+end_src
 ** Dashboard
 
 Always good to have a dashboard.
@@ -1600,45 +1649,6 @@ parenthesis. Anyway, if you don't like it, you can try taking a look at
     :config (smartparens-global-mode 1))
 #+END_SRC
 
-** Projectile
-
-#+BEGIN_QUOTE
-Projectile is a project interaction library for Emacs. Its goal is to provide a
-nice set of features operating on a project level without introducing external
-dependencies (when feasible). For instance - finding project files has a
-portable implementation written in pure Emacs Lisp without the use of GNU find
-(but for performance sake an indexing mechanism backed by external commands
-exists as well).
-
-Use build.sh to compile project with build.sh
-
-[[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
-#+END_QUOTE
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package projectile
-    ;;:defer 1
-    :custom
-    (projectile-cache-file (expand-file-name (format "~/.emacs.d/cache/projectile.cache")))
-    (projectile-globally-ignored-file-suffixes '(".o" ".a"))
-    (projectile-completion-system 'ivy)
-    (projectile-enable-caching t)
-    ;;(projectile-keymap-prefix (kbd "C-c p"))
-    (projectile-require-project nil)
-    (projectile-known-projects-file (expand-file-name (format "~/.emacs.d/cache/projectile-bookmarks.eld")))
-    (projectile-mode-line '(:eval (projectile-project-name)))
-    :config
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (add-to-list 'projectile-globally-ignored-directories ".clangd")
-    (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
-    (projectile-register-project-type 'build-proj '("build.sh")
-                                      :compile "./build.sh")
-    (projectile-global-mode))
-
-  (use-package counsel-projectile
-    :after (counsel projectile)
-    :config (counsel-projectile-mode 1))
-#+END_SRC
 
 ** Recent Files
 
