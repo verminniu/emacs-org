@@ -1403,8 +1403,13 @@ find.
 #+begin_src emacs-lisp :tangle yes
   (use-package all-the-icons-ivy-rich
     :ensure t
-    :after projectile
+    :after (projectile ibuffer ibuffer-projectile)
     :init (all-the-icons-ivy-rich-mode 1))
+
+  (use-package all-the-icons-ibuffer
+    :after (projectile ibuffer ibuffer-projectile)
+    :ensure t
+    :init (all-the-icons-ibuffer-mode 1))
 
   (use-package ivy-rich
     :ensure t
@@ -1457,12 +1462,12 @@ like being able to find my way easily.
 
   (use-package ibuffer-projectile
     :after ibuffer
-    :preface
-    (defun my/ibuffer-projectile ()
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic)))
-    :hook (ibuffer . my/ibuffer-projectile))
+    :config
+    (add-hook 'ibuffer-hook
+              (lambda ()
+                (ibuffer-projectile-set-filter-groups)
+                (unless (eq ibuffer-sorting-mode 'alphabetic)
+                  (ibuffer-do-sort-by-alphabetic)))))
 #+END_SRC
 
 ** History
