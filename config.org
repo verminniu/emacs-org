@@ -89,6 +89,7 @@
   - [[#org-ql][Org QL]]
   - [[#org-sidebar][Org sidebar]]
   - [[#org-superstar][Org Superstar]]
+  - [[#org-modern][Org modern]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#calfw][Calfw]]
   - [[#org-timeline][Org Timeline]]
@@ -2183,13 +2184,19 @@ org-sidebar-toggle: Toggle default sidebars.
 #+end_src
 
 ** Org Superstar
-#+begin_src emacs-lisp :tangle yes
+try org modern
+#+begin_src emacs-lisp :tangle no
   (use-package org-superstar
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
     )
 #+end_src
-
+** Org modern
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-modern
+    :config
+    (add-hook 'org-mode-hook #'org-modern-mode))
+#+end_src
 ** Org Super Agenda
 #+begin_src emacs-lisp :tangle yes
   (use-package org-super-agenda
