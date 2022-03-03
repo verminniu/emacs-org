@@ -618,7 +618,7 @@ C-g: Close the peek window.
 #+end_quote
 https://github.com/universal-ctags/citre
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package citre
     :defer t
     :init
