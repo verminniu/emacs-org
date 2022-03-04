@@ -364,7 +364,10 @@ telephone 更好看一点
           ;; symbols: `background', `bold', `gray', `intense', `italic'
           modus-themes-prompts '(intense bold)
 
-          modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
+          ;; modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
+          modus-themes-completions '((matches . (extrabold))
+                                     (selection . (semibold accented))
+                                     (popup . (accented intense)))
 
           modus-themes-mail-citations nil ; {nil,'faint,'monochrome}
 
