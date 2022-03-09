@@ -91,6 +91,7 @@
   - [[#org-superstar][Org Superstar]]
   - [[#org-modern][Org modern]]
   - [[#org-super-agenda][Org Super Agenda]]
+  - [[#org-valign][Org Valign]]
   - [[#calfw][Calfw]]
   - [[#org-timeline][Org Timeline]]
   - [[#pomodoro][Pomodoro]]
@@ -2202,6 +2203,13 @@ try org modern
   (use-package org-super-agenda
     :config
     (org-super-agenda-mode))
+#+end_src
+
+** Org Valign
+#+begin_src emacs-lisp :tangle no
+  (use-package valign
+    :config
+    (add-hook 'org-mode-hook #'valign-mode))
 #+end_src
 
 ** Calfw
