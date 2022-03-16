@@ -96,7 +96,8 @@
   - [[#org-timeline][Org Timeline]]
   - [[#pomodoro][Pomodoro]]
   - [[#toc-org][Toc-org]]
-  - [[#add-markdown-to-export-list][Add markdown to Export list]]
+  - [[#org-hugo][Org hugo]]
+  - [[#add-gfm-markdown-to-export-list][add gfm markdown to Export list]]
   - [[#org-mind-map][Org-mind-map]]
   - [[#org-roam][Org-roam]]
 
@@ -676,7 +677,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 ** Eglot
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package project)
   (use-package eglot
     :ensure t
@@ -694,7 +695,7 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 ** LSP
 查找引用有点不好用，暂时先用eglot
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -2256,7 +2257,15 @@ try org modern
     (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
     )
 #+end_src
-** Add markdown to Export list
+** Org hugo
+#+begin_src emacs-lisp :tangle yes
+      (use-package ox-hugo
+        :ensure t
+        :pin melpa
+        :after ox)
+#+end_src
+
+** add gfm markdown to Export list
 #+begin_src emacs-lisp :tangle yes
   ;;(use-package ox-qmd)
   (use-package ox-gfm)
