@@ -711,6 +711,14 @@ https://github.com/universal-ctags/citre
                 ("C-c C-d" . lsp-describe-thing-at-point))
     :init (setq lsp-auto-guess-root t)       ; Detect project root
     :config
+    (setq lsp-clients-clangd-args '("-j=2"
+                          "--malloc-trim"
+                          "--background-index"
+                          "--clang-tidy"
+                          "--completion-style=bundled"
+                          "--pch-storage=memory"
+                          "--header-insertion=iwyu"
+                          "--header-insertion-decorators"))
     (setq lsp-completion-enable t
           lsp-enable-snippet t
           lsp-semantic-highlighting t
