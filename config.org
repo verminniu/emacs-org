@@ -711,7 +711,7 @@ https://github.com/universal-ctags/citre
                 ("C-c C-d" . lsp-describe-thing-at-point))
     :init (setq lsp-auto-guess-root t)       ; Detect project root
     :config
-    (setq lsp-clients-clangd-args '("-j=2"
+    (setq lsp-clients-clangd-args '("-j=8"
                           "--malloc-trim"
                           "--background-index"
                           "--clang-tidy"
@@ -768,6 +768,9 @@ https://github.com/universal-ctags/citre
     :commands lsp-ivy-workspace-symbol
     )
 #+END_SRC
+
+#+RESULTS:
+
 ** GDB
 暂时先配置多窗口调试
 #+begin_src emacs-lisp :tangle yes
