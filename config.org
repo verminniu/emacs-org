@@ -623,7 +623,7 @@ C-g: Close the peek window.
 #+end_quote
 https://github.com/universal-ctags/citre
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package citre
     :defer t
     :init
@@ -694,7 +694,7 @@ https://github.com/universal-ctags/citre
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 #+END_SRC
 ** LSP
-查找引用有点不好用，暂时先用eglot
+
 #+BEGIN_SRC emacs-lisp :tangle yes
     (setq lsp-keymap-prefix "C-c l")
 
