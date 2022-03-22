@@ -62,6 +62,7 @@
   - [[#buffers][Buffers]]
   - [[#history][History]]
   - [[#which-key][Which-Key]]
+  - [[#wgrep][wgrep]]
   - [[#ivy][Ivy]]
   - [[#avy][Avy]]
   - [[#parentheses][Parentheses]]
@@ -1517,6 +1518,11 @@ Use Whick-key to help
     (which-key-mode)
     )
 #+END_SRC
+** wgrep
+修改 counsel-rg 出来的结果需要
+#+begin_src emacs-lisp :tangle yes
+  (use-package wgrep)
+#+end_src
 ** Ivy
 
 I used =helm= before, but I find =ivy= faster and lighter.
@@ -1671,7 +1677,6 @@ parenthesis. Anyway, if you don't like it, you can try taking a look at
     :custom (sp-escape-quotes-after-insert nil)
     :config (smartparens-global-mode 1))
 #+END_SRC
-
 
 ** Recent Files
 
