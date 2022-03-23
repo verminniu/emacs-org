@@ -300,21 +300,10 @@ use Hydra for some keybinds
 *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
 [[#Icons][all-the-icons]].
 
-+powerline+ telephone-line && moe-theme is better than doom's
-
 #+begin_src emacs-lisp :tangle yes
-  (use-package telephone-line
-    :config
-    (telephone-line-mode 1)
-    )
-#+end_src
-
-telephone 更好看一点
-#+begin_src emacs-lisp :tangle no
-  (use-package powerline
-    :config
-    (powerline-default-theme)
-    )
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -1246,10 +1235,7 @@ dockerfile-mode
 #+begin_src emacs-lisp :tangle yes
   (use-package nyan-mode
     :config
-    (setq mode-line-format
-          (list
-           '(:eval (list (nyan-create)))
-           )))
+    (nyan-mode))
 #+end_src
 
 ** Saveplace
