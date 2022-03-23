@@ -46,6 +46,8 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#parrot][parrot]]
+  - [[#nyan-mode][nyan-mode]]
   - [[#saveplace][Saveplace]]
   - [[#bing-dict][Bing-dict]]
   - [[#helpful][Helpful]]
@@ -59,6 +61,7 @@
   - [[#icons][Icons]]
   - [[#dashboard][Dashboard]]
   - [[#dired][Dired]]
+  - [[#dirvish-dired][dirvish&& dired]]
   - [[#buffers][Buffers]]
   - [[#history][History]]
   - [[#which-key][Which-Key]]
@@ -1230,6 +1233,25 @@ dockerfile-mode
 #+end_src
 
 * Advanced Configuration
+** parrot
+摇头鹦鹉
+#+begin_src emacs-lisp :tangle yes
+  (use-package parrot
+    :config
+    (parrot-mode))
+#+end_src
+
+** nyan-mode
+彩虹猫
+#+begin_src emacs-lisp :tangle yes
+  (use-package nyan-mode
+    :config
+    (setq mode-line-format
+          (list
+           '(:eval (list (nyan-create)))
+           )))
+#+end_src
+
 ** Saveplace
 每次打开文件回到上次光标位置
 #+begin_src  emacs-lisp :tangle yes
@@ -1412,10 +1434,6 @@ find.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons
     :if (display-graphic-p))
-
-  (use-package all-the-icons-dired
-    :config
-    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 #+END_SRC
 
 尝试下
@@ -1457,7 +1475,7 @@ Always good to have a dashboard.
 
 For those who didn't know, GNU Emacs is also a file explorer.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package dired
     :ensure nil
     :delight "Dired "
@@ -1468,8 +1486,136 @@ For those who didn't know, GNU Emacs is also a file explorer.
     (dired-listing-switches "-alh")
     (dired-ls-F-marks-symlinks nil)
     (dired-recursive-copies 'always))
-#+END_SRC
 
+  (use-package all-the-icons-dired
+    :after all-the-icons
+    :config
+    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+  (use-package treemacs-icons-dired
+    :after treemacs dired
+    :ensure t
+    :config (treemacs-icons-dired-mode))
+
+#+END_SRC
+** dirvish&& dired
+替换dired
+#+begin_src emacs-lisp :tangle yes
+
+  (use-package dired
+    :ensure nil
+    :delight "Dired "
+    :custom
+    (dired-auto-revert-buffer t)
+    (dired-dwim-target t)
+    (dired-hide-details-hide-symlink-targets nil)
+    (dired-listing-switches "-alh")
+    (dired-ls-F-marks-symlinks nil)
+    (dired-recursive-copies 'always))
+
+  (use-package all-the-icons-dired
+    :after all-the-icons
+    :config
+    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+  (use-package treemacs-icons-dired
+    :after treemacs dired
+    :ensure t
+    :config (treemacs-icons-dired-mode))
+
+  ;; (use-package dired-x
+  ;;   ;; Enable dired-omit-mode by default
+  ;;   ;; :hook
+  ;;   ;; (dired-mode . dired-omit-mode)
+  ;;   :after dired
+  ;;   :config
+  ;;   ;; Make dired-omit-mode hide all "dotfiles"
+  ;;   (setq dired-omit-files
+  ;; (concat dired-omit-files "\\|^\\..*$")))
+
+  ;; Addtional syntax highlighting for dired
+  (use-package diredfl
+    :hook
+    (dired-mode . diredfl-mode))
+
+  ;; Turn Dired into a tree browser
+  (use-package dired-subtree
+    :bind
+    (:map dired-mode-map
+          ("TAB" . dired-subtree-toggle)))
+
+  ;; Narrow a dired buffer to the files matching a string.
+  (use-package dired-narrow
+    :bind
+    (:map dired-mode-map
+          ("N" . dired-narrow)))
+
+  ;; `ibuffer' like file filtering system
+  (use-package dired-filter
+    :after dirvish
+    :config
+    ;; Define our own mode line segment
+    (dirvish-define-mode-line filter "Describe filters."
+      (when dired-filter-mode
+        (format " %s %s " (propertize "Filters:" 'face 'bold)
+                (dired-filter--describe-filters))))
+    :custom
+    ;; Do not touch the header line
+    (dired-filter-show-filters nil)
+    ;; Instead, use our mode line segment defined above
+    (dirvish-mode-line-format '(:left (sort filter) :right (yank index)))
+    (dired-filter-revert 'always)
+    :bind
+    (:map dired-mode-map
+          ([remap dired-omit-mode] . dired-filter-mode)))
+
+  (use-package dired-collapse
+    :bind
+    (:map dired-mode-map
+          ("M-c" . dired-collapse-mode)))
+
+  ;; Drop-in replacement for find-dired
+  (use-package fd-dired
+    :bind
+    ("C-c F" . fd-dired))
+
+  (use-package dirvish
+    :after dired
+    :custom
+    ;; Feel free to replace `all-the-icons' with `vscode-icon'.
+    (dirvish-attributes '(expanded-state all-the-icons file-size))
+    ;; Maybe the icons are too big to your eyes
+    ;; (dirvish-all-the-icons-height 0.8)
+    ;; Go back home? Just press `bh'
+    ;; (dirvish-bookmarks-alist
+    ;;  '(("h" "~/"                          "Home")
+    ;;    ("d" "~/Downloads/"                "Downloads")
+    ;;    ("m" "/mnt/"                       "Drives")
+    ;;    ("t" "~/.local/share/Trash/files/" "TrashCan")))
+    ;; List directories that has over 10000 files asynchronously
+    ;; This feature is disabled by default
+    ;; (dirvish-async-listing-threshold 10000)
+    :config
+    (dirvish-override-dired-mode)
+    (dirvish-peek-mode)
+    ;; In case you want the details at startup like `dired'
+    ;; :hook
+    ;; (dirvish-mode . (lambda () (dired-hide-details-mode -1)))
+    :bind
+    (nil ; Bind `dirvish', `dirvish-dired' and `dirvish-side' as you see fit
+     :map dired-mode-map
+     ("SPC" . dirvish-show-history)
+     ("r"   . dirvish-roam)
+     ("b"   . dirvish-goto-bookmark)
+     ("f"   . dirvish-file-info-menu)
+     ("M-a" . dirvish-mark-actions-menu)
+     ("M-s" . dirvish-setup-menu)
+     ("M-f" . dirvish-toggle-fullscreen)
+     ([remap dired-summary] . dirvish-dispatch)
+     ([remap dired-do-copy] . dirvish-yank)
+     ([remap mode-line-other-buffer] . dirvish-other-buffer)))
+
+#+end_src
 ** Buffers
 
 Buffers can quickly become a mess. For some people, it's not a problem, but I
@@ -2062,11 +2208,6 @@ Try emr
   (use-package treemacs-projectile
     :after treemacs projectile
     :ensure t)
-
-  (use-package treemacs-icons-dired
-    :after treemacs dired
-    :ensure t
-    :config (treemacs-icons-dired-mode))
 
   (use-package treemacs-magit
     :after treemacs magit
