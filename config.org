@@ -2354,9 +2354,10 @@ try org modern
 #+end_src
 
 ** Org Valign
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle ys
   (use-package valign
     :config
+    (setq valign-fancy-bar t)
     (add-hook 'org-mode-hook #'valign-mode))
 #+end_src
 
