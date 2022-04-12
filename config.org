@@ -1446,10 +1446,10 @@ Always good to have a dashboard.
   (use-package dashboard
     :ensure t
     :config
-    (setq dashboard-items '((recents  . 30)
+    (setq dashboard-items '((recents  . 10)
                             (bookmarks . 5)
-                            (projects . 15)
-                            (agenda . 5)
+                            (projects . 20)
+                            (agenda . 10)
                             (registers . 5)))
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
