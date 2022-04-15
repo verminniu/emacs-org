@@ -616,7 +616,7 @@ C-g: Close the peek window.
 #+end_quote
 https://github.com/universal-ctags/citre
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package citre
     :defer t
     :init
@@ -670,7 +670,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 ** Eglot
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project)
   (use-package eglot
     :ensure t
@@ -688,7 +688,7 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 ** LSP
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
     (setq lsp-keymap-prefix "C-c l")
 
     (use-package lsp-mode
@@ -721,7 +721,11 @@ https://github.com/universal-ctags/citre
       (push 'company-capf company-backends))
 
     (use-package lsp-ui
-      :commands lsp-ui-mode)
+      :commands lsp-ui-mode
+      :config
+      (lsp-ui-peek-enable)
+      (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+      (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
     ;; Debug
     (use-package dap-mode
@@ -1678,7 +1682,7 @@ smaller, simpler, and smoother to use yet highly customizable.
            ("C-x C-r" . counsel-recentf)
            ("C-x C-u" . counsel-unicode-char)
            ("C-x C-v" . counsel-set-variable)
-           ("C-c C-n" . counsel-imenu)
+           ("C-c n" . counsel-imenu)
            ("M-x" . counsel-M-x)
            )
     :config (counsel-mode)
@@ -2455,12 +2459,12 @@ https://www.orgroam.com
   (use-package org-roam
     :diminish
     :hook (after-init . org-roam-db-autosync-enable)
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n g" . org-roam-graph)
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n c" . org-roam-capture)
-           ("C-c n j" . org-roam-dailies-capture-today))
+    :bind (("C-c C-n l" . org-roam-buffer-toggle)
+           ("C-c C-n f" . org-roam-node-find)
+           ("C-c C-n g" . org-roam-graph)
+           ("C-c C-n i" . org-roam-node-insert)
+           ("C-c C-n c" . org-roam-capture)
+           ("C-c C-n j" . org-roam-dailies-capture-today))
     :init
     (setq org-roam-v2-ack t)
     :config
