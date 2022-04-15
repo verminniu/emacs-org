@@ -671,20 +671,23 @@ https://github.com/universal-ctags/citre
 ** Eglot
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package project)
-  (use-package eglot
-    :ensure t
-    :after project
-    :config
-    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-    (add-hook 'c-mode-hook 'eglot-ensure)
-    (add-hook 'c++-mode-hook 'eglot-ensure)
-    (add-hook 'python-mode-hook 'eglot-ensure)
-    (add-hook 'go-mode-hook 'eglot-ensure)
-    (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
-    (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
-    (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
-    (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+    (use-package project)
+    (use-package eglot
+      :ensure t
+      :after project
+      :config
+      (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+      (add-hook 'c-mode-hook 'eglot-ensure)
+      (add-hook 'c++-mode-hook 'eglot-ensure)
+      (add-hook 'python-mode-hook 'eglot-ensure)
+      (add-hook 'go-mode-hook 'eglot-ensure)
+      (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+      (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+      (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
+      (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+
+    (use-package consult-eglot
+      :after consult)
 #+END_SRC
 ** LSP
 
@@ -723,7 +726,6 @@ https://github.com/universal-ctags/citre
     (use-package lsp-ui
       :commands lsp-ui-mode
       :config
-      (lsp-ui-peek-enable)
       (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
       (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
