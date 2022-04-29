@@ -672,7 +672,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 ** Eglot
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
     (use-package project)
     (use-package eglot
       :ensure t
@@ -693,81 +693,83 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 ** LSP
 
-#+BEGIN_SRC emacs-lisp :tangle no
-    (setq lsp-keymap-prefix "C-c l")
+#+BEGIN_SRC emacs-lisp :tangle yes
+      (setq lsp-keymap-prefix "C-c l")
 
-    (use-package lsp-mode
-      :after (yasnippet company)
-      :hook (
-             (c++-mode . lsp-deferred)
-             (c-mode . lsp-deferred)
-             (python-mode . lsp-deferred)
-             (go-mode . lsp-deferred)
-             (lsp-mode . lsp-enable-which-key-integration)
-             )
-      :bind (:map lsp-mode-map
-                  ("C-c C-d" . lsp-describe-thing-at-point))
-      :init (setq lsp-auto-guess-root t)       ; Detect project root
-      :config
-      (setq lsp-clients-clangd-args '("-j=8" ; 多并发
-                            "--malloc-trim" ; 通过malloc_trim定期释放内存
-                            "--background-index"
-                            "--clang-tidy"
-                            "--completion-style=bundled"
-                            "--pch-storage=memory"
-                            "--header-insertion=iwyu"
-                            "--header-insertion-decorators"))
-      (setq lsp-completion-enable t
-            lsp-enable-snippet t
-            lsp-semantic-highlighting t
-            lsp-idle-delay 0.1
-            lsp-enable-text-document-color t
-            lsp-completion-provider :capf)
-      (push 'company-capf company-backends))
+      (use-package lsp-mode
+        :after (yasnippet company)
+        :hook (
+               (c++-mode . lsp-deferred)
+               (c-mode . lsp-deferred)
+               (python-mode . lsp-deferred)
+               (go-mode . lsp-deferred)
+               (lsp-mode . lsp-enable-which-key-integration)
+               )
+        :bind (:map lsp-mode-map
+                    ("C-c C-d" . lsp-describe-thing-at-point))
+        :init (setq lsp-auto-guess-root t)       ; Detect project root
+        :config
+        (setq lsp-clients-clangd-args '("-j=8" ; 多并发
+                              "--malloc-trim" ; 通过malloc_trim定期释放内存
+                              "--background-index"
+                              "--clang-tidy"
+                              "--completion-style=bundled"
+                              "--pch-storage=memory"
+                              "--header-insertion=iwyu"
+                              "--header-insertion-decorators"))
+        (setq lsp-completion-enable t
+              lsp-enable-snippet t
+              lsp-semantic-highlighting t
+              lsp-idle-delay 0.1
+              lsp-enable-text-document-color t
+              lsp-completion-provider :capf)
+        (push 'company-capf company-backends))
 
-    (use-package lsp-ui
-      :commands lsp-ui-mode
-      :config
-      (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-      (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
+      (use-package lsp-ui
+        :commands lsp-ui-mode
+        :bind (:map lsp-mode-map
+                    ("C-c n" . lsp-ui-imenu))
+        :config
+        (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+        (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
-    ;; Debug
-    (use-package dap-mode
-      :diminish
-      :functions dap-hydra/nil
-      :bind (:map lsp-mode-map
-                  ("<f5>" . dap-debug)
-                  ("M-<f5>" . dap-hydra))
-      :config
-      (setq dap-python-executable "python3")
-      :hook ((after-init . dap-mode)
-             (dap-mode . dap-ui-mode)
-             (dap-session-created . (lambda (&_rest) (dap-hydra)))
-             (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-             (python-mode . (lambda () (require 'dap-python)))
-  g           (ruby-mode . (lambda () (require 'dap-ruby)))
-             (go-mode . (lambda () (require 'dap-go)))
-             (java-mode . (lambda () (require 'dap-java)))
-             ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
-             (php-mode . (lambda () (require 'dap-php)))
-             (elixir-mode . (lambda () (require 'dap-elixir)))
-             ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
+      ;; Debug
+      (use-package dap-mode
+        :diminish
+        :functions dap-hydra/nil
+        :bind (:map lsp-mode-map
+                    ("<f5>" . dap-debug)
+                    ("M-<f5>" . dap-hydra))
+        :config
+        (setq dap-python-executable "python3")
+        :hook ((after-init . dap-mode)
+               (dap-mode . dap-ui-mode)
+               (dap-session-created . (lambda (&_rest) (dap-hydra)))
+               (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+               (python-mode . (lambda () (require 'dap-python)))
+               (ruby-mode . (lambda () (require 'dap-ruby)))
+               (go-mode . (lambda () (require 'dap-go)))
+               (java-mode . (lambda () (require 'dap-java)))
+               ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+               (php-mode . (lambda () (require 'dap-php)))
+               (elixir-mode . (lambda () (require 'dap-elixir)))
+               ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
 
-    (with-eval-after-load 'lsp-mode
-      (require 'dap-cpptools))
+      (with-eval-after-load 'lsp-mode
+        (require 'dap-cpptools))
 
-    ;; `lsp-mode' and `treemacs' integration.
-    (use-package lsp-treemacs
-      :commands lsp-treemacs-errors-list
-      )
+      ;; `lsp-mode' and `treemacs' integration.
+      (use-package lsp-treemacs
+        :commands lsp-treemacs-errors-list
+        )
 
-    ;;   (use-package company-lsp
-    ;;     :config (push 'company-lsp company-backends)
-    ;;     )
+      ;;   (use-package company-lsp
+      ;;     :config (push 'company-lsp company-backends)
+      ;;     )
 
-    (use-package lsp-ivy
-      :commands lsp-ivy-workspace-symbol
-      )
+      (use-package lsp-ivy
+        :commands lsp-ivy-workspace-symbol
+        )
 #+END_SRC
 
 #+RESULTS:
@@ -2496,7 +2498,7 @@ https://www.orgroam.com
 
 ** Org-pdf
 如果遇到报错，执行 pdf-tools-install
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link))
 
