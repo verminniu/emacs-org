@@ -75,6 +75,7 @@ zinit ice svn
 zinit snippet OMZP::macos
 
 zinit load unixorn/fzf-zsh-plugin
+zinit load unixorn/git-extra-commands
 # 打开tab提示
 zinit load Aloxaf/fzf-tab
 
