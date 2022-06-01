@@ -19,18 +19,17 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 # mysql client
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/mysql-client/lib"
-export CPPFLAGS="-I/usr/local/opt/mysql-client/include"
+# export LDFLAGS="-L/usr/local/opt/mysql-client/lib"
+# export CPPFLAGS="-I/usr/local/opt/mysql-client/include"
 export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 
-export LDFLAGS="-L/usr/local/opt/gettext/lib"
-export CPPFLAGS="-I/usr/local/opt/gettext/include"
+# export LDFLAGS="-L/usr/local/opt/gettext/lib"
+# export CPPFLAGS="-I/usr/local/opt/gettext/include"
 
-export LDFLAGS="-L/usr/local/opt/llvm/lib"
-export CPPFLAGS="-I/usr/local/opt/llvm/include"
+# export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+# export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
 export PATH="/usr/local/opt/llvm/bin:$PATH"
-export PATH="/Users/verminniu/Library/Python/3.7/bin:$PATH"
 
 export GO111MODULE=on
 export GOPROXY=https://goproxy.cn
