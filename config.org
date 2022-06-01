@@ -331,6 +331,7 @@ use Hydra for some keybinds
     (setq modus-themes-italic-constructs t
           modus-themes-bold-constructs nil
           modus-themes-region '(bg-only no-extend))
+    (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font")
 
     ;; Load the theme files before enabling a theme
     (modus-themes-load-themes)
