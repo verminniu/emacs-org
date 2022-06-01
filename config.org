@@ -12,6 +12,7 @@
   - [[#better-defaults][Better defaults]]
   - [[#os-set][Os Set]]
   - [[#customization][Customization]]
+  - [[#fonts][Fonts]]
   - [[#key-binding][Key Binding]]
   - [[#hydra][Hydra]]
   - [[#shell-path][Shell Path]]
@@ -257,6 +258,20 @@ I also made sure to follow the XDG base directory specification for the
   (when (file-exists-p custom-file)
     (load custom-file t))
 #+END_SRC
+** Fonts
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font"))
+  (set-face-attribute 'default t :font "JetBrainsMono Nerd Font")
+
+  (use-package unicode-fonts
+    :ensure t
+    :config
+    (unicode-fonts-setup))
+
+  (use-package cnfonts
+    :config
+    (cnfonts-mode 1))
+#+end_src
 
 ** Key Binding
 自己适应的一些绑定
@@ -303,128 +318,25 @@ use Hydra for some keybinds
 [[#Icons][all-the-icons]].
 
 #+begin_src emacs-lisp :tangle yes
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
+  (use-package doom-modeline
+    :ensure t
+    :hook (after-init . doom-modeline-mode))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
   (use-package modus-themes
     :ensure
     :init
+    ;; Add all your customizations prior to loading the themes
     (setq modus-themes-italic-constructs t
-          modus-themes-slanted-constructs t
-          modus-themes-bold-constructs t
-          modus-themes-mixed-fonts t
-          modus-themes-subtle-line-numbers nil
-          modus-themes-intense-markup t
-          modus-themes-success-deuteranopia t
-          modus-themes-tabs-accented t
-          modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
+          modus-themes-bold-constructs nil
+          modus-themes-region '(bg-only no-extend))
 
-          modus-themes-fringes nil ; {nil,'subtle,'intense}
-
-          ;; Options for `modus-themes-lang-checkers' are either nil (the
-          ;; default), or a list of properties that may include any of those
-          ;; symbols: `straight-underline', `text-also', `background',
-          ;; `intense' OR `faint'.
-          modus-themes-lang-checkers nil
-
-          ;; Options for `modus-themes-mode-line' are either nil, or a list
-          ;; that can combine any of `3d' OR `moody', `borderless',
-          ;; `accented', `padded'.
-          modus-themes-mode-line '(padded accented borderless)
-
-          ;; Options for `modus-themes-syntax' are either nil (the default),
-          ;; or a list of properties that may include any of those symbols:
-          ;; `faint', `yellow-comments', `green-strings', `alt-syntax'
-          modus-themes-syntax nil
-
-          ;; Options for `modus-themes-hl-line' are either nil (the default),
-          ;; or a list of properties that may include any of those symbols:
-          ;; `accented', `underline', `intense'
-          modus-themes-hl-line '(underline accented intense)
-
-          ;; Options for `modus-themes-paren-match' are either nil (the
-          ;; default), or a list of properties that may include any of those
-          ;; symbols: `bold', `intense', `underline'
-          modus-themes-paren-match '(bold intense)
-
-          ;; Options for `modus-themes-links' are either nil (the default),
-          ;; or a list of properties that may include any of those symbols:
-          ;; `neutral-underline' OR `no-underline', `faint' OR `no-color',
-          ;; `bold', `italic', `background'
-          modus-themes-links '(neutral-underline background)
-
-          ;; Options for `modus-themes-prompts' are either nil (the
-          ;; default), or a list of properties that may include any of those
-          ;; symbols: `background', `bold', `gray', `intense', `italic'
-          modus-themes-prompts '(intense bold)
-
-          ;; modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
-          modus-themes-completions '((matches . (extrabold))
-                                     (selection . (semibold accented))
-                                     (popup . (accented intense)))
-
-          modus-themes-mail-citations nil ; {nil,'faint,'monochrome}
-
-          ;; Options for `modus-themes-region' are either nil (the default),
-          ;; or a list of properties that may include any of those symbols:
-          ;; `no-extend', `bg-only', `accented'
-          modus-themes-region '(bg-only no-extend)
-
-          ;; Options for `modus-themes-diffs': nil, 'desaturated,
-          ;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
-          ;; modus-themes-diffs 'fg-only-deuteranopia
-          modus-themes-diffs nil
-
-          modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
-
-          modus-themes-org-agenda ; this is an alist: read the manual or its doc string
-          '((header-block . (variable-pitch scale-title))
-            (header-date . (grayscale workaholic bold-today))
-            (event . (accented scale-small))
-            (scheduled . uniform)
-            (habit . traffic-light-deuteranopia))
-
-          modus-themes-headings ; this is an alist: read the manual or its doc string
-          '((1 . (overline background))
-            (2 . (rainbow overline))
-            (t . (no-bold)))
-
-          modus-themes-variable-pitch-ui nil
-          modus-themes-variable-pitch-headings t
-          modus-themes-scale-headings t
-          modus-themes-scale-1 1.1
-          modus-themes-scale-2 1.15
-          modus-themes-scale-3 1.21
-          modus-themes-scale-4 1.27)
-    ;; modus-themes-scale-title 1.33)
     ;; Load the theme files before enabling a theme
     (modus-themes-load-themes)
     :config
     ;; Load the theme of your choice:
-    ;; (modus-themes-load-operandi) ;; light
-    (modus-themes-load-vivendi)) ;; dark
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package moe-theme
-    :config
-    (setq moe-theme-hightlight-buffer-id t)
-    ;; Resize titles (optional).
-    (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
-    (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
-    (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
-    ;; Choose a color for mode-line.(Default: blue)
-    (moe-theme-random-color)
-    ;; (powerline-moe-theme)
-    (show-paren-mode t)
-    (setq show-paren-style 'expression)
-    (load-theme 'moe-dark t)
-    (set-face-background hl-line-face "color-17")
-    )
+    (modus-themes-load-vivendi))
 #+end_src
 
 ** Corfu
