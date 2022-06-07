@@ -106,6 +106,7 @@
   - [[#add-gfm-markdown-to-export-list][add gfm markdown to Export list]]
   - [[#org-mind-map][Org-mind-map]]
   - [[#org-roam][Org-roam]]
+  - [[#pandoc][Pandoc]]
   - [[#org-pdf][Org-pdf]]
 
 * Install
@@ -761,6 +762,9 @@ format all languages
     (add-hook 'python-mode-hook #'(lambda ()
                                     (setq-local format-all-formatters '(("Python" myblack))))))
 #+end_src
+
+#+RESULTS:
+: t
 
 ** Shell
 add shell support
@@ -2414,6 +2418,11 @@ https://www.orgroam.com
     :config
     (unless (file-exists-p org-roam-directory)
       (make-directory org-roam-directory)))
+#+end_src
+
+** Pandoc
+#+begin_src emacs-lisp :tangle yes
+  (use-package ox-pandoc)
 #+end_src
 
 ** Org-pdf
