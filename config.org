@@ -21,6 +21,7 @@
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
   - [[#projectile][Projectile]]
+  - [[#rime][Rime]]
 - [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
   - [[#citre][Citre]]
@@ -513,6 +514,16 @@ Use build.sh to compile project with build.sh
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
 #+END_SRC
+** Rime
+中文输入法支持
+https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
+#+begin_src emacs-lisp :tangle yes
+  (use-package rime
+    :custom
+    (default-input-method "rime"))
+#+end_src
+
+
 * Languages
 ** FlyCheck
 #+BEGIN_SRC emacs-lisp :tangle yes
