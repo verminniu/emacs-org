@@ -14,14 +14,14 @@ alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-ti
 
 export PATH="/usr/local/opt/gettext/bin:$PATH"
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export PATH="/Users/vermin/code_tools/gradle-2.14.1/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 # mysql client
-export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-# export LDFLAGS="-L/usr/local/opt/mysql-client/lib"
-# export CPPFLAGS="-I/usr/local/opt/mysql-client/include"
-export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
+export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
 
 # export LDFLAGS="-L/usr/local/opt/gettext/lib"
 # export CPPFLAGS="-I/usr/local/opt/gettext/include"
@@ -31,12 +31,13 @@ export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 
 export PATH="/usr/local/opt/llvm/bin:$PATH"
 
+export CAT_HOME="/data/appdatas/cat/"
 export GO111MODULE=on
 export GOPROXY=https://goproxy.cn
 export GOPATH="/usr/local/gopath/"
 export PATH="$GOPATH/bin:$PATH"
 
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
+# export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 export HOMEBREW_NO_AUTO_UPDATE=1
 
 export HISTCONTROL=erasedups
