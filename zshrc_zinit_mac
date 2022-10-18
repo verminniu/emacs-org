@@ -10,6 +10,7 @@ alias ll='ls -l --color=auto'
 alias ls='ls --color=auto'
 alias mkproj='echo > .projectile'
 alias vi='vim'
+alias nlp="netstat -AaLlnW"
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 
 export PATH="/usr/local/opt/gettext/bin:$PATH"
@@ -30,7 +31,8 @@ export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
 # export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
 export PATH="/usr/local/opt/llvm/bin:$PATH"
-
+export JAVA_HOME=`/usr/libexec/java_home`
+export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
 export CAT_HOME="/data/appdatas/cat/"
 export GO111MODULE=on
 export GOPROXY=https://goproxy.cn
