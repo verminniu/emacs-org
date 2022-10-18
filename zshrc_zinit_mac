@@ -24,6 +24,7 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
 
+
 # export LDFLAGS="-L/usr/local/opt/gettext/lib"
 # export CPPFLAGS="-I/usr/local/opt/gettext/include"
 
@@ -31,7 +32,8 @@ export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
 # export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
 export PATH="/usr/local/opt/llvm/bin:$PATH"
-export JAVA_HOME=`/usr/libexec/java_home`
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_341.jdk/Contents/Home"
+export PATH="${JAVA_HOME}/bin:$PATH"
 export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
 export CAT_HOME="/data/appdatas/cat/"
 export GO111MODULE=on
