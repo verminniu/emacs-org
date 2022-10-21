@@ -631,7 +631,7 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 ** LSP
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -995,10 +995,7 @@ disable cquery and ccls to use clangd as lsp server
 
 ** Java
 jdt lsp
-try eglot
 #+begin_src emacs-lisp :tangle no
-  (setq lsp-java-server-install-dir "/opt/homebrew/Cellar/jdtls/1.15.0/")
-  (use-package lsp-java)
 #+end_src
 
 ** Shell
