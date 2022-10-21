@@ -610,27 +610,28 @@ https://github.com/universal-ctags/citre
 ** Eglot
 
 #+BEGIN_SRC emacs-lisp :tangle no
-    (use-package project)
-    (use-package eglot
-      :ensure t
-      :after project
-      :config
-      (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-      (add-hook 'c-mode-hook 'eglot-ensure)
-      (add-hook 'c++-mode-hook 'eglot-ensure)
-      (add-hook 'python-mode-hook 'eglot-ensure)
-      (add-hook 'go-mode-hook 'eglot-ensure)
-      (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
-      (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
-      (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
-      (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+  (use-package project)
+  (use-package eglot
+    :ensure t
+    :after project
+    :config
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+    (add-hook 'c-mode-hook 'eglot-ensure)
+    (add-hook 'c++-mode-hook 'eglot-ensure)
+    (add-hook 'python-mode-hook 'eglot-ensure)
+    (add-hook 'go-mode-hook 'eglot-ensure)
+    (add-hook 'java-mode-hook 'eglot-ensure)
+    (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
+    (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 
-    (use-package consult-eglot
-      :after consult)
+  (use-package consult-eglot
+    :after consult)
 #+END_SRC
 ** LSP
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -678,6 +679,17 @@ https://github.com/universal-ctags/citre
     (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
+  ;; use pyright
+  ;; sudo npm install -g pyright
+  ;; sudo npm update -g pyright
+  (use-package lsp-pyright
+    :ensure t
+    :config
+    (setq lsp-pyright-python-executable-cmd "python3")
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp))))  ; or lsp-deferred
+
   ;; Debug
   (use-package dap-mode
     :diminish
@@ -707,6 +719,7 @@ https://github.com/universal-ctags/citre
 
   ;; `lsp-mode' and `treemacs' integration.
   (use-package lsp-treemacs
+    :after treemacs
     :commands lsp-treemacs-errors-list
     )
 
@@ -915,20 +928,6 @@ Provides minibuffer hints when working with Emacs Lisp.
 Lsp-mode will start py on python mode
 use [[*Format All][Format All]] to format code
 
-Use pyright
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; sudo npm install -g pyright
-  ;; sudo npm update -g pyright
-  (use-package lsp-pyright
-    :ensure t
-    :config
-    (setq lsp-pyright-python-executable-cmd "python3")
-    :hook (python-mode . (lambda ()
-                           (require 'lsp-pyright)
-                           (lsp))))  ; or lsp-deferred
-
-#+END_SRC
-
 #+BEGIN_SRC shell :tangle no
   pip install --upgrade setuptools
   pip install 'python-language-server[all]'
@@ -996,7 +995,8 @@ disable cquery and ccls to use clangd as lsp server
 
 ** Java
 jdt lsp
-#+begin_src emacs-lisp :tangle yes
+try eglot
+#+begin_src emacs-lisp :tangle no
   (setq lsp-java-server-install-dir "/opt/homebrew/Cellar/jdtls/1.15.0/")
   (use-package lsp-java)
 #+end_src
@@ -2183,10 +2183,6 @@ Try emr
     :after treemacs magit
     :ensure t)
 
-  (use-package lsp-treemacs
-    :commands lsp-treemacs-errors-list
-    )
-
   (use-package treemacs-persp ;;treemacs-persective if you use perspective.el vs. persp-mode
     :after treemacs persp-mode ;;or perspective vs. persp-mode
     :ensure t
@@ -2352,6 +2348,17 @@ try org modern
   (use-package calfw-org
     :init
     (require 'calfw-org))
+
+  (use-package cal-china-x
+    :config
+    (setq mark-holidays-in-calendar t)
+    (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
+    (setq cal-china-x-general-holidays '((holiday-lunar 1 15 "元宵节")))
+    (setq calendar-holidays
+          (append cal-china-x-important-holidays
+                  cal-china-x-general-holidays
+                  other-holidays)))
+
 #+end_src
 
 ** Org Timeline
