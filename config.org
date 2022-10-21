@@ -311,7 +311,7 @@ use Hydra for some keybinds
     :ensure t
     :init (progn
             (when(not(eq system-type 'windows-nt))
-              (setq exec-path-from-shell-variables '("PYTHONPATH" "GOPATH"))
+              (setq exec-path-from-shell-variables '("PATH" "PYTHONPATH" "GOPATH"))
               ;; when it is nil, exec-path-from-shell will read environment variable
               ;; from .zshenv instead of .zshrc, but makes sure that you put all
               ;; environment variable you need in .zshenv rather than .zshrc
@@ -997,8 +997,18 @@ disable cquery and ccls to use clangd as lsp server
 ** Java
 jdt lsp
 #+begin_src emacs-lisp :tangle yes
-  (setq lsp-java-server-install-dir "/opt/homebrew/Cellar/jdtls/1.15.0/")
-  (use-package lsp-java)
+  ;; (setq lsp-java-server-install-dir "")
+  (use-package lsp-java
+    :config (add-hook 'java-mode-hook 'lsp))
+
+  (require 'lsp-java-boot)
+  ;; to enable the lenses
+  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+
+  (use-package gradle-mode
+    :config
+    (gradle-mode 1))
 #+end_src
 
 ** Shell
