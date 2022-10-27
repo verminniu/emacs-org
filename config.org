@@ -610,28 +610,37 @@ https://github.com/universal-ctags/citre
 #+end_src
 ** Eglot
 
-#+BEGIN_SRC emacs-lisp :tangle no
-    (use-package project)
-    (use-package eglot
-      :ensure t
-      :after project
-      :config
-      (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-      (add-hook 'c-mode-hook 'eglot-ensure)
-      (add-hook 'c++-mode-hook 'eglot-ensure)
-      (add-hook 'python-mode-hook 'eglot-ensure)
-      (add-hook 'go-mode-hook 'eglot-ensure)
-      (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
-      (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
-      (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
-      (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package project)
+  (use-package eglot
+    :ensure t
+    :after project
+    :config
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+    (add-hook 'c-mode-hook 'eglot-ensure)
+    (add-hook 'c++-mode-hook 'eglot-ensure)
+    (add-hook 'python-mode-hook 'eglot-ensure)
+    (add-hook 'go-mode-hook 'eglot-ensure)
+    (add-hook 'java-mode-hook 'eglot-ensure)
+    (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
+    (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 
-    (use-package consult-eglot
-      :after consult)
+  (use-package consult-eglot
+    :after consult)
 #+END_SRC
+
+**** java
+#+begin_src emacs-lisp :tangle yes
+  (use-package eglot-java
+    :config
+    (eglot-java-init))
+#+end_src
+
 ** LSP
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -720,7 +729,31 @@ https://github.com/universal-ctags/citre
     )
 #+END_SRC
 
-#+RESULTS:
+**** lsp-java
+#+begin_src emacs-lisp :tangle no
+  ;; (setq lsp-java-server-install-dir "")
+  (use-package lsp-java
+    :config (add-hook 'java-mode-hook 'lsp))
+
+  (require 'lsp-java-boot)
+  ;; to enable the lenses
+  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+#+end_src
+
+**** lsp-python
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; sudo npm install -g pyright
+  ;; sudo npm update -g pyright
+  (use-package lsp-pyright
+    :ensure t
+    :config
+    (setq lsp-pyright-python-executable-cmd "python3")
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp))))  ; or lsp-deferred
+
+#+END_SRC
 
 ** GDB
 暂时先配置多窗口调试
@@ -917,19 +950,6 @@ Lsp-mode will start py on python mode
 use [[*Format All][Format All]] to format code
 
 Use pyright
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; sudo npm install -g pyright
-  ;; sudo npm update -g pyright
-  (use-package lsp-pyright
-    :ensure t
-    :config
-    (setq lsp-pyright-python-executable-cmd "python3")
-    :hook (python-mode . (lambda ()
-                           (require 'lsp-pyright)
-                           (lsp))))  ; or lsp-deferred
-
-#+END_SRC
-
 #+BEGIN_SRC shell :tangle no
   pip install --upgrade setuptools
   pip install 'python-language-server[all]'
@@ -998,15 +1018,6 @@ disable cquery and ccls to use clangd as lsp server
 ** Java
 jdt lsp
 #+begin_src emacs-lisp :tangle yes
-  ;; (setq lsp-java-server-install-dir "")
-  (use-package lsp-java
-    :config (add-hook 'java-mode-hook 'lsp))
-
-  (require 'lsp-java-boot)
-  ;; to enable the lenses
-  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
-  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
-
   (use-package gradle-mode
     :config
     (gradle-mode 1))
