@@ -2416,9 +2416,7 @@ try org modern
   (use-package toc-org
     :config
     (add-hook 'org-mode-hook 'toc-org-mode)
-    (add-hook 'markdown-mode-hook 'toc-org-mode)
-    (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point)
-    )
+    (add-hook 'markdown-mode-hook 'toc-org-mode))
 #+end_src
 ** Org hugo
 #+begin_src emacs-lisp :tangle yes
