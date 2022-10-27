@@ -25,7 +25,7 @@
 - [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
   - [[#citre][Citre]]
-  - [[#nox][Nox]]
+  - [[#lspbridge][LspBridge]]
   - [[#eglot][Eglot]]
   - [[#lsp][LSP]]
   - [[#gdb][GDB]]
@@ -586,27 +586,15 @@ https://github.com/universal-ctags/citre
      ;; certain modes (like `prog-mode'), set it like this.
      citre-auto-enable-citre-mode-modes '(prog-mode)))
 #+end_src
-** Nox
-补全不太稳定 - 观望中
+** LspBridge
 #+begin_src emacs-lisp :tangle no
-  (use-package posframe)
-  (use-package nox
-    :quelpa ((nox :fetcher github :repo "manateelazycat/nox") :upgrade t))
-  (dolist (hook (list
-                 'js-mode-hook
-                 'rust-mode-hook
-                 'python-mode-hook
-                 'ruby-mode-hook
-                 'java-mode-hook
-                 'sh-mode-hook
-                 'php-mode-hook
-                 'c-mode-common-hook
-                 'c-mode-hook
-                 'csharp-mode-hook
-                 'c++-mode-hook
-                 'haskell-mode-hook
-                 ))
-    (add-hook hook '(lambda () (nox-ensure))))
+  (quelpa '(lsp-bridge :fetcher github-ssh :repo "manateelazycat/lsp-bridge"))
+  ;;(quelpa '(lsp-bridge :fetcher git :url "https://github.com/manateelazycat/lsp-bridge.git"))
+  (require 'yasnippet)
+  (yas-global-mode 1)
+
+  (require 'lsp-bridge)
+  (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
 
