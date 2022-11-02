@@ -597,7 +597,6 @@ https://github.com/universal-ctags/citre
   (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
-
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project)
   (use-package eglot
@@ -627,7 +626,6 @@ https://github.com/universal-ctags/citre
 #+end_src
 
 ** LSP
-
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
@@ -810,10 +808,6 @@ format all languages
     (add-hook 'python-mode-hook #'(lambda ()
                                     (setq-local format-all-formatters '(("Python" myblack))))))
 #+end_src
-
-#+RESULTS:
-: t
-
 ** Shell
 add shell support
 #+begin_src emacs-lisp :tangle yes
