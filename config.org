@@ -770,6 +770,7 @@ format all languages
     ;; 主动打开各个mode的hook
     (add-hook 'emacs-lisp-mode-hook 'format-all-mode)
     (add-hook 'protobuf-mode-hook 'format-all-mode)
+    (add-hook 'json-mode-hook 'format-all-mode)
     (define-format-all-formatter g-clang-format
       (:executable "clang-format")
       (:install
