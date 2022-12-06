@@ -597,7 +597,7 @@ https://github.com/universal-ctags/citre
   (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package project)
   (use-package eglot
     :ensure t
@@ -619,7 +619,7 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 
 **** java
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package eglot-java
   :config
   (add-hook 'java-mode-hook 'eglot-java-mode)
@@ -633,7 +633,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -658,13 +658,13 @@ https://github.com/universal-ctags/citre
     (custom-set-faces
      '(lsp-face-semhl-comment ((t (:inherit shadow)))))
     (setq lsp-clients-clangd-args '("-j=8" ; 多并发
-                          "--malloc-trim" ; 通过malloc_trim定期释放内存
-                          "--background-index"
-                          "--clang-tidy"
-                          "--completion-style=bundled"
-                          "--pch-storage=memory"
-                          "--header-insertion=iwyu"
-                          "--header-insertion-decorators"))
+                                    ;"--malloc-trim" ; 通过malloc_trim定期释放内存，只支持linux，mac 不支持
+                                    "--background-index"
+                                    "--clang-tidy"
+                                    "--completion-style=bundled"
+                                    "--pch-storage=memory"
+                                    "--header-insertion=iwyu"
+                                    "--header-insertion-decorators"))
     (setq lsp-completion-enable t
           lsp-enable-snippet t
           lsp-semantic-highlighting t
@@ -723,19 +723,35 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 
 **** lsp-java
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   ;; (setq lsp-java-server-install-dir "")
   (use-package lsp-java
-    :config (add-hook 'java-mode-hook 'lsp))
+    :config
+    (add-hook 'java-mode-hook 'lsp)
+    ;; 打开gradle 支持
+    (setq lsp-java-import-gradle-enabled t)
+    ;; 打开code lens 支持
+    (setq lsp-java-references-code-lens-enabled t)
+    ;; java启动二进制
+    (setq lsp-java-java-path "/Library/Java/JavaVirtualMachines/openjdk.jdk/Contents/Home/bin/java"
+          ;; 默认java8
+          lsp-java-configuration-runtimes '[(:name "OpenJDK"
+                                                   :path "/Library/Java/JavaVirtualMachines/openjdk.jdk/Contents/Home")
+                                            (:name "Java8"
+                                                   :path "/Library/Java/JavaVirtualMachines/jdk1.8.0_341.jdk/Contents/Home"
+                                                   :default t)])
+    ;; I also set dap-java-java-command but it seems to only have effect on :request compile_attach
+    (setq dap-java-java-command "/Library/Java/JavaVirtualMachines/jdk1.8.0_341.jdk/Contents/Home/bin/java"))
 
   (require 'lsp-java-boot)
   ;; to enable the lenses
   (add-hook 'lsp-mode-hook #'lsp-lens-mode)
   (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+
 #+end_src
 
 **** lsp-python
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; sudo npm install -g pyright
   ;; sudo npm update -g pyright
   (use-package lsp-pyright
