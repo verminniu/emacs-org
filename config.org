@@ -1022,11 +1022,9 @@ disable cquery and ccls to use clangd as lsp server
 #+END_SRC
 
 ** Java
-jdt lsp
-#+begin_src emacs-lisp :tangle yes
-  (use-package gradle-mode
-    :config
-    (gradle-mode 1))
+lsp-java 改lsp目录，这里为其他java相关配置
+#+begin_src emacs-lisp :tangle no
+
 #+end_src
 ** Groovy
 #+begin_src emacs-lisp :tangle yes
