@@ -5,6 +5,7 @@
 - [[#install][Install]]
   - [[#install-from-sources][Install From Sources]]
 - [[#emacs-initialization][Emacs Initialization]]
+  - [[#proxy][Proxy]]
   - [[#packages-sources][Packages Sources]]
   - [[#use-package][use-package]]
   - [[#quelpa][Quelpa]]
@@ -121,6 +122,12 @@
 #+end_src
 
 * Emacs Initialization
+** Proxy
+#+begin_src emacs-lisp :tangle yes
+  (setq url-gateway-method 'socks)
+  ;; use wallless
+  (setq socks-server '("Default server" "127.0.0.1" 33211 5))
+#+end_src
 ** Packages Sources
 
 In order to install packages, it is useful to configure the package sources.
@@ -312,7 +319,7 @@ use Hydra for some keybinds
     :ensure t
     :init (progn
             (when(not(eq system-type 'windows-nt))
-              (setq exec-path-from-shell-variables '("PATH" "PYTHONPATH" "GOPATH"))
+              (setq exec-path-from-shell-variables '("PATH" "PYTHONPATH" "GOPATH" "JAVA_HOME" "GROOVY_HOME" "GRADLE_HOME" "GRADLE_USER_HOME"))
               ;; when it is nil, exec-path-from-shell will read environment variable
               ;; from .zshenv instead of .zshrc, but makes sure that you put all
               ;; environment variable you need in .zshenv rather than .zshrc
@@ -730,6 +737,11 @@ https://github.com/universal-ctags/citre
     (add-hook 'java-mode-hook 'lsp)
     ;; 打开gradle 支持
     (setq lsp-java-import-gradle-enabled t)
+    (setq lsp-file-watch-ignored
+          '(".idea" ".ensime_cache" ".eunit" "node_modules"
+            ".git" ".hg" ".fslckout" "_FOSSIL_"
+            ".bzr" "_darcs" ".tox" ".svn" ".stack-work"
+            "build"))
     ;; 打开code lens 支持
     (setq lsp-java-references-code-lens-enabled t)
     ;; java启动二进制
@@ -1023,8 +1035,13 @@ disable cquery and ccls to use clangd as lsp server
 
 ** Java
 lsp-java 改lsp目录，这里为其他java相关配置
-#+begin_src emacs-lisp :tangle no
-
+#+begin_src emacs-lisp :tangle yes
+  (use-package gradle-mode
+    :config
+    (setq gradle-executable-path "/Users/vermin/code_tools/gradle-4.10.3/bin/gradle")
+    (add-hook 'java-mode-hook (lambda ()
+                          (setq c-default-style "java")
+                          (gradle-mode 1))))
 #+end_src
 ** Groovy
 #+begin_src emacs-lisp :tangle yes
