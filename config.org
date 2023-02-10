@@ -51,6 +51,7 @@
   - [[#k8s][k8s]]
   - [[#dockerfile][dockerfile]]
   - [[#json][Json]]
+  - [[#javascripttypescript][JavaScript/TypeScript]]
 - [[#advanced-configuration][Advanced Configuration]]
   - [[#parrot][parrot]]
   - [[#nyan-mode][nyan-mode]]
@@ -711,6 +712,8 @@ https://github.com/universal-ctags/citre
            (python-mode . lsp-deferred)
            (go-mode . lsp-deferred)
            (java-mode . lsp-deferred)
+           (typescript-mode . lsp-deferred)
+           (js-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration)
            )
     :bind (:map lsp-mode-map
@@ -1311,6 +1314,41 @@ C-c C-d: Decrement the number at point
 #+begin_src emacs-lisp :tangle yes
   (use-package json-mode)
   (use-package json-navigator)
+#+end_src
+
+** JavaScript/TypeScript
+js/ts
+
+use web-mode
+#+begin_src emacs-lisp :tangle yes
+  (use-package web-mode
+    :defer 2
+    :after (add-node-modules-path)
+    :ensure t
+    :mode ("\\.html?\\'"
+           "/themes/.*\\.php?\\'"
+           "/\\(components\\|containers\\|src\\)/.*\\.js[x]?\\'"
+           "\\.\\(handlebars\\|hbs\\)\\'")
+    :config (progn
+              (setq
+               web-mode-markup-indent-offset 2
+               web-mode-css-indent-offset 2
+               web-mode-code-indent-offset 2
+               web-mode-enable-auto-closing t
+               web-mode-enable-auto-opening t
+               web-mode-enable-auto-pairing t
+               web-mode-enable-auto-indentation t
+               web-mode-enable-auto-quoting t
+               web-mode-enable-current-column-highlight t
+               web-mode-enable-current-element-highlight t
+               web-mode-content-types-alist
+               '(("jsx" . "/\\(components\\|containers\\|src\\)/.*\\.js[x]?\\'")))))
+#+end_src
+
+js/ts support
+#+begin_src emacs-lisp :tangle yes
+  (use-package react-snippets)
+  (use-package typescript-mode)
 #+end_src
 
 * Advanced Configuration
