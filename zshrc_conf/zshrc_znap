@@ -61,6 +61,10 @@ export HISTCONTROL=erasedups
 export TERM=xterm-256color
 export LANG=zh_CN.utf8
 
+# git diff 用less进行分页，需要配置less参数，防止乱码
+export LESS=eFRX
+export LESSCHARSET=utf-8
+
 # 以下为history配置
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000000
@@ -102,6 +106,7 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
 znap source zsh-users/zsh-syntax-highlighting
 
 znap source Aloxaf/fzf-tab
+
 znap source unixorn/fzf-zsh-plugin
 znap source unixorn/git-extra-commands
 znap source yuki-yano/zeno.zsh
@@ -147,9 +152,20 @@ eval "$(pyenv init -)"
 # fd替换find，需要先安装fd:
 #    brew install fd
 export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --type f"
+
 # 展示
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
 
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
