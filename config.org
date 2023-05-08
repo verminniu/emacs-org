@@ -52,6 +52,7 @@
   - [[#json][Json]]
   - [[#javascripttypescript][JavaScript/TypeScript]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#goggles][goggles]]
   - [[#read-only][Read only]]
   - [[#parrot][parrot]]
   - [[#nyan-mode][nyan-mode]]
@@ -1285,6 +1286,15 @@ js/ts support
 #+end_src
 
 * Advanced Configuration
+** goggles
+复制粘贴高亮
+#+begin_src emacs-lisp :tangle yes
+  (use-package goggles
+    :hook ((prog-mode text-mode) . goggles-mode)
+    :config
+    (setq-default goggles-pulse t))
+#+end_src
+
 ** Read only
 emacs java 模式 主要用来看代码，防止误操作
 #+begin_src emacs-lisp :tangle yes
