@@ -77,6 +77,7 @@
   - [[#ivy][Ivy]]
   - [[#corfu][Corfu]]
   - [[#avy][Avy]]
+  - [[#avyzap][avyZap]]
   - [[#parentheses][Parentheses]]
   - [[#recent-files][Recent Files]]
   - [[#version-control][Version Control]]
@@ -1941,8 +1942,18 @@ Navigation with Avy
   (use-package ivy-avy
     :after ivy
     )
-#+end_src
 
+  (use-package ace-pinyin
+    :config
+    (ace-pinyin-global-mode +1))
+#+end_src
+** avyZap
+#+begin_src emacs-lisp :tangle yes
+  (use-package avy-zap
+    :config
+    (global-set-key (kbd "M-z") 'avy-zap-to-char-dwim)
+    (global-set-key (kbd "M-Z") 'avy-zap-up-to-char-dwim))
+#+end_src
 ** Parentheses
 
 Managing parentheses can be painful. One of the first things you want to do is
