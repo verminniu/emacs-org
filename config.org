@@ -192,59 +192,61 @@ use Quelpa for use github packages
 For a better user experience of GNU Emacs, here are the default values I use.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-        (setq-default
-         ad-redefinition-action 'accept                   ; Silence warnings for redefinition
-         cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
-         display-time-default-load-average nil            ; Don't display load average
-         fill-column 100                                   ; Set width for automatic line breaks
-         mode-require-final-newline t                     ; add a newline to end of file
-         help-window-select t                             ; Focus new help windows when opened
-         inhibit-startup-screen t                         ; Disable start-up screen
-         initial-scratch-message ""                       ; Empty the initial *scratch* buffer
-         kill-ring-max 128                                ; Maximum length of kill ring
-         load-prefer-newer t                              ; Prefers the newest version of a file
-         mark-ring-max 128                                ; Maximum length of mark ring
-         scroll-conservatively most-positive-fixnum       ; Always scroll by one line
-         select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
-         indent-tabs-mode nil                             ; Space to tab
-         tab-width 4                                      ; Set width for tabs
-         use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
-         user-full-name "Vermin"                          ; Set the full name of the current user
-         user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
-         vc-follow-symlinks t                             ; Always follow the symlinks
-         make-backup-files nil							  ; close backup files
-         gc-cons-threshold 100000000                      ; lsp need more memory
-         read-process-output-max (* 1024 1024)            ; 1mb
-         truncate-partial-width-windows nil               ; turn off wrapping long lines
-         view-read-only t)                                ; Always open read-only buffers in view-mode
-                                                ;  (cd "~/")                                         ; Move to the user directory
-        (column-number-mode 1)                            ; Show the column number
-        ;;(global-linum-mode 1)
-        (setq create-lockfiles nil)                       ; disable lock file
-        (display-time-mode 1)                             ; Enable time in the mode-line
-        (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
-        (global-hl-line-mode)                             ; Hightlight current line
+  (setq-default
+   ad-redefinition-action 'accept                   ; Silence warnings for redefinition
+   cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
+   display-time-default-load-average nil            ; Don't display load average
+   fill-column 100                                   ; Set width for automatic line breaks
+   mode-require-final-newline t                     ; add a newline to end of file
+   help-window-select t                             ; Focus new help windows when opened
+   inhibit-startup-screen t                         ; Disable start-up screen
+   initial-scratch-message ""                       ; Empty the initial *scratch* buffer
+   kill-ring-max 128                                ; Maximum length of kill ring
+   load-prefer-newer t                              ; Prefers the newest version of a file
+   mark-ring-max 128                                ; Maximum length of mark ring
+   scroll-conservatively most-positive-fixnum       ; Always scroll by one line
+   select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
+   indent-tabs-mode nil                             ; Space to tab
+   tab-width 4                                      ; Set width for tabs
+   use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
+   user-full-name "Vermin"                          ; Set the full name of the current user
+   user-mail-address "cattlenzq@163.com"            ; Set the email address of the current user
+   vc-follow-symlinks t                             ; Always follow the symlinks
+   make-backup-files nil							  ; close backup files
+   gc-cons-threshold 100000000                      ; lsp need more memory
+   read-process-output-max (* 1024 1024)            ; 1mb
+   truncate-partial-width-windows nil               ; turn off wrapping long lines
+   view-read-only t)                                ; Always open read-only buffers in view-mode
+                                          ;  (cd "~/")                                         ; Move to the user directory
+  (column-number-mode 1)                            ; Show the column number
+  ;;(global-linum-mode 1)
+  (setq create-lockfiles nil)                       ; disable lock file
+  (display-time-mode 1)                             ; Enable time in the mode-line
+  (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
+  (global-hl-line-mode)                             ; Hightlight current line
 
-        (set-language-environment "UTF-8")
-        (set-default-coding-systems 'utf-8)
-        (set-buffer-file-coding-system 'utf-8-unix)
-        (set-clipboard-coding-system 'utf-8-unix)
-        (set-file-name-coding-system 'utf-8-unix)
-        (set-keyboard-coding-system 'utf-8-unix)
-        (set-next-selection-coding-system 'utf-8-unix)
-        (set-selection-coding-system 'utf-8-unix)
-        (set-terminal-coding-system 'utf-8-unix)
-        (setq locale-coding-system 'utf-8)
-        (prefer-coding-system 'utf-8)
-        (prefer-coding-system 'utf-8-unix)		;
-        ;;(prefer-coding-system 'chinese-gbk)       ; linux system
-        ;;(prefer-coding-system 'gb2312-unix)		;
-        (show-paren-mode 1)                               ; Show the parent
-        (add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
-        (add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
-        (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-        (add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
-        (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
+  (set-language-environment "UTF-8")
+  (set-default-coding-systems 'utf-8)
+  (set-buffer-file-coding-system 'utf-8-unix)
+  (set-clipboard-coding-system 'utf-8-unix)
+  (set-file-name-coding-system 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (set-next-selection-coding-system 'utf-8-unix)
+  (set-selection-coding-system 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (setq locale-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8-unix)		;
+  ;;(prefer-coding-system 'chinese-gbk)       ; linux system
+  ;;(prefer-coding-system 'gb2312-unix)		;
+  (show-paren-mode 1)                               ; Show the parent
+  (add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
+  (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
+
+  (add-to-list 'image-types 'svg) ; add svg to image-types
 #+END_SRC
 
 ** Os Set
@@ -646,7 +648,7 @@ https://github.com/universal-ctags/citre
            (c-mode . lsp-deferred)
            (python-mode . lsp-deferred)
            (go-mode . lsp-deferred)
-           (java-mode . lsp-deferred)
+           ;; (java-mode . lsp-deferred)
            (typescript-mode . lsp-deferred)
            (js-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration)
@@ -728,7 +730,8 @@ https://github.com/universal-ctags/citre
 #+END_SRC
 
 **** lsp-java
-#+begin_src emacs-lisp :tangle yes
+暂时java开发采用idea，emacs主要是用来合并版本等，开启lsp启动过慢，临时编码ctags足够
+#+begin_src emacs-lisp :tangle no
   ;; (setq lsp-java-server-install-dir "")
   (use-package lsp-java
     :config
