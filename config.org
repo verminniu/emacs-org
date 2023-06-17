@@ -39,6 +39,7 @@
   - [[#cmake][CMake]]
   - [[#yaml][Yaml]]
   - [[#emacs-lisp][Emacs Lisp]]
+  - [[#lua][Lua]]
   - [[#python][Python]]
   - [[#c][C++]]
   - [[#java][Java]]
@@ -401,7 +402,7 @@ use Hydra for some keybinds
     (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font")
 
     ;; Load the theme files before enabling a theme
-    (load-theme 'modus-vivendi-tinted :no-confirm)
+    (load-theme 'modus-operandi-tinted :no-confirm)
     )
 
   (defvar my-rainbow-region-colors
@@ -651,6 +652,7 @@ https://github.com/universal-ctags/citre
            ;; (java-mode . lsp-deferred)
            (typescript-mode . lsp-deferred)
            (js-mode . lsp-deferred)
+           (lua-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration)
            )
     :bind (:map lsp-mode-map
@@ -964,6 +966,14 @@ Provides minibuffer hints when working with Emacs Lisp.
     :hook (emacs-lisp-mode . eldoc-mode))
 #+END_SRC
 
+** Lua
+#+begin_src emacs-lisp :tangle yes
+  (use-package lua-mode
+    :config
+    (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+    (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+    (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
+#+end_src
 ** Python
 Lsp-mode will start py on python mode
 use [[*Format All][Format All]] to format code
