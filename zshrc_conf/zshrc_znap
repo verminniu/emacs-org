@@ -1,6 +1,7 @@
 # 以下为mac的环境变量设置
 alias vscode='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+# alias app_emacs='open /opt/homebrew/opt/emacs-mac/Emacs.app'
 alias ec='emacsclient -t'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -9,10 +10,14 @@ alias l.='ls -d .* --color=auto'
 alias ll='ls -l --color=auto'
 alias ls='ls --color=auto'
 alias mkproj='echo > .projectile'
-alias vi='vim'
+alias vi='nvim'
+alias vim='nvim'
 alias nlp="netstat -AaLlnW"
 alias cb="~/code_tools/call_dubbo/call_dubbo.py"
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+
+# aviator
+alias aviator='~/code_tools/aviator/aviator'
 
 # exec brew install coreutils
 export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
@@ -23,17 +28,18 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
+# graphviz
+export GRAPHVIZ_DOT="/opt/homebrew/bin/dot"
+
 # mysql client
-export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include"
-export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
+export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib $LDFLAGS"
+export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include $CPPFLAGS"
+export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include $CPPFLAGS"
 
 # llvm
-LDFLAGS="-L/opt/homebrew/opt/llvm@14/lib/c++ -Wl,-rpath,/opt/homebrew/opt/llvm@14/lib/c++"
-
-export LDFLAGS="-L/opt/homebrew/opt/llvm@14/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm@14/include"
-export PATH="/opt/homebrew/opt/llvm@14/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib/c++ -Wl,-rpath,/opt/homebrew/opt/llvm/lib/c++ $LDFLAGS"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include $CPPFLAGS"
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
 # java
 # gradle
@@ -144,6 +150,17 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+
 # ------- znap end --------
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -156,20 +173,11 @@ export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_mo
 # 展示
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
 
-# disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-# switch group using `,` and `.`
-zstyle ':fzf-tab:*' switch-group ',' '.'
-
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+
+export HOMEBREW_GITHUB_API_TOKEN="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"
