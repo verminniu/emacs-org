@@ -93,56 +93,26 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent .slime-histor
 setopt COMBINING_CHARS
 # ----- history end --
 
-# ------- znap start --------
+# ----- zim begin
 
-# Download Znap, if it's not there yet.
-[[ -f ~/Git/zsh-snap/znap.zsh ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ~/Git/zsh-snap
+zstyle ':zim:zmodule' use 'degit'
+ZIM_HOME=~/.zim
 
-source ~/Git/zsh-snap/znap.zsh
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+      https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+fi
 
-# `znap prompt` makes your prompt visible in just 15-40ms!
-znap prompt sindresorhus/pure
-# znap prompt romkatv/powerlevel10k
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
 
-# `znap source` automatically downloads and starts your plugins.
-znap source marlonrichert/zsh-autocomplete
-ZSH_AUTOSUGGEST_STRATEGY=( history )
-znap source zsh-users/zsh-autosuggestions
-ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
-znap source zsh-users/zsh-syntax-highlighting
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
 
-znap source Aloxaf/fzf-tab
-
-znap source unixorn/fzf-zsh-plugin
-znap source unixorn/git-extra-commands
-znap source yuki-yano/zeno.zsh
-
-# If the first arg is a repo, then the command will run inside it. Plus,
-# whenever you update a repo with `znap pull`, its eval cache gets regenerated
-# automatically.
-znap eval trapd00r/LS_COLORS "$( whence -a dircolors gdircolors ) -b LS_COLORS"
-
-# The cache gets regenerated, too, when the eval command has changed. For
-# example, here we include a variable. So, the cache gets invalidated whenever
-# this variable has changed.
-znap source marlonrichert/zcolors
-znap eval   marlonrichert/zcolors "zcolors ${(q)LS_COLORS}"
-
-
-# Combine `znap eval` with `curl` or `wget` to download, cache and source
-# individual files:
-znap eval omz-git 'curl -fsSL \
-    https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/git/git.plugin.zsh'
-
-# `znap eval` caches and runs any kind of command output for you.
-znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
-
-# `znap function` lets you lazy-load features you don't always need.
-znap function _pyenv pyenv 'eval "$( pyenv init - --no-rehash )"'
-compctl -K    _pyenv pyenv
-
+# ----- zim end
 
 [[ -s "/opt/homebrew/etc/grc.zsh" ]] && source /opt/homebrew/etc/grc.zsh
 
@@ -152,18 +122,16 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-# switch group using `,` and `.`
-zstyle ':fzf-tab:*' switch-group ',' '.'
-
-# ------- znap end --------
+# # disable sort when completing `git checkout`
+# zstyle ':completion:*:git-checkout:*' sort false
+# # set descriptions format to enable group support
+# zstyle ':completion:*:descriptions' format '[%d]'
+# # set list-colors to enable filename colorizing
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# # preview directory's content with exa when completing cd
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# # switch group using `,` and `.`
+# zstyle ':fzf-tab:*' switch-group ',' '.'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

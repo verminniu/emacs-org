@@ -1,0 +1,26 @@
+zmodule romkatv/powerlevel10k --use degit
+zmodule marlonrichert/zsh-autocomplete
+zmodule zsh-users/zsh-completions --fpath src
+zmodule completion
+zmodule zsh-users/zsh-autosuggestions
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule Aloxaf/fzf-tab
+
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+
+zmodule unixorn/fzf-zsh-plugin
+zmodule zimfw/fzf
+zmodule unixorn/git-extra-commands
+zmodule yuki-yano/zeno.zsh
+zmodule sorin-ionescu/prezto --root modules/command-not-found
+zmodule sorin-ionescu/prezto --root modules/gnu-utility
+zmodule ohmyzsh/ohmyzsh --root plugins/git
