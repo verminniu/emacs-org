@@ -404,7 +404,7 @@ use Hydra for some keybinds
             (t . (1.1))))
 
     ;; Load the theme files before enabling a theme
-    (load-theme 'modus-operandi-tinted :no-confirm)
+    (load-theme 'modus-vivendi-tinted :no-confirm)
     )
 
   (defvar my-rainbow-region-colors
