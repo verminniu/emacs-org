@@ -387,7 +387,7 @@ space-theme
   (use-package spacemacs-theme
     :ensure t
     :config
-    (load-theme 'spaceemacs-dark :no-confirm))
+    (load-theme 'spacemacs-dark :no-confirm))
 
   (use-package spaceline-all-the-icons
     :after spaceline
