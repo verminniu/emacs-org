@@ -352,13 +352,59 @@ use Hydra for some keybinds
 *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
 [[#Icons][all-the-icons]].
 
+#+begin_src emacs-lisp :tangle no
+  (use-package ewal
+    :init (setq ewal-use-built-in-always-p nil
+                ewal-use-built-in-on-failure-p t
+                ewal-built-in-palette "sexy-material"))
+  (use-package ewal-spacemacs-themes
+    :init (progn
+            (setq spacemacs-theme-underline-parens t
+                  my:rice:font (font-spec
+                                :family "IntoneMono Nerd Font Mono"
+                                :weight 'semi-bold
+                                :size 11.0))
+            (show-paren-mode +1)
+            (global-hl-line-mode)
+            (set-frame-font my:rice:font nil t)
+            (add-to-list  'default-frame-alist
+                          `(font . ,(font-xlfd-name my:rice:font))))
+    :config (progn
+              (load-theme 'ewal-spacemacs-modern t)
+              (enable-theme 'ewal-spacemacs-modern)))
+  (use-package ewal-evil-cursors
+    :after (ewal-spacemacs-themes)
+    :config (ewal-evil-cursors-get-colors
+             :apply t :spaceline t))
+  (use-package spaceline
+    :after (ewal-evil-cursors winum)
+    :init (setq powerline-default-separator nil)
+    :config (spaceline-spacemacs-theme))
+#+end_src
+
+space-theme
 #+begin_src emacs-lisp :tangle yes
+  (use-package spacemacs-theme
+    :ensure t
+    :config
+    (load-theme 'spaceemacs-dark :no-confirm))
+
+  (use-package spaceline-all-the-icons
+    :after spaceline
+    :config (spaceline-all-the-icons-theme))
+
+#+end_src
+
+doom modeline
+#+begin_src emacs-lisp :tangle no
   (use-package doom-modeline
     :ensure t
     :hook (after-init . doom-modeline-mode))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+
+modus-theme
+#+begin_src emacs-lisp :tangle no
   (use-package modus-themes
     :ensure t
     :demand t
