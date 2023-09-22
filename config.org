@@ -389,10 +389,13 @@ space-theme
     :config
     (load-theme 'spacemacs-dark :no-confirm))
 
+  (use-package spaceline
+    :after spacemacs-theme
+    :config (spaceline-spacemacs-theme))
+
   (use-package spaceline-all-the-icons
     :after spaceline
     :config (spaceline-all-the-icons-theme))
-
 #+end_src
 
 doom modeline
