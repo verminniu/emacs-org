@@ -2502,6 +2502,8 @@ Try emr
     (require 'org-tempo)
     ;; shifttab when open org files
     (add-hook 'org-mode-hook (lambda () (org-shifttab)))
+    ;; org 模式打开自动换行
+    (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
     ;; For hydra
     (defun hot-expand (str &optional mod)
       "Expand org template.
