@@ -382,7 +382,7 @@ use Hydra for some keybinds
     :config (spaceline-spacemacs-theme))
 #+end_src
 
-space-theme
+spacemacs-theme
 #+begin_src emacs-lisp :tangle yes
   (use-package spacemacs-theme
     :ensure t
