@@ -1,7 +1,10 @@
 zmodule romkatv/powerlevel10k --use degit
 zmodule marlonrichert/zsh-autocomplete
 zmodule zsh-users/zsh-completions --fpath src
+
 zmodule completion
+zmodule fzf
+
 zmodule zsh-users/zsh-autosuggestions
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule Aloxaf/fzf-tab
@@ -18,9 +21,10 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
 zmodule unixorn/fzf-zsh-plugin
-zmodule zimfw/fzf
 zmodule unixorn/git-extra-commands
 zmodule yuki-yano/zeno.zsh
-zmodule sorin-ionescu/prezto --root modules/command-not-found
-zmodule sorin-ionescu/prezto --root modules/gnu-utility
+zmodule sorin-ionescu/prezto --root modules/command-not-found --no-submodules
+zmodule sorin-ionescu/prezto --root modules/gnu-utility --no-submodules
 zmodule ohmyzsh/ohmyzsh --root plugins/git
+
+zmodule DarrinTisdale/zsh-aliases-exa
