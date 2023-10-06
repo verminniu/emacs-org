@@ -5,7 +5,7 @@ zmodule zsh-users/zsh-completions --fpath src
 zmodule completion
 zmodule fzf
 
-zmodule skywind3000/z.lua --cmd 'eval "$(lua {}/z.lua --init zsh enhanced once)"'
+zmodule skywind3000/z.lua --cmd 'eval "$(lua {}/z.lua --init zsh enhanced once fzf)"'
 zmodule zsh-users/zsh-autosuggestions
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule Aloxaf/fzf-tab
