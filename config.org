@@ -263,6 +263,10 @@ use fullcreen on mac os, and use alt instead cmd
       (message "Microsoft Windows")))
    ((string-equal system-type "darwin") ; Mac OS X
     (progn
+      (make-directory "~/.emacs_backups/" t)
+      (make-directory "~/.emacs_autosave/" t)
+      (setq auto-save-file-name-transforms '((".*" "~/.emacs_autosave/" t)))
+      (setq backup-directory-alist '(("." . "~/.emacs_backups/")))
       (setq mac-command-modifier 'control)
       (setq mac-option-modifier 'meta)
       (scroll-bar-mode -1)
@@ -271,6 +275,10 @@ use fullcreen on mac os, and use alt instead cmd
       ))
    ((string-equal system-type "gnu/linux") ; linux
     (progn
+      (make-directory "~/.emacs_backups/" t)
+      (make-directory "~/.emacs_autosave/" t)
+      (setq auto-save-file-name-transforms '((".*" "~/.emacs_autosave/" t)))
+      (setq backup-directory-alist '(("." . "~/.emacs_backups/")))
       (message "Linux"))))
 #+END_SRC
 
