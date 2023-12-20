@@ -105,6 +105,7 @@
   - [[#org-sidebar][Org sidebar]]
   - [[#org-superstar][Org Superstar]]
   - [[#org-modern][Org modern]]
+  - [[#org-tag-beautify][Org tag beautify]]
   - [[#org-super-agenda][Org Super Agenda]]
   - [[#org-valign][Org Valign]]
   - [[#calfw][Calfw]]
@@ -2558,10 +2559,12 @@ Try emr
 ** Org bullets
 Show org-mode bullets as UTF-8 characters.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package org-bullets
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+    :custom
+    (org-bullets-bullet-list '("◉" "☯" "○" "☯" "✸" "☯" "✿" "☯" "✜" "☯" "◆" "☯" "▶"))
+    (org-ellipsis "⤵")
+    :hook (org-mode . org-bullets-mode))
 
   (use-package org-fancy-priorities
     :ensure t
@@ -2647,13 +2650,12 @@ try org modern
     :hook
     (org-mode . org-modern-mode)
     (org-agenda-finalize . org-modern-agenda))
-
-  (use-package org-bullets-mode
-    :ensure org-bullets
-    :config
-    :hook org-mode)
-
-
+#+end_src
+** Org tag beautify
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-tag-beautify
+  :ensure t
+  :init (org-tag-beautify-mode 1))
 #+end_src
 ** Org Super Agenda
 #+begin_src emacs-lisp :tangle yes
