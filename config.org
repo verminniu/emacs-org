@@ -713,6 +713,7 @@ https://github.com/universal-ctags/citre
            (typescript-mode . lsp-deferred)
            (js-mode . lsp-deferred)
            (lua-mode . lsp-deferred)
+           (sh-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration)
            )
     :bind (:map lsp-mode-map
