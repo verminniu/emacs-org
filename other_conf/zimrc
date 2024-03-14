@@ -2,13 +2,15 @@ zmodule romkatv/powerlevel10k --use degit
 zmodule marlonrichert/zsh-autocomplete
 zmodule zsh-users/zsh-completions --fpath src
 
-zmodule completion
+# zmodule completion
 zmodule fzf
 
-zmodule skywind3000/z.lua --cmd 'eval "$(lua {}/z.lua --init zsh enhanced once fzf)"'
+# zmodule skywind3000/z.lua --cmd 'eval "$(lua {}/z.lua --init zsh)"'
+zmodule agkozak/zsh-z
 zmodule zsh-users/zsh-autosuggestions
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule Aloxaf/fzf-tab
+zmodule z-shell/zsh-eza
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
@@ -27,5 +29,3 @@ zmodule yuki-yano/zeno.zsh
 zmodule sorin-ionescu/prezto --root modules/command-not-found --no-submodules
 zmodule sorin-ionescu/prezto --root modules/gnu-utility --no-submodules
 zmodule ohmyzsh/ohmyzsh --root plugins/git
-
-zmodule DarrinTisdale/zsh-aliases-exa
