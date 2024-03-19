@@ -4,6 +4,14 @@ local wezterm = require("wezterm")
 -- This table will hold the configuration.
 local config = {}
 
+function scheme_for_appearance(appearance)
+	if appearance:find "Dark" then
+	  return "Catppuccin Mocha"
+	else
+	  return "Catppuccin Latte"
+	end
+end
+
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
 if wezterm.config_builder then
@@ -14,7 +22,8 @@ end
 
 -- For example, changing the color scheme:
 -- config.color_scheme = "AdventureTime"
-config.color_scheme = "seoulbones_dark"
+config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
+
 -- config.font = wezterm.font "JetBrainsMono Nerd Font"
 config.font = wezterm.font_with_fallback({ "JetBrainsMono Nerd Font", "LXGWWenKaiMono" })
 
