@@ -1324,6 +1324,7 @@ C-c C-d: Decrement the number at point
 #+begin_src emacs-lisp :tangle yes
   (use-package json-mode)
   (use-package json-navigator)
+  (use-package jmespath)
 #+end_src
 
 ** JavaScript/TypeScript
