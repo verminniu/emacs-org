@@ -44,7 +44,6 @@
   - [[#c][C++]]
   - [[#java][Java]]
   - [[#groovy][Groovy]]
-  - [[#shell-1][Shell]]
   - [[#markdown][Markdown]]
   - [[#go][GO]]
   - [[#protobuf][Protobuf]]
@@ -918,6 +917,20 @@ add shell support
     )
 #+end_src
 
+add shell check
+#+begin_src emacs-lisp :tangle yes
+(use-package flymake-shellcheck
+  :commands flymake-shellcheck-load
+  :init
+  (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
+#+end_src
+
+Use lsp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; npm i -g bash-language-server
+#+END_SRC
+
+
 ** Common Lisp -- slime
 common lisp env
 #+begin_src emacs-lisp :tangle yes
@@ -1122,11 +1135,6 @@ lsp-java 改lsp目录，这里为其他java相关配置
   (use-package groovy-imports)
 #+end_src
 
-** Shell
-Use lsp
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; npm i -g bash-language-server
-#+END_SRC
 ** Markdown
 Grip use github api Need github account try other
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -1325,6 +1333,7 @@ C-c C-d: Decrement the number at point
   (use-package json-mode)
   (use-package json-navigator)
   (use-package jmespath)
+  (use-package x-path-walker)
 #+end_src
 
 ** JavaScript/TypeScript
