@@ -662,7 +662,7 @@ https://github.com/universal-ctags/citre
   (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project)
   (use-package eglot
     :ensure t
@@ -673,32 +673,38 @@ https://github.com/universal-ctags/citre
     (add-hook 'c++-mode-hook 'eglot-ensure)
     (add-hook 'python-mode-hook 'eglot-ensure)
     (add-hook 'go-mode-hook 'eglot-ensure)
+    (add-hook 'lua-mode-hook 'eglot-ensure)
+    (add-hook 'sh-mode-hook 'eglot-ensure)
     (add-hook 'java-mode-hook 'eglot-ensure)
     (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
     (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
     (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
 
+
   (use-package consult-eglot
     :after consult)
+
+  (use-package consult-eglot-embark
+    :after consult-eglot)
 #+END_SRC
 
 **** java
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package eglot-java
-  :config
-  (add-hook 'java-mode-hook 'eglot-java-mode)
-  (add-hook 'eglot-java-mode-hook (lambda ()
-                                    (define-key eglot-java-mode-map (kbd "C-c l n") #'eglot-java-file-new)
-                                    (define-key eglot-java-mode-map (kbd "C-c l x") #'eglot-java-run-main)
-                                    (define-key eglot-java-mode-map (kbd "C-c l t") #'eglot-java-run-test)
-                                    (define-key eglot-java-mode-map (kbd "C-c l N") #'eglot-java-project-new)
-                                    (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
-                                    (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh))))
+    :config
+    (add-hook 'java-mode-hook 'eglot-java-mode)
+    (with-eval-after-load 'eglot-java
+      (define-key eglot-java-mode-map (kbd "C-c l n") #'eglot-java-file-new)
+      (define-key eglot-java-mode-map (kbd "C-c l x") #'eglot-java-run-main)
+      (define-key eglot-java-mode-map (kbd "C-c l t") #'eglot-java-run-test)
+      (define-key eglot-java-mode-map (kbd "C-c l N") #'eglot-java-project-new)
+      (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
+      (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh)))
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -757,7 +763,7 @@ https://github.com/universal-ctags/citre
     :functions dap-hydra/nil
     :bind (:map lsp-mode-map
                 ("<f5>" . dap-debug)
-                ("M-<f5>" . dap-hydra))
+                ;; ("M-<f5>" . dap-hydra))
     :config
     (setq dap-python-executable "python3")
     (dap-auto-configure-mode)
@@ -826,7 +832,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 
 **** lsp-python
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; sudo npm install -g pyright
   ;; sudo npm update -g pyright
   (use-package lsp-pyright
@@ -929,7 +935,6 @@ Use lsp
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; npm i -g bash-language-server
 #+END_SRC
-
 
 ** Common Lisp -- slime
 common lisp env
@@ -1331,6 +1336,7 @@ C-c C-d: Decrement the number at point
 
 #+begin_src emacs-lisp :tangle yes
   (use-package json-mode)
+  (use-package json-navigator)
   (use-package json-navigator)
   (use-package jmespath)
   (use-package x-path-walker)
