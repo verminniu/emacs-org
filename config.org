@@ -106,6 +106,7 @@
   - [[#org-modern][Org modern]]
   - [[#org-tag-beautify][Org tag beautify]]
   - [[#org-super-agenda][Org Super Agenda]]
+  - [[#org-appear][Org appear]]
   - [[#org-valign][Org Valign]]
   - [[#calfw][Calfw]]
   - [[#org-timeline][Org Timeline]]
@@ -675,7 +676,7 @@ https://github.com/universal-ctags/citre
     (add-hook 'go-mode-hook 'eglot-ensure)
     (add-hook 'lua-mode-hook 'eglot-ensure)
     (add-hook 'sh-mode-hook 'eglot-ensure)
-    (add-hook 'java-mode-hook 'eglot-ensure)
+    ;; (add-hook 'java-mode-hook 'eglot-ensure)
     (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
     (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
     (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
@@ -687,10 +688,14 @@ https://github.com/universal-ctags/citre
 
   (use-package consult-eglot-embark
     :after consult-eglot)
+
+  (use-package flycheck-eglot
+    :config
+    (global-flycheck-eglot-mode 1))
 #+END_SRC
 
 **** java
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package eglot-java
     :config
     (add-hook 'java-mode-hook 'eglot-java-mode)
@@ -2681,6 +2686,12 @@ try org modern
     (org-super-agenda-mode))
 #+end_src
 
+** Org appear
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-appear
+    :hook
+    (org-mode . org-appear-mode))
+#+end_src
 ** Org Valign
 #+begin_src emacs-lisp :tangle no
   (use-package valign
