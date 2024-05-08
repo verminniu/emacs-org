@@ -344,7 +344,6 @@ use Hydra for some keybinds
               ;; when it is nil, exec-path-from-shell will read environment variable
               ;; from .zshenv instead of .zshrc, but makes sure that you put all
               ;; environment variable you need in .zshenv rather than .zshrc
-              (setq exec-path-from-shell-check-startup-files nil) ;
               (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
               (exec-path-from-shell-initialize)
               )
@@ -504,32 +503,32 @@ completion candidates.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package company
-      :defer 0.5
-      :delight
-      :init
-      (add-hook 'after-init-hook 'global-company-mode)
-      :custom
-      (company-begin-commands '(self-insert-command))
-      (company-idle-delay .1)
-      (company-dabbrev-ignore-case t)
-      (company-minimum-prefix-length 1)
-      (company-show-numbers t)
-      (company-tooltip-align-annotations 't)
-      (global-company-mode t)
-      :config
-      (define-key company-active-map (kbd "C-n") 'company-select-next)
-      (define-key company-active-map (kbd "C-p") 'company-select-previous)
-      ;;	(delete 'company-dabbrev 'company-backends)
-      ;;	(add-to-list 'company-backends #'company-dabbrev)
-      (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
-      (setq company-dabbrev-code-other-buffers 'all)
-      (setq completion-ignore-case t)
-      ;; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
-      (setq company-dabbrev-downcase nil)
-      ;; 合并capf 和dabbrev
-      (add-to-list 'company-backends '(company-capf :with company-dabbrev))
-      )
+  (use-package company
+    :defer 0.5
+    :delight
+    :init
+    (add-hook 'after-init-hook 'global-company-mode)
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .1)
+    (company-dabbrev-ignore-case t)
+    (company-minimum-prefix-length 1)
+    (company-show-numbers t)
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t)
+    :config
+    (define-key company-active-map (kbd "C-n") 'company-select-next)
+    (define-key company-active-map (kbd "C-p") 'company-select-previous)
+    ;;	(delete 'company-dabbrev 'company-backends)
+    ;;	(add-to-list 'company-backends #'company-dabbrev)
+    ;; (setq company-dabbrev-char-regexp "[\\.0-9a-zA-Z-_'/]")
+    ;; (setq company-dabbrev-code-other-buffers 'all)
+    (setq completion-ignore-case t)
+    ;; company在纯文本的时候使用dabbrev做后端，会默认开启downcase，然后补全都会变成小写
+    ;; (setq company-dabbrev-downcase nil)
+    ;; 合并capf 和dabbrev
+    (add-to-list 'company-backends '(company-capf :with company-dabbrev))
+    )
 
 
 
@@ -588,7 +587,7 @@ Use build.sh to compile project with build.sh
     (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
     (projectile-register-project-type 'build-proj '("build.sh")
                                       :compile "./build.sh")
-    (projectile-global-mode))
+    (projectile-mode))
 
   (use-package counsel-projectile
     :after (counsel projectile)
@@ -2669,12 +2668,40 @@ try org modern
      '(;; (?- . "-")
        (?* . "•")
        (?+ . "‣")))
-    :hook
-    (org-mode . org-modern-mode)
-    (org-agenda-finalize . org-modern-agenda))
+    :config
+    (with-eval-after-load 'org (global-org-modern-mode))
+    (setq
+     ;; Edit settings
+     org-auto-align-tags nil
+     org-tags-column 0
+     org-fold-catch-invisible-edits 'show-and-error
+     org-special-ctrl-a/e t
+     org-insert-heading-respect-content t
+
+     ;; Org styling, hide markup etc.
+     org-hide-emphasis-markers t
+     org-pretty-entities t
+
+     ;; Agenda styling
+     org-agenda-tags-column 0
+     org-agenda-block-separator ?─
+     org-agenda-time-grid
+     '((daily today require-timed)
+       (800 1000 1200 1400 1600 1800 2000)
+       " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+     org-agenda-current-time-string
+     "◀── now ─────────────────────────────────────────────────")
+
+    ;; Ellipsis styling
+    (setq org-ellipsis "…")
+    (set-face-attribute 'org-ellipsis nil :inherit 'default :box nil))
+
+  ;; :hook
+  ;; (org-mode . org-modern-mode)
+  ;; (org-agenda-finalize . org-modern-agenda))
 #+end_src
 ** Org tag beautify
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package org-tag-beautify
   :ensure t
   :init (org-tag-beautify-mode 1))
