@@ -2693,7 +2693,7 @@ try org modern
      "◀── now ─────────────────────────────────────────────────")
 
     ;; Ellipsis styling
-    (setq org-ellipsis "…")
+    ;; (setq org-ellipsis "…")
     (set-face-attribute 'org-ellipsis nil :inherit 'default :box nil))
 
   ;; :hook
