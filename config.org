@@ -662,7 +662,7 @@ https://github.com/universal-ctags/citre
   (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package project)
   (use-package eglot
     :ensure t
@@ -708,7 +708,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
@@ -836,7 +836,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 
 **** lsp-python
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; sudo npm install -g pyright
   ;; sudo npm update -g pyright
   (use-package lsp-pyright
@@ -2680,6 +2680,7 @@ try org modern
 
      ;; Org styling, hide markup etc.
      org-hide-emphasis-markers t
+     ;; 下面这个开启以后，会按公式显示 a_b 这种展示为下标
      ;; org-pretty-entities t
 
      ;; Agenda styling
