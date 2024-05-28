@@ -767,7 +767,7 @@ https://github.com/universal-ctags/citre
     :functions dap-hydra/nil
     :bind (:map lsp-mode-map
                 ("<f5>" . dap-debug)
-                ;; ("M-<f5>" . dap-hydra))
+                ("M-<f5>" . dap-hydra))
     :config
     (setq dap-python-executable "python3")
     (dap-auto-configure-mode)
@@ -1123,9 +1123,7 @@ disable cquery and ccls to use clangd as lsp server
 
 #+BEGIN_SRC  emacs-lisp :tangle yes
   (use-package modern-cpp-font-lock
-    :diminish
-    :init (modern-c++-font-lock-global-mode t)
-    )
+    :ensure t)
 #+END_SRC
 
 ** Java
@@ -1340,7 +1338,6 @@ C-c C-d: Decrement the number at point
 
 #+begin_src emacs-lisp :tangle yes
   (use-package json-mode)
-  (use-package json-navigator)
   (use-package json-navigator)
   (use-package jmespath)
   (use-package x-path-walker)
