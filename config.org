@@ -303,7 +303,8 @@ I also made sure to follow the XDG base directory specification for the
   ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font"))
   ;; (set-face-attribute 'default t :font "JetBrainsMono Nerd Font")
 
-  (set-fontset-font t 'latin (font-spec :family "IntelOne Mono"))
+  ;; (set-fontset-font t 'latin (font-spec :family "IntelOne Mono"))
+  (set-fontset-font t 'latin (font-spec :family "Cascadia Mono NF"))
   (set-fontset-font t 'han (font-spec :family "霞鹜文楷" :weight 'bold))
   (set-fontset-font t 'kana (font-spec :family "Sarasa Gothic J" :weight 'normal :slant 'normal))
 
@@ -338,7 +339,7 @@ use Hydra for some keybinds
   ;; make Emacs use the $PATH set up by the user's shell
   (use-package exec-path-from-shell
     :ensure t
-    :init (progn
+    :config (progn
             (when(not(eq system-type 'windows-nt))
               (setq exec-path-from-shell-variables '("PATH" "PYTHONPATH" "GOPATH" "JAVA_HOME" "GROOVY_HOME" "GRADLE_HOME" "GRADLE_USER_HOME"))
               ;; when it is nil, exec-path-from-shell will read environment variable
@@ -349,12 +350,6 @@ use Hydra for some keybinds
               )
             )
     )
-
-  ;;   (use-package exec-path-from-shell
-  ;;     :init
-  ;;     (setq exec-path-from-shell-check-startup-files nil)
-  ;;     (exec-path-from-shell-initialize)
-  ;;   )
 #+END_SRC
 ** Theme
 *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
@@ -362,22 +357,22 @@ use Hydra for some keybinds
 
 #+begin_src emacs-lisp :tangle no
   (use-package ewal
-    :init (setq ewal-use-built-in-always-p nil
+    :config (setq ewal-use-built-in-always-p nil
                 ewal-use-built-in-on-failure-p t
                 ewal-built-in-palette "sexy-material"))
   (use-package ewal-spacemacs-themes
-    :init (progn
-            (setq spacemacs-theme-underline-parens t
-                  my:rice:font (font-spec
-                                :family "IntoneMono Nerd Font Mono"
-                                :weight 'semi-bold
-                                :size 11.0))
-            (show-paren-mode +1)
-            (global-hl-line-mode)
-            (set-frame-font my:rice:font nil t)
-            (add-to-list  'default-frame-alist
-                          `(font . ,(font-xlfd-name my:rice:font))))
+    :init (use-package spacemacs-theme)
     :config (progn
+              (setq spacemacs-theme-underline-parens t
+                    my:rice:font (font-spec
+                                  :family "Cascadia Mono NF"
+                                  :weight 'semi-bold
+                                  :size 11.0))
+              (show-paren-mode +1)
+              (global-hl-line-mode)
+              (set-frame-font my:rice:font nil t)
+              (add-to-list  'default-frame-alist
+                            `(font . ,(font-xlfd-name my:rice:font)))
               (load-theme 'ewal-spacemacs-modern t)
               (enable-theme 'ewal-spacemacs-modern)))
   (use-package ewal-evil-cursors
@@ -386,12 +381,13 @@ use Hydra for some keybinds
              :apply t :spaceline t))
   (use-package spaceline
     :after (ewal-evil-cursors winum)
-    :init (setq powerline-default-separator nil)
-    :config (spaceline-spacemacs-theme))
+    :config
+    (setq powerline-default-separator nil)
+    (spaceline-spacemacs-theme))
 #+end_src
 
 spacemacs-theme
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package spacemacs-theme
     :ensure t
     :config
@@ -415,7 +411,7 @@ doom modeline
 
 
 modus-theme
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package modus-themes
     :ensure t
     :demand t
@@ -506,8 +502,6 @@ completion candidates.
   (use-package company
     :defer 0.5
     :delight
-    :init
-    (add-hook 'after-init-hook 'global-company-mode)
     :custom
     (company-begin-commands '(self-insert-command))
     (company-idle-delay .1)
@@ -517,6 +511,7 @@ completion candidates.
     (company-tooltip-align-annotations 't)
     (global-company-mode t)
     :config
+    (add-hook 'after-init-hook 'global-company-mode)
     (define-key company-active-map (kbd "C-n") 'company-select-next)
     (define-key company-active-map (kbd "C-p") 'company-select-previous)
     ;;	(delete 'company-dabbrev 'company-backends)
@@ -606,7 +601,7 @@ https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
 ** FlyCheck
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck
-    :init
+    :config
     (global-flycheck-mode)
     )
 #+END_SRC
@@ -624,8 +619,7 @@ https://github.com/universal-ctags/citre
 #+begin_src emacs-lisp :tangle yes
   (use-package citre
     :defer t
-    :init
-    ;; This is needed in `:init' block for lazy load to work.
+    :config
     (require 'citre-config)
     ;; Bind your frequently used commands.  Alternatively, you can define them
     ;; in `citre-mode-map' so you can only use them when `citre-mode' is enabled.
@@ -633,7 +627,6 @@ https://github.com/universal-ctags/citre
     (global-set-key (kbd "C-x c J") 'citre-jump-back)
     (global-set-key (kbd "C-x c p") 'citre-ace-peek)
     (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
-    :config
     (setq
      ;; Set these if readtags/ctags is not in your path.
      ;; citre-readtags-program "/path/to/readtags"
@@ -727,8 +720,8 @@ https://github.com/universal-ctags/citre
            )
     :bind (:map lsp-mode-map
                 ("C-c C-d" . lsp-describe-thing-at-point))
-    :init (setq lsp-auto-guess-root t)       ; Detect project root
     :config
+    (setq lsp-auto-guess-root t)       ; Detect project root
     ;; (setq lsp-keymap-prefix "C-c l")
     (setq lsp-semantic-tokens-enable t)
     (setq lsp-semantic-token-faces
@@ -792,9 +785,9 @@ https://github.com/universal-ctags/citre
     :commands lsp-treemacs-errors-list
     )
 
-  ;;   (use-package company-lsp
-  ;;     :config (push 'company-lsp company-backends)
-  ;;     )
+;;  (use-package company-lsp
+;;    :config (push 'company-lsp company-backends)
+;;    )
 
   (use-package lsp-ivy
     :commands lsp-ivy-workspace-symbol
@@ -931,7 +924,7 @@ add shell check
 #+begin_src emacs-lisp :tangle yes
 (use-package flymake-shellcheck
   :commands flymake-shellcheck-load
-  :init
+  :config
   (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
 #+end_src
 
@@ -1028,7 +1021,7 @@ Yaml mode support
 
   (use-package flycheck-yamllint
     :after flycheck
-    :init
+    :config
     (add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup)
     )
 
@@ -1160,7 +1153,7 @@ Grip use github api Need github account try other
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
+    :config (setq markdown-command "multimarkdown"))
 
 #+END_SRC
 
@@ -1601,16 +1594,16 @@ find.
   (use-package all-the-icons-ivy-rich
     :ensure t
     :after (projectile ibuffer ibuffer-projectile)
-    :init (all-the-icons-ivy-rich-mode 1))
+    :config (all-the-icons-ivy-rich-mode 1))
 
   (use-package all-the-icons-ibuffer
     :after (projectile ibuffer ibuffer-projectile)
     :ensure t
-    :init (all-the-icons-ibuffer-mode 1))
+    :config (all-the-icons-ibuffer-mode 1))
 
   (use-package ivy-rich
     :ensure t
-    :init (ivy-rich-mode 1))
+    :config (ivy-rich-mode 1))
 #+end_src
 ** Dashboard
 
@@ -1820,7 +1813,7 @@ radical function, it is part of a good user experience.
 Use Whick-key to help
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package which-key
-    :init
+    :config
     (which-key-mode)
     )
 #+END_SRC
@@ -1869,8 +1862,6 @@ smaller, simpler, and smoother to use yet highly customizable.
 
   (use-package ivy
     :delight
-    :init
-    (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
     :defer 0.1
     :bind (("C-x b" . ivy-switch-buffer)
            ("C-x B" . ivy-switch-buffer-other-window)
@@ -1885,7 +1876,9 @@ smaller, simpler, and smoother to use yet highly customizable.
     (ivy-count-format "(%d/%d) ")
     (ivy-re-builders-alist '((t . ivy--regex-plus)))
     (ivy-use-virtual-buffers t)
-    :config (ivy-mode))
+    :config
+    (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+    (ivy-mode))
 
   (use-package ivy-pass
     :after ivy
@@ -1940,12 +1933,12 @@ smaller, simpler, and smoother to use yet highly customizable.
     ;; Recommended: Enable Corfu globally.
     ;; This is recommended since Dabbrev can be used globally (M-/).
     ;; See also `corfu-excluded-modes'.
-    :init
+    :config
     (global-corfu-mode))
 
   ;; A few more useful configurations...
   (use-package emacs
-    :init
+    :config
     ;; TAB cycle if there are only few candidates
     (setq completion-cycle-threshold 3)
 
@@ -1969,7 +1962,7 @@ smaller, simpler, and smoother to use yet highly customizable.
 
   ;; Optionally use the `orderless' completion style.
   (use-package orderless
-    :init
+    :config
     ;; Configure a custom style dispatcher (see the Consult wiki)
     ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
     ;;       orderless-component-separator #'orderless-escapable-split-on-space)
@@ -1997,7 +1990,7 @@ smaller, simpler, and smoother to use yet highly customizable.
            ("C-c p ^" . cape-tex)
            ("C-c p &" . cape-sgml)
            ("C-c p r" . cape-rfc1345))
-    :init
+    :config
     ;; Add `completion-at-point-functions', used by `completion-at-point'.
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
@@ -2085,13 +2078,13 @@ parenthesis. Anyway, if you don't like it, you can try taking a look at
 =paredit= or =autopair=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package smartparens
-    :defer 1
-    :delight
-    :init
-    (require 'smartparens-config)
-    :custom (sp-escape-quotes-after-insert nil)
-    :config (smartparens-global-mode 1))
+   (use-package smartparens
+     :defer 1
+     :delight
+     :custom (sp-escape-quotes-after-insert nil)
+     :config
+     (require 'smartparens-config)
+     (smartparens-global-mode 1))
 #+END_SRC
 
 ** Recent Files
@@ -2101,7 +2094,6 @@ Provides fast access to the recent files.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package recentf
     :bind ("C-c r" . recentf-open-files)
-    :init (recentf-mode)
     :custom
     (recentf-exclude (list "COMMIT_EDITMSG"
                            "~$"
@@ -2112,7 +2104,9 @@ Provides fast access to the recent files.
     (recentf-max-menu-items 15)
     (recentf-max-saved-items 200)
     (recentf-save-file (expand-file-name (format "~/.emacs.d/cache/recentf")))
-    :config (run-at-time nil (* 5 60) 'recentf-save-list))
+    :config
+    (recentf-mode)
+    (run-at-time nil (* 5 60) 'recentf-save-list))
 #+END_SRC
 
 ** Version Control
@@ -2145,7 +2139,7 @@ Git clients exist, only Magit and Git itself deserve to be called porcelains.
   (use-package magit :defer 0.3)
 
   (use-package hl-todo
-    :init
+    :config
     (add-hook 'after-init-hook 'global-hl-todo-mode)
     )
 
@@ -2161,7 +2155,7 @@ while it is being edited.
   (use-package git-gutter
     :defer 0.3
     :delight
-    :init (global-git-gutter-mode +1))
+    :config (global-git-gutter-mode +1))
 #+END_SRC
 
 Finally, one last package that I like to use with Git to easily see the changes
@@ -2214,11 +2208,10 @@ and automatically expand it into function templates.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
     :defer t
-    ;; :after lsp-mode
-    :init
-    ;;(add-hook 'prog-mode-hook 'yas-minor-mode)
-    (yas-global-mode 1)
-    )
+    :after lsp-mode
+    :config
+    (add-hook 'prog-mode-hook 'yas-minor-mode)
+    (yas-global-mode 1))
 
   (use-package yasnippet-snippets
     :after yasnippet
@@ -2231,9 +2224,8 @@ and automatically expand it into function templates.
 ** Number Window
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package window-numbering			;
-    :init
-    (window-numbering-mode 1)
     :config
+    (window-numbering-mode 1)
     (setq window-numbering-assign-func
           (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
     )
@@ -2249,7 +2241,7 @@ and automatically expand it into function templates.
 ** Syntax subword
 #+begin_src emacs-lisp :tangle yes
   (use-package syntax-subword
-    :init
+    :config
     (global-syntax-subword-mode)
     )
 #+end_src
@@ -2258,9 +2250,8 @@ and automatically expand it into function templates.
 #+BEGIN_SRC emacs-lisp :tangle no
   use easy-kill to install this
   (use-package whole-line-or-region
-    :init
-    (whole-line-or-region-global-mode)
-    )
+    :config
+    (whole-line-or-region-global-mode))
 #+END_SRC
 
 ** Ediff
@@ -2299,7 +2290,7 @@ and automatically expand it into function templates.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package diff-hl
-    :init
+    :config
     (global-diff-hl-mode)
     )
 
@@ -2324,7 +2315,7 @@ hight light symbol in different color
 ** Smex
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smex
-    :init
+    :config
     (smex-initialize)
     ;;    :bind (("M-x" . smex)
     ;;	       ("M-X" . smex-major-mode-commands)
@@ -2402,10 +2393,9 @@ Try emr
     (use-package treemacs
     :ensure t
     :defer t
-    :init
+    :config
     (with-eval-after-load 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
     (progn
       (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
             treemacs-deferred-git-apply-delay        0.5
@@ -2613,14 +2603,17 @@ Show org-mode bullets as UTF-8 characters.
   (cl-pushnew '(shell . t) load-language-list)
 
   (use-package ob-go
-    :init (cl-pushnew '(go . t) load-language-list))
+    :config
+    (cl-pushnew '(go . t) load-language-list))
 
   (use-package ob-rust
-    :init (cl-pushnew '(rust . t) load-language-list))
+    :config
+    (cl-pushnew '(rust . t) load-language-list))
 
   ;; Use mermadi-cli: npm install -g @mermaid-js/mermaid-cli
   (use-package ob-mermaid
-    :init (cl-pushnew '(mermaid . t) load-language-list))
+    :config
+    (cl-pushnew '(mermaid . t) load-language-list))
 
   (org-babel-do-load-languages 'org-babel-load-languages
                                load-language-list)
@@ -2702,7 +2695,7 @@ try org modern
 #+begin_src emacs-lisp :tangle no
   (use-package org-tag-beautify
   :ensure t
-  :init (org-tag-beautify-mode 1))
+  :config (org-tag-beautify-mode 1))
 #+end_src
 ** Org Super Agenda
 #+begin_src emacs-lisp :tangle yes
@@ -2730,7 +2723,7 @@ try org modern
 #+begin_src emacs-lisp :tangle yes
   (use-package calfw)
   (use-package calfw-org
-    :init
+    :config
     (require 'calfw-org))
 #+end_src
 
@@ -2751,7 +2744,7 @@ try org modern
     (org-pomodoro-mode-line-break ((t (:inherit success))))
     :bind (:map org-mode-map
                 ("C-c C-x m" . org-pomodoro))
-    :init
+    :config
     (with-eval-after-load 'org-agenda
       (bind-keys :map org-agenda-mode-map
                  ("K" . org-pomodoro)
@@ -2824,9 +2817,8 @@ https://www.orgroam.com
            ("C-c C-n i" . org-roam-node-insert)
            ("C-c C-n c" . org-roam-capture)
            ("C-c C-n j" . org-roam-dailies-capture-today))
-    :init
-    (setq org-roam-v2-ack t)
     :config
+    (setq org-roam-v2-ack t)
     (unless (file-exists-p org-roam-directory)
       (make-directory org-roam-directory)))
 #+end_src
