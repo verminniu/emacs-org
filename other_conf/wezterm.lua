@@ -4,6 +4,7 @@ local wezterm = require("wezterm")
 -- This table will hold the configuration.
 local config = {}
 
+-- Mocha, -- or Macchiato, Frappe, Latte
 function scheme_for_appearance(appearance)
 	if appearance:find "Dark" then
 	  return "Catppuccin Mocha"
@@ -25,7 +26,16 @@ end
 config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
 -- config.font = wezterm.font "JetBrainsMono Nerd Font"
-config.font = wezterm.font_with_fallback({ "JetBrainsMono Nerd Font", "LXGWWenKaiMono" })
+-- config.font = wezterm.font_with_fallback({ "JetBrainsMono Nerd Font", "LXGWWenKaiMono" })
+config.font = wezterm.font_with_fallback {
+  {
+    family = 'Cascadia Mono NF',
+    harfbuzz_features = {"zero" , "ss01", "cv05"},
+  },
+  { family = 'Terminus', weight = 'Bold' },
+  'Noto Color Emoji',
+}
+
 
 config.keys = {
 	-- disable ctrl-shift-2 for mark in emacs
