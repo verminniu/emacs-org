@@ -487,6 +487,15 @@ modus-theme
   (add-hook 'diff-mode-hook #'my-rainbow-region-magenta)
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+  (use-package moody
+    :config
+    (setq x-underline-at-descent-line t)
+    (moody-replace-mode-line-buffer-identification)
+    (moody-replace-vc-mode)
+    (moody-replace-eldoc-minibuffer-message-function))
+#+end_src
+
 ** Company
 =company= provides auto-completion at point and to Displays a small pop-in
 containing the candidates.
