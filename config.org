@@ -1788,10 +1788,17 @@ M-w for kill && mark
 find cursor
 #+begin_src emacs-lisp :tangle yes
   (use-package beacon
+    :ensure t
+    :demand t
     :config
-    (beacon-mode 1)
-    )
-
+    ; https://github.com/Malabarba/beacon/issues/46
+    ; the value is compared with >, not >=
+    (setq beacon-blink-when-point-moves-vertically 1)
+    ; disable beacon for horizontal movement
+    (setq beacon-blink-when-point-moves-horizontally 1)
+    ; remove specific symbols from the variable 'beacon-dont-blink-commands
+    (setq beacon-dont-blink-commands '(forward-char backward-char meow-right meow-left))
+    (beacon-mode 1))
 #+end_src
 
 ** Hungry delete
