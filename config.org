@@ -1854,14 +1854,11 @@ find.
 
 *NOTE:* if it's the first time that you install the package, you must run
 =M-x all-the-icons-install-fonts=.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
+*** all-the-icons
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package all-the-icons
     :if (display-graphic-p))
-#+END_SRC
 
-尝试下
-#+begin_src emacs-lisp :tangle yes
   (use-package all-the-icons-ivy-rich
     :ensure t
     :after (projectile ibuffer ibuffer-projectile)
@@ -1874,8 +1871,65 @@ find.
 
   (use-package ivy-rich
     :ensure t
-    :config (ivy-rich-mode 1))
+    :init (ivy-rich-mode 1))
+#+END_SRC
+
+*** nerd-icons
+#+begin_src emacs-lisp :tangle yes
+  (use-package nerd-icons
+    :custom
+    ;; The Nerd Font you want to use in GUI
+    ;; "Symbols Nerd Font Mono" is the default and is recommended
+    ;; but you can use any other Nerd Font if you want
+    ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+    (nerd-icons-font-family "Cascadia Mono NF")
+    )
+
+  (use-package nerd-icons-dired
+    :hook
+    (dired-mode . nerd-icons-dired-mode))
+
+  (use-package nerd-icons-ibuffer
+    :ensure t
+    :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+  (use-package nerd-icons-completion
+    :config
+    (nerd-icons-completion-mode))
+
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+    ;; available in the *Completions* buffer, add it to the
+    ;; `completion-list-mode-map'.
+    :bind (:map minibuffer-local-map
+                ("M-A" . marginalia-cycle))
+
+    ;; The :init section is always executed.
+    :init
+
+    ;; Marginalia must be activated in the :init section of use-package such that
+    ;; the mode gets enabled right away. Note that this forces loading the
+    ;; package.
+    (marginalia-mode))
+
+  (use-package nerd-icons-completion
+    :after marginalia
+    :config
+    (nerd-icons-completion-mode)
+    (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+  (use-package nerd-icons-ivy-rich
+    :ensure t
+    :init
+    (nerd-icons-ivy-rich-mode 1)
+    (ivy-rich-mode 1))
+
+  (use-package ivy-rich
+    :ensure t
+    :init (ivy-rich-mode 1))
 #+end_src
+
 ** Dashboard
 
 Always good to have a dashboard.
@@ -1937,15 +1991,10 @@ For those who didn't know, GNU Emacs is also a file explorer.
     (dired-ls-F-marks-symlinks nil)
     (dired-recursive-copies 'always))
 
-  (use-package all-the-icons-dired
-    :after all-the-icons
-    :config
-    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
-  (use-package treemacs-icons-dired
-    :after treemacs dired
-    :ensure t
-    :config (treemacs-icons-dired-mode))
+  ;; (use-package treemacs-icons-dired
+  ;;   :after treemacs dired
+  ;;   :ensure t
+  ;;   :config (treemacs-icons-dired-mode))
 
   ;; (use-package dired-x
   ;;   ;; Enable dired-omit-mode by default
@@ -2007,7 +2056,7 @@ For those who didn't know, GNU Emacs is also a file explorer.
     :after dired
     :custom
     ;; Feel free to replace `all-the-icons' with `vscode-icon'.
-    (dirvish-attributes '(expanded-state all-the-icons file-size))
+    ;; (dirvish-attributes '(expanded-state all-the-icons file-size))
     ;; Maybe the icons are too big to your eyes
     ;; (dirvish-all-the-icons-height 0.8)
     ;; Go back home? Just press `bh'
@@ -2018,7 +2067,7 @@ For those who didn't know, GNU Emacs is also a file explorer.
     ;;    ("t" "~/.local/share/Trash/files/" "TrashCan")))
     ;; List directories that has over 10000 files asynchronously
     ;; This feature is disabled by default
-    ;; (dirvish-async-listing-threshold 10000)
+    (dirvish-async-listing-threshold 10000)
     :config
     (dirvish-override-dired-mode)
     (dirvish-peek-mode)
