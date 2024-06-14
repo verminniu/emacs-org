@@ -1861,17 +1861,13 @@ find.
 
   (use-package all-the-icons-ivy-rich
     :ensure t
-    :after (projectile ibuffer ibuffer-projectile)
+    :after (projectile ibuffer ibuffer-projectile ivy-rich)
     :config (all-the-icons-ivy-rich-mode 1))
 
   (use-package all-the-icons-ibuffer
     :after (projectile ibuffer ibuffer-projectile)
     :ensure t
     :config (all-the-icons-ibuffer-mode 1))
-
-  (use-package ivy-rich
-    :ensure t
-    :init (ivy-rich-mode 1))
 #+END_SRC
 
 *** nerd-icons
@@ -1921,13 +1917,10 @@ find.
 
   (use-package nerd-icons-ivy-rich
     :ensure t
+    :after ivy-rich
     :init
     (nerd-icons-ivy-rich-mode 1)
     (ivy-rich-mode 1))
-
-  (use-package ivy-rich
-    :ensure t
-    :init (ivy-rich-mode 1))
 #+end_src
 
 ** Dashboard
@@ -2212,13 +2205,13 @@ smaller, simpler, and smoother to use yet highly customizable.
                             ivy-rich-path-style 'abbrev)
     :config (ivy-rich-mode 1))
 
-  (use-package all-the-icons-ivy
-    :after (all-the-icons ivy)
-    :custom (all-the-icons-ivy-buffer-commands '(ivy-switch-buffer-other-window))
-    :config
-    (add-to-list 'all-the-icons-ivy-file-commands 'counsel-dired-jump)
-    (add-to-list 'all-the-icons-ivy-file-commands 'counsel-find-library)
-    (all-the-icons-ivy-setup))
+  ;; (use-package all-the-icons-ivy
+  ;;   :after (all-the-icons ivy)
+  ;;   :custom (all-the-icons-ivy-buffer-commands '(ivy-switch-buffer-other-window))
+  ;;   :config
+  ;;   (add-to-list 'all-the-icons-ivy-file-commands 'counsel-dired-jump)
+  ;;   (add-to-list 'all-the-icons-ivy-file-commands 'counsel-find-library)
+  ;;   (all-the-icons-ivy-setup))
 
   (use-package swiper
     :after ivy
