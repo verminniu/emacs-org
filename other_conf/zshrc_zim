@@ -51,11 +51,17 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 # java
 # gradle
 export GRADLE_USER_HOME="/Users/vermin/.gradle/"
-export GRADLE_HOME="/Users/vermin/code_tools/gradle-4.10.3//"
-export PATH="${GRADLE_HOME}/bin:$PATH"
+
+# gradle 4.10
+export GRADLE_HOME="/Users/vermin/code_tools/gradle-4.10.3/"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/liberica-jdk-8-full.jdk/Contents/Home"
-# export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home"
-export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+
+# gradle 7.3
+# export GRADLE_HOME="/Users/vermin/code_tools/gradle-7.3/"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/liberica-jdk-17-full.jdk/Contents/Home"
+# export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+# export JDK_JAVA_OPTIONS="-server -Xms8G -Xmx20G -XX:ReservedCodeCacheSize=512m -XX:+UseConcMarkSweepGC -XX:SoftRefLRUPolicyMSPerMB=200 -ea -Dsun.io.useCanonCaches=false -Djava.net.preferIPv4Stack=true -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow "
+export PATH="${GRADLE_HOME}/bin:$PATH"
 export PATH="${JAVA_HOME}/bin:$PATH"
 export GROOVY_HOME="/opt/homebrew/opt/groovy/libexec"
 
@@ -130,7 +136,8 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # brew install fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf配置
 # fd替换find，需要先安装fd:
