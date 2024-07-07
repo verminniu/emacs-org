@@ -1,16 +1,19 @@
 zmodule romkatv/powerlevel10k --use degit
-zmodule marlonrichert/zsh-autocomplete
+# zmodule marlonrichert/zsh-autocomplete
+# zmodule zsh-users/zsh-completions --fpath src
+
+zmodule git-info
+zmodule duration-info
 zmodule zsh-users/zsh-completions --fpath src
-
-# zmodule completion
-zmodule fzf
-
-# zmodule skywind3000/z.lua --cmd 'eval "$(lua {}/z.lua --init zsh)"'
-zmodule agkozak/zsh-z
-zmodule zsh-users/zsh-autosuggestions
+# use this for compinit
+zmodule completion
 zmodule zsh-users/zsh-syntax-highlighting
-zmodule Aloxaf/fzf-tab
+zmodule zsh-users/zsh-autosuggestions
+
+zmodule fzf
+zmodule agkozak/zsh-z
 zmodule z-shell/zsh-eza
+
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
