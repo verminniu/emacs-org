@@ -451,7 +451,7 @@ modus-theme
 
     ;; Load the theme files before enabling a theme
     ;; (load-theme 'modus-vivendi-tinted :no-confirm)
-    (load-theme 'modus-operandi-tinted :no-confirm)
+    (load-theme 'modus-operandi-tritanopia :no-confirm)
     )
 
   (defvar my-rainbow-region-colors
@@ -1727,6 +1727,34 @@ for code move
     (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
     )
 
+
+  (use-package mc-extras
+    :after multiple-cursors
+    :config
+    (define-key mc/keymap (kbd "C-. M-C-f") 'mc/mark-next-sexps)
+    (define-key mc/keymap (kbd "C-. M-C-b") 'mc/mark-previous-sexps)
+    (define-key mc/keymap (kbd "C-. <") 'mc/mark-all-above)
+    (define-key mc/keymap (kbd "C-. >") 'mc/mark-all-below)
+
+    (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
+    (define-key mc/keymap (kbd "C-. C-k") 'mc/remove-cursors-at-eol)
+    (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
+    (define-key mc/keymap (kbd "C-. C-o") 'mc/remove-cursors-on-blank-lines)
+
+    (define-key mc/keymap (kbd "C-. .")   'mc/move-to-column)
+    (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
+
+    ;; Emacs 24.4+ comes with rectangle-mark-mode.
+    (define-key rectangle-mark-mode-map (kbd "C-. C-,") 'mc/rect-rectangle-to-multiple-cursors)
+
+    (define-key cua--rectangle-keymap   (kbd "C-. C-,") 'mc/cua-rectangle-to-multiple-cursors)
+    (mc/cua-rectangle-setup))
+
+  (use-package ace-mc
+    :after (multiple-cursors)
+    :config
+    (global-set-key (kbd "C-)") 'ace-mc-add-multiple-cursors)
+    (global-set-key (kbd "C-M-)") 'ace-mc-add-single-cursor))
 #+end_src
 
 ** Easy Kill && easy mark
