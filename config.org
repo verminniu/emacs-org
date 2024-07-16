@@ -1118,7 +1118,7 @@ https://github.com/universal-ctags/citre
 ** RealGud
 use realgud for debug
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   ;; maybe need run M-x package-refresh-contents RET first
   (use-package realgud
     :ensure t
