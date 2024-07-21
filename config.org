@@ -4,6 +4,7 @@
 * Table of Contents                                                :TOC_2_gh:
 - [[#install][Install]]
   - [[#install-from-sources][Install From Sources]]
+  - [[#mac-版本][Mac 版本]]
 - [[#emacs-initialization][Emacs Initialization]]
   - [[#proxy][Proxy]]
   - [[#packages-sources][Packages Sources]]
@@ -129,6 +130,8 @@
   ./configure --with-nativecomp --with-gnutls --without-x --with-pop --with-mailutils --with-xml2 --with-json=ifavailable
 #+end_src
 
+** Mac 版本
+https://github.com/jimeh/emacs-builds
 * Emacs Initialization
 ** Proxy
 #+begin_src emacs-lisp :tangle no
