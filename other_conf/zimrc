@@ -14,6 +14,7 @@ zmodule fzf
 zmodule agkozak/zsh-z
 zmodule z-shell/zsh-eza
 
+zmodule bigH/git-fuzzy --cmd 'eval "export PATH=\"${ZIM_HOME}/modules/git-fuzzy/bin:\$PATH\""'
 zmodule unixorn/fzf-zsh-plugin
 zmodule unixorn/git-extra-commands
 zmodule yuki-yano/zeno.zsh
