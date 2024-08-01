@@ -10,6 +10,7 @@ zmodule completion
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
 
+zmodule Aloxaf/fzf-tab
 zmodule fzf
 zmodule agkozak/zsh-z
 zmodule z-shell/zsh-eza
