@@ -2860,6 +2860,7 @@ Try emr
              ("C-c b" . org-switchb)
              ("C-c x" . org-capture))
       :config
+      ;; 打开tab自动补全 <s
       (require 'org-tempo)
       ;; shifttab when open org files
       (add-hook 'org-mode-hook (lambda () (org-shifttab)))
