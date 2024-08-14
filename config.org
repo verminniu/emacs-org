@@ -27,6 +27,7 @@
 - [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
   - [[#citre][Citre]]
+  - [[#tree-sitter][Tree-sitter]]
   - [[#lspbridge][LspBridge]]
   - [[#eglot][Eglot]]
   - [[#lsp][LSP]]
@@ -911,6 +912,17 @@ https://github.com/universal-ctags/citre
      ;; certain modes (like `prog-mode'), set it like this.
      citre-auto-enable-citre-mode-modes '(prog-mode)))
 #+end_src
+** Tree-sitter
+auto install tree sitter
+#+begin_src emacs-lisp :tangle no
+  (use-package treesit-auto
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+#+end_src
+
 ** LspBridge
 #+begin_src emacs-lisp :tangle no
   (quelpa '(lsp-bridge :fetcher github-ssh :repo "manateelazycat/lsp-bridge"))
