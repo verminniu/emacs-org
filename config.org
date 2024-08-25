@@ -2991,8 +2991,9 @@ Show org-mode bullets as UTF-8 characters.
 ** Org QL
 This package provides a query language for Org files. It offers two syntax styles: Lisp-like sexps and search engine-like keywords.
 use libraries org-ql and org-ql-view.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package org-ql)
+  (use-package helm-org-ql)
 #+end_src
 
 ** Org sidebar
