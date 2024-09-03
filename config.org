@@ -2466,7 +2466,6 @@ Provides fast access to the recent files.
 #+END_SRC
 
 ** Version Control
-
 It is quite common to work on Git repositories, so it is important to have a
 configuration that we like.
 
