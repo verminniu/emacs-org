@@ -102,7 +102,7 @@
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
   - [[#org-bullets][Org bullets]]
-  - [[#org-bable][Org bable]]
+  - [[#org-babel][Org babel]]
   - [[#org-ql][Org QL]]
   - [[#org-sidebar][Org sidebar]]
   - [[#org-superstar][Org Superstar]]
@@ -2923,7 +2923,7 @@ Show org-mode bullets as UTF-8 characters.
     (org-mode . org-fancy-priorities-mode))
 #+end_src
 
-** Org bable
+** Org babel
 #+begin_src emacs-lisp :tangle yes
   ;; Babel
   (setq org-confirm-babel-evaluate nil
