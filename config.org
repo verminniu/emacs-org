@@ -360,6 +360,12 @@ use Hydra for some keybinds
 *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
 [[#Icons][all-the-icons]].
 
+#+begin_src emacs-lisp :tangle yes
+(use-package leuven-theme
+  :config
+  (load-theme 'leuven-dark t))
+#+end_src
+
 #+begin_src emacs-lisp :tangle no
   (use-package ewal
     :config (setq ewal-use-built-in-always-p nil
@@ -408,7 +414,7 @@ spacemacs-theme
 #+end_src
 
 modus-theme
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package modus-themes
     :ensure t
     :demand t
