@@ -363,7 +363,7 @@ use Hydra for some keybinds
 #+begin_src emacs-lisp :tangle yes
 (use-package leuven-theme
   :config
-  (load-theme 'leuven-dark t))
+  (load-theme 'leuven t))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
