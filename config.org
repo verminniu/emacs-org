@@ -2210,7 +2210,7 @@ smaller, simpler, and smoother to use yet highly customizable.
            ("C-c n" . counsel-imenu)
            ("C-c g" . counsel-git)
            ("C-c j" . counsel-git-grep)
-           ("C-c k" . counsel-ag)
+           ("C-c k" . counsel-rg)
            ("C-x l" . counsel-locate)
            ("M-x" . counsel-M-x)
            )
