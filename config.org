@@ -92,6 +92,7 @@
   - [[#syntax-subword][Syntax subword]]
   - [[#whole-line-or-region][Whole line or region]]
   - [[#ediff][Ediff]]
+  - [[#difft][Difft]]
   - [[#symbol-overlay][Symbol overlay]]
   - [[#smex][Smex]]
   - [[#compile][Compile]]
@@ -2652,6 +2653,21 @@ Use ztree to diff dirs
   (use-package abridge-diff
     :after magit ;; optional, if you'd like to use with magit
     :init (abridge-diff-mode 1))
+#+end_src
+** Difft
+代码对比
+https://github.com/wilfred/difftastic
+#+begin_src emacs-lisp :tangle yes
+  (use-package difftastic
+    :demand t
+    :bind (:map magit-blame-read-only-mode-map
+           ("D" . difftastic-magit-show)
+           ("S" . difftastic-magit-show))
+    :config
+    (eval-after-load 'magit-diff
+      '(transient-append-suffix 'magit-diff '(-1 -1)
+         [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+          ("S" "Difftastic show" difftastic-magit-show)])))
 #+end_src
 ** Symbol overlay
 hight light symbol in different color
