@@ -2494,6 +2494,13 @@ https://magit.vc/manual/magit/Installing-from-Melpa.html
 #+END_SRC
 
 use diff-hl instead
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package diff-hl
+    :config
+    (global-diff-hl-mode)
+    )
+#+END_SRC
+
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package git-gutter
@@ -2632,20 +2639,20 @@ and automatically expand it into function templates.
     )
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package diff-hl
-    :config
-    (global-diff-hl-mode)
-    )
-
-  (use-package diffview)
-#+END_SRC
-
 Use ztree to diff dirs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ztree)
 #+END_SRC
 
+#+begin_src emacs-lisp :tangle yes
+  (use-package diffview)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package abridge-diff
+    :after magit ;; optional, if you'd like to use with magit
+    :init (abridge-diff-mode 1))
+#+end_src
 ** Symbol overlay
 hight light symbol in different color
 #+BEGIN_SRC emacs-lisp :tangle yes
