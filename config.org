@@ -3254,19 +3254,18 @@ https://www.orgroam.com
 
 ** Org download
 #+begin_src emacs-lisp :tangle yes
+  ;; first install with brew
+  ;; brew install pngpaste
   (use-package org-download
     :after org
-    :bind (:map org-mode-map
-                ("<f2>" . org-download-screenshot))
-    :ensure nil
     :config
-    (setq org-download-annotate-function 'ignore)
-    (setq org-download-method 'attach)
-    (setq org-download-display-inline-images 'posframe)
-    (setq org-download-screenshot-file (concat temporary-file-directory "image.png"))
-    (setq org-download-image-attr-list
-          '("#+ATTR_HTML: :width 80% :align center"))
-    (when (eq system-type 'windows-nt)
-      (setq org-download-screenshot-method "convert clipboard: %s"))
+    (setq-default org-download-heading-lvl nil)
+    (setq-default org-download-image-dir "./images")
+    (setq org-download-backend "wget")
+    (setq org-download-abbreviate-filename-function (lambda (fn) fn)) ; use original filename
+    (defun dummy-org-download-annotate-function (link)
+      "")
+    (setq org-download-annotate-function
+          #'dummy-org-download-annotate-function)
     (org-download-enable))
 #+end_src
