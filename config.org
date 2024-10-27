@@ -921,7 +921,7 @@ https://github.com/universal-ctags/citre
 #+end_src
 ** Tree-sitter
 auto install tree sitter
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package treesit-auto
     :custom
     (treesit-auto-install 'prompt)
@@ -2925,6 +2925,8 @@ Try emr
             org-log-done 'time
             org-catch-invisible-edits 'smart
             org-startup-indented t
+            ;; 图片显示
+            org-startup-with-inline-images t
             org-ellipsis (if (and (display-graphic-p) (char-displayable-p ?⏷)) "\t⏷" nil)
             org-pretty-entities nil
             org-export-with-sub-superscripts nil
@@ -3030,6 +3032,7 @@ try org modern
   (use-package org-modern
     :ensure t
     :custom
+    (org-indent-mode -1)
     (org-modern-hide-stars nil)		; adds extra indentation
     (org-modern-table nil)
     (org-modern-list
