@@ -248,6 +248,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
   ;;(prefer-coding-system 'chinese-gbk)       ; linux system
   ;;(prefer-coding-system 'gb2312-unix)		;
   (show-paren-mode 1)                               ; Show the parent
+  (setq show-paren-style 'expression)
   (add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -360,6 +361,24 @@ use Hydra for some keybinds
 ** Theme
 *NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
 [[#Icons][all-the-icons]].
+
+#+begin_src emacs-lisp :tangle no
+  (use-package moe-theme
+    :config
+    ;; Show highlighted buffer-id as decoration. (Default: nil)
+    (setq moe-theme-highlight-buffer-id t)
+
+    ;; Resize titles (optional).
+    (setq moe-theme-resize-title-markdown '(1.5 1.4 1.3 1.2 1.0 1.0))
+    (setq moe-theme-resize-title-org '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+    (setq moe-theme-resize-title-rst '(1.5 1.4 1.3 1.2 1.1 1.0))
+
+    ;; Choose a color for modeline.(Default: blue)
+    (setq moe-theme-modeline-color 'cyan)
+    ;; Finally, apply moe-theme now.
+    ;; Choose what you like, (moe-light) or (moe-dark)
+    (moe-light))
+#+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (use-package leuven-theme
