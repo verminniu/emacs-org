@@ -248,7 +248,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
   ;;(prefer-coding-system 'chinese-gbk)       ; linux system
   ;;(prefer-coding-system 'gb2312-unix)		;
   (show-paren-mode 1)                               ; Show the parent
-  (setq show-paren-style 'expression)
+  (setq show-paren-style 'mixed)
   (add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -960,7 +960,7 @@ auto install tree sitter
   (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project)
   (use-package eglot
     :ensure t
@@ -1006,7 +1006,7 @@ auto install tree sitter
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
