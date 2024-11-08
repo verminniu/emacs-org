@@ -3,13 +3,14 @@
 
 * Table of Contents                                                :TOC_2_gh:
 - [[#install][Install]]
-  - [[#install-from-sources][Install From Sources]]
+  - [[#linux-install-from-sources][linux Install From Sources]]
   - [[#mac-版本][Mac 版本]]
 - [[#emacs-initialization][Emacs Initialization]]
   - [[#proxy][Proxy]]
   - [[#packages-sources][Packages Sources]]
   - [[#use-package][use-package]]
   - [[#quelpa][Quelpa]]
+  - [[#elpaca][elpaca]]
 - [[#start-up][Start Up]]
   - [[#better-defaults][Better defaults]]
   - [[#os-set][Os Set]]
@@ -125,7 +126,7 @@
   - [[#org-download][Org download]]
 
 * Install
-** Install From Sources
+** linux Install From Sources
 编译参数
 --with-nativecomp需要单独分支支持
 #+begin_src shell
@@ -136,10 +137,11 @@
 https://github.com/jimeh/emacs-builds
 * Emacs Initialization
 ** Proxy
+复用系统代理
 #+begin_src emacs-lisp :tangle no
   (setq url-gateway-method 'socks)
   ;; use wallless
-  (setq socks-server '("Default server" "127.0.0.1" 33211 5))
+  (setq socks-server '("Default server" "127.0.0.1" 7890 5))
 #+end_src
 ** Packages Sources
 
@@ -194,6 +196,9 @@ use Quelpa for use github packages
 
 #+end_src
 
+** elpaca
+待定
+https://github.com/progfolio/elpaca
 * Start Up
 ** Better defaults
 
@@ -2610,7 +2615,8 @@ and automatically expand it into function templates.
 #+end_src
 
 ** Syntax subword
-#+begin_src emacs-lisp :tangle yes
+暂时不需要分subword，后续考虑
+#+begin_src emacs-lisp :tangle no
   (use-package syntax-subword
     :config
     (global-syntax-subword-mode)
