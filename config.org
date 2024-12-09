@@ -167,17 +167,14 @@ In order to install packages, it is useful to configure the package sources.
 #+END_SRC
 
 ** use-package
+已经为默认
 
-To be able to manage its configuration with =use-package= it is necessary to
-first install it, if you don't already.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
 
   (use-package delight :ensure t)
-  (use-package use-package-ensure-system-package :ensure t)
 #+END_SRC
 
 ** Quelpa
