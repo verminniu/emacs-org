@@ -134,7 +134,9 @@
 #+end_src
 
 ** Mac 版本
-https://github.com/jimeh/emacs-builds
+emacs-plus更好一点
+https://github.com/d12frosted/homebrew-emacs-plus
++https://github.com/jimeh/emacs-builds+
 * Emacs Initialization
 ** Proxy
 复用系统代理
