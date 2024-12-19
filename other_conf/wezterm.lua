@@ -25,8 +25,13 @@ end
 -- config.color_scheme = "AdventureTime"
 config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 
--- config.font = wezterm.font "JetBrainsMono Nerd Font"
--- config.font = wezterm.font_with_fallback({ "JetBrainsMono Nerd Font", "LXGWWenKaiMono" })
+-- config.font =
+--     wezterm.font_with_fallback {
+--     "JetBrainsMono Nerd Font",
+--     -- This font has a broader selection of Chinese glyphs than my preferred font
+--     "DengXian"
+-- }
+-- config.font = wezterm.font_with_fallback({"JetBrainsMono Nerd Font", "LXGWWenKaiMono"})
 config.font =
     wezterm.font_with_fallback {
     {
@@ -34,17 +39,18 @@ config.font =
         harfbuzz_features = {"zero", "ss01", "cv05"}
     },
     {family = "Terminus", weight = "Bold"},
-    "Noto Color Emoji"
+    "Noto Color Emoji",
+    "LXGW WenKai Mono"
 }
 
-config.keys = {
-    -- disable ctrl-shift-2 for mark in emacs
-    {
-        key = "2",
-        mods = "SHIFT|CTRL",
-        action = wezterm.action.SendKey({key = "@", mods = "CTRL"})
-    }
-}
+-- config.keys = {
+--     -- disable ctrl-shift-2 for mark in emacs
+--     {
+--         key = "2",
+--         Mods = "SHIFT|CTRL",
+--         action = wezterm.action.SendKey({key = "@", mods = "CTRL"})
+--     }
+-- }
 
 -- and finally, return the configuration to wezterm
 return config
