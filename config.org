@@ -2774,7 +2774,6 @@ Try emr
   (use-package comment-dwim-2
     :config
     (global-set-key (kbd "M-;") 'comment-dwim-2)
-    (define-key org-mode-map (kbd "M-;") 'org-comment-dwim-2)
     )
 #+END_SRC
 
