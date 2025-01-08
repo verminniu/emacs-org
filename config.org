@@ -177,6 +177,8 @@ In order to install packages, it is useful to configure the package sources.
     (package-install 'use-package))
 
   (use-package delight :ensure t)
+  (use-package use-package-ensure-system-package
+    :ensure t)
 #+END_SRC
 
 ** Quelpa
@@ -3193,8 +3195,7 @@ export org to mind-map with Graphviz
        :init
        (require 'ox-org)
        :ensure t
-       ;; Uncomment the below if 'ensure-system-packages` is installed
-       ;;:ensure-system-package (gvgen . graphviz)
+       :ensure-system-package (gvgen . graphviz)
        :config
        (setq org-mind-map-engine "dot")       ; Default. Directed Graph
        ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
@@ -3229,7 +3230,8 @@ https://www.orgroam.com
 
 ** Pandoc
 #+begin_src emacs-lisp :tangle yes
-  (use-package ox-pandoc)
+    (use-package ox-pandoc
+      :ensure-system-package pandoc)
 #+end_src
 
 ** Org-pdf
@@ -3284,6 +3286,7 @@ https://www.orgroam.com
   ;; brew install pngpaste
   (use-package org-download
     :after org
+    :ensure-system-package pngpaste
     :config
     (setq-default org-download-heading-lvl nil)
     (setq-default org-download-image-dir "./images")
