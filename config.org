@@ -1175,13 +1175,19 @@ format all languages
 主动打开各个语言的format，否则如果没有配置formater，会报错
 #+begin_src emacs-lisp :tangle yes
   (use-package format-all
+    :ensure-system-package
+    (pgformatter black)
     :config
+    (setq-default format-all-formatters
+                  ;; sql 默认用pg
+                  '(("SQL" pgformatter)))
     (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
     ;; 主动打开各个mode的hook
     (add-hook 'emacs-lisp-mode-hook 'format-all-mode)
     (add-hook 'lua-mode-hook 'format-all-mode)
     (add-hook 'protobuf-mode-hook 'format-all-mode)
     (add-hook 'json-mode-hook 'format-all-mode)
+    (add-hook 'sql-mode-hook 'format-all-mode)
     (define-format-all-formatter g-clang-format
       (:executable "clang-format")
       (:install
