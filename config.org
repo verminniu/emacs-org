@@ -175,7 +175,8 @@ In order to install packages, it is useful to configure the package sources.
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
-
+  (use-package system-packages
+    :ensure t)
   (use-package delight :ensure t)
 #+END_SRC
 
@@ -2515,12 +2516,12 @@ https://magit.vc/manual/magit/Installing-from-Melpa.html
 
   (use-package hl-todo
     :config
-    (add-hook 'after-init-hook 'global-hl-todo-mode)
-    )
+    (add-hook 'after-init-hook 'global-hl-todo-mode))
 
-  (use-package magit-todos
-    )
+  (use-package magit-todos)
 
+  (use-package magit-delta
+    :hook (magit-mode . magit-delta-mode))
 #+END_SRC
 
 use diff-hl instead
