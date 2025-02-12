@@ -175,8 +175,10 @@ In order to install packages, it is useful to configure the package sources.
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
+
   (use-package system-packages
     :ensure t)
+
   (use-package delight :ensure t)
 #+END_SRC
 
@@ -1177,11 +1179,12 @@ format all languages
 #+begin_src emacs-lisp :tangle yes
   (use-package format-all
     :ensure-system-package
-    (pgformatter black)
+    ((pg_format . pgformatter)
+     (black . black))
     :config
     (setq-default format-all-formatters
                   ;; sql 默认用pg
-                  '(("SQL" pgformatter)))
+                  '(("SQL" pg_format)))
     (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
     ;; 主动打开各个mode的hook
     (add-hook 'emacs-lisp-mode-hook 'format-all-mode)
