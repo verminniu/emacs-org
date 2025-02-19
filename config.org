@@ -2908,62 +2908,62 @@ Try emr
 * Org-mode
 ** Org Common Setting
 #+begin_src emacs-lisp :tangle yes
-    (use-package org
-      :ensure nil
-      :commands (org-dynamic-block-define)
-      :custom-face (org-ellipsis ((t (:foreground nil))))
-      :bind (("C-c a" . org-agenda)
-             ("C-c b" . org-switchb)
-             ("C-c x" . org-capture))
-      :config
-      ;; 打开tab自动补全 <s
-      (require 'org-tempo)
-      ;; shifttab when open org files
-      (add-hook 'org-mode-hook (lambda () (org-shifttab)))
-      ;; org 模式打开自动换行
-      (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
-      ;; For hydra
-      (defun hot-expand (str &optional mod)
-        "Expand org template.
-    STR is a structure template string recognised by org like <s. MOD is a
-    string with additional parameters to add the begin line of the
-    structure element. HEADER string includes more parameters that are
-    prepended to the element after the #+HEADER: tag."
-        (let (text)
-          (when (region-active-p)
-            (setq text (buffer-substring (region-beginning) (region-end)))
-            (delete-region (region-beginning) (region-end)))
-          (insert str)
-          (if (fboundp 'org-try-structure-completion)
-              (org-try-structure-completion) ; < org 9
-            (progn
-              ;; New template expansion since org 9
-              (require 'org-tempo nil t)
-              (org-tempo-complete-tag)))
-          (when mod (insert mod) (forward-line))
-          (when text (insert text))))
+  (use-package org
+    :ensure nil
+    :commands (org-dynamic-block-define)
+    :custom-face (org-ellipsis ((t (:foreground nil))))
+    :bind (("C-c a" . org-agenda)
+           ("C-c b" . org-switchb)
+           ("C-c x" . org-capture))
+    :config
+    ;; 打开tab自动补全 <s
+    (require 'org-tempo)
+    ;; shifttab when open org files
+    (add-hook 'org-mode-hook (lambda () (org-shifttab)))
+    ;; org 模式打开自动换行
+    (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+    ;; For hydra
+    (defun hot-expand (str &optional mod)
+      "Expand org template.
+        STR is a structure template string recognised by org like <s. MOD is a
+        string with additional parameters to add the begin line of the
+        structure element. HEADER string includes more parameters that are
+        prepended to the element after the #+HEADER: tag."
+      (let (text)
+        (when (region-active-p)
+          (setq text (buffer-substring (region-beginning) (region-end)))
+          (delete-region (region-beginning) (region-end)))
+        (insert str)
+        (if (fboundp 'org-try-structure-completion)
+            (org-try-structure-completion) ; < org 9
+          (progn
+            ;; New template expansion since org 9
+            (require 'org-tempo nil t)
+            (org-tempo-complete-tag)))
+        (when mod (insert mod) (forward-line))
+        (when text (insert text))))
 
-      ;; To speed up startup, don't put to init section
-      (setq org-modules nil                 ; Faster loading
-            org-todo-keywords
-            '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
-              (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
-            org-todo-keyword-faces '(("HANGUP" . warning)
-                                     ("❓" . warning))
-            org-priority-faces '((?A . error)
-                                 (?B . warning)
-                                 (?C . success))
+    ;; To speed up startup, don't put to init section
+    (setq org-modules nil                 ; Faster loading
+          org-todo-keywords
+          '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
+            (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
+          org-todo-keyword-faces '(("HANGUP" . warning)
+                                   ("❓" . warning))
+          org-priority-faces '((?A . error)
+                               (?B . warning)
+                               (?C . success))
 
-            org-tags-column -80
-            org-log-done 'time
-            org-catch-invisible-edits 'smart
-            org-startup-indented t
-            ;; 图片显示
-            org-startup-with-inline-images t
-            org-ellipsis (if (and (display-graphic-p) (char-displayable-p ?⏷)) "\t⏷" nil)
-            org-pretty-entities nil
-            org-export-with-sub-superscripts nil
-            org-hide-emphasis-markers t))
+          org-tags-column -80
+          org-log-done 'time
+          org-catch-invisible-edits 'smart
+          org-startup-indented t
+          ;; 图片显示
+          org-startup-with-inline-images t
+          org-ellipsis (if (and (display-graphic-p) (char-displayable-p ?⏷)) "\t⏷" nil)
+          org-pretty-entities nil
+          org-export-with-sub-superscripts nil
+          org-hide-emphasis-markers t))
 
   ;; 子项目完成，主项目自动完成
   (defun org-summary-todo (n-done n-not-done)
@@ -2973,7 +2973,23 @@ Try emr
 
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
+  ;; 归档配置
+  (setq org-archive-save-context-info '(time tree))
 
+  ;; 自动归档钩子
+  (add-hook 'org-after-todo-statistics-hook
+            (lambda ()
+              (when (member org-state org-done-keywords)
+                ;; 自动继承原父标题
+                (let ((parent-heading (org-get-heading)))
+                  (save-excursion
+                    (org-up-heading-safe)
+                    (setq parent-heading (org-get-heading)))
+                  ;; 动态构建归档路径
+                  (let ((org-archive-location
+                         (format "%s_done.org::* %s/%%<%%Y-%%m> %%s"
+                                 parent-heading)))
+                    (org-archive-subtree))))))
 #+end_src
 
 ** Org bullets
