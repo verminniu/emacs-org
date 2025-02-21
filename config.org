@@ -56,6 +56,7 @@
   - [[#json][Json]]
   - [[#javascripttypescript][JavaScript/TypeScript]]
 - [[#advanced-configuration][Advanced Configuration]]
+  - [[#visual-regexp][visual-regexp]]
   - [[#goggles][goggles]]
   - [[#read-only][Read only]]
   - [[#parrot][parrot]]
@@ -1691,6 +1692,20 @@ js/ts support
 #+end_src
 
 * Advanced Configuration
+** visual-regexp
+支持标准正则
+#+begin_src emacs-lisp :tangle yes
+  ;; 安装
+  (use-package visual-regexp
+    :ensure t
+    :config
+    (define-key global-map (kbd "C-c q") 'vr/query-replace)
+    ;; if you use multiple-cursors, this is for you:
+    (define-key global-map (kbd "C-c m") 'vr/mc-mark))
+  (use-package visual-regexp-steroids
+    :ensure t
+    :after visual-regexp)
+#+end_src
 ** goggles
 复制粘贴高亮
 #+begin_src emacs-lisp :tangle yes
