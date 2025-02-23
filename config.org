@@ -355,15 +355,15 @@ use Hydra for some keybinds
   (use-package exec-path-from-shell
     :ensure t
     :config (progn
-            (when(not(eq system-type 'windows-nt))
-              (setq exec-path-from-shell-variables '("PATH" "PYTHONPATH" "GOPATH" "JAVA_HOME" "GROOVY_HOME" "GRADLE_HOME" "GRADLE_USER_HOME"))
-              ;; when it is nil, exec-path-from-shell will read environment variable
-              ;; from .zshenv instead of .zshrc, but makes sure that you put all
-              ;; environment variable you need in .zshenv rather than .zshrc
-              (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
-              (exec-path-from-shell-initialize)
+              (when(not(eq system-type 'windows-nt))
+                (setq exec-path-from-shell-variables '("PATH" "PYTHONPATH" "GOPATH" "JAVA_HOME" "GROOVY_HOME" "GRADLE_HOME" "GRADLE_USER_HOME"))
+                ;; when it is nil, exec-path-from-shell will read environment variable
+                ;; from .zshenv instead of .zshrc, but makes sure that you put all
+                ;; environment variable you need in .zshenv rather than .zshrc
+                (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
+                (exec-path-from-shell-initialize)
+                )
               )
-            )
     )
 #+END_SRC
 ** Theme
@@ -389,16 +389,16 @@ use Hydra for some keybinds
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package leuven-theme
-  :config
-  (load-theme 'leuven t))
+  (use-package leuven-theme
+    :config
+    (load-theme 'leuven t))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
   (use-package ewal
     :config (setq ewal-use-built-in-always-p nil
-                ewal-use-built-in-on-failure-p t
-                ewal-built-in-palette "sexy-material"))
+                  ewal-use-built-in-on-failure-p t
+                  ewal-built-in-palette "sexy-material"))
   (use-package ewal-spacemacs-themes
     :init (use-package spacemacs-theme)
     :config (progn
@@ -494,12 +494,12 @@ modus-theme
 
   (defvar my-rainbow-region-colors
     (modus-themes-with-colors
-      `((red . ,bg-red-subtle)
-        (green . ,bg-green-subtle)
-        (yellow . ,bg-yellow-subtle)
-        (blue . ,bg-blue-subtle)
-        (magenta . ,bg-magenta-subtle)
-        (cyan . ,bg-cyan-subtle)))
+     `((red . ,bg-red-subtle)
+       (green . ,bg-green-subtle)
+       (yellow . ,bg-yellow-subtle)
+       (blue . ,bg-blue-subtle)
+       (magenta . ,bg-magenta-subtle)
+       (cyan . ,bg-cyan-subtle)))
     "Sample list of color values for `my-rainbow-region'.")
 
   (defun my-rainbow-region (color)
@@ -1043,7 +1043,7 @@ auto install tree sitter
     (custom-set-faces
      '(lsp-face-semhl-comment ((t (:inherit shadow)))))
     (setq lsp-clients-clangd-args '("-j=8" ; 多并发
-                                    ;"--malloc-trim" ; 通过malloc_trim定期释放内存，只支持linux，mac 不支持
+                                          ;"--malloc-trim" ; 通过malloc_trim定期释放内存，只支持linux，mac 不支持
                                     "--background-index"
                                     "--clang-tidy"
                                     "--completion-style=bundled"
@@ -1098,9 +1098,9 @@ auto install tree sitter
     :commands lsp-treemacs-errors-list
     )
 
-;;  (use-package company-lsp
-;;    :config (push 'company-lsp company-backends)
-;;    )
+  ;;  (use-package company-lsp
+  ;;    :config (push 'company-lsp company-backends)
+  ;;    )
 
   (use-package lsp-ivy
     :commands lsp-ivy-workspace-symbol
@@ -1242,10 +1242,10 @@ add shell support
 
 add shell check
 #+begin_src emacs-lisp :tangle yes
-(use-package flymake-shellcheck
-  :commands flymake-shellcheck-load
-  :config
-  (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
+  (use-package flymake-shellcheck
+    :commands flymake-shellcheck-load
+    :config
+    (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
 #+end_src
 
 Use lsp
@@ -1446,8 +1446,8 @@ lsp-java 改lsp目录，这里为其他java相关配置
     :config
     (setq gradle-executable-path "/Users/vermin/code_tools/gradle-4.10.3/bin/gradle")
     (add-hook 'java-mode-hook (lambda ()
-                          (setq c-default-style "java")
-                          (gradle-mode 1))))
+                                (setq c-default-style "java")
+                                (gradle-mode 1))))
 #+end_src
 ** Groovy
 #+begin_src emacs-lisp :tangle yes
@@ -1889,12 +1889,12 @@ find cursor
     :ensure t
     :demand t
     :config
-    ; https://github.com/Malabarba/beacon/issues/46
-    ; the value is compared with >, not >=
+                                          ; https://github.com/Malabarba/beacon/issues/46
+                                          ; the value is compared with >, not >=
     (setq beacon-blink-when-point-moves-vertically 1)
-    ; disable beacon for horizontal movement
+                                          ; disable beacon for horizontal movement
     (setq beacon-blink-when-point-moves-horizontally 1)
-    ; remove specific symbols from the variable 'beacon-dont-blink-commands
+                                          ; remove specific symbols from the variable 'beacon-dont-blink-commands
     (setq beacon-dont-blink-commands '(forward-char backward-char meow-right meow-left))
     (beacon-mode 1))
 #+end_src
@@ -2120,9 +2120,9 @@ For those who didn't know, GNU Emacs is also a file explorer.
     :config
     ;; Define our own mode line segment
     (dirvish-define-mode-line filter "Describe filters."
-      (when dired-filter-mode
-        (format " %s %s " (propertize "Filters:" 'face 'bold)
-                (dired-filter--describe-filters))))
+                              (when dired-filter-mode
+                                (format " %s %s " (propertize "Filters:" 'face 'bold)
+                                        (dired-filter--describe-filters))))
     :custom
     ;; Do not touch the header line
     (dired-filter-show-filters nil)
@@ -2494,13 +2494,13 @@ parenthesis. Anyway, if you don't like it, you can try taking a look at
 =paredit= or =autopair=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package smartparens
-     :defer 1
-     :delight
-     :custom (sp-escape-quotes-after-insert nil)
-     :config
-     (require 'smartparens-config)
-     (smartparens-global-mode 1))
+  (use-package smartparens
+    :defer 1
+    :delight
+    :custom (sp-escape-quotes-after-insert nil)
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode 1))
 #+END_SRC
 
 ** Recent Files
@@ -2710,8 +2710,8 @@ https://github.com/wilfred/difftastic
   (use-package difftastic
     :demand t
     :bind (:map magit-blame-read-only-mode-map
-           ("D" . difftastic-magit-show)
-           ("S" . difftastic-magit-show))
+                ("D" . difftastic-magit-show)
+                ("S" . difftastic-magit-show))
     :config
     (eval-after-load 'magit-diff
       '(transient-append-suffix 'magit-diff '(-1 -1)
@@ -2805,7 +2805,7 @@ Try emr
 ** Treemacs
 
 #+begin_src emacs-lisp :tangle yes
-    (use-package treemacs
+  (use-package treemacs
     :ensure t
     :defer t
     :config
@@ -2940,10 +2940,10 @@ Try emr
     ;; For hydra
     (defun hot-expand (str &optional mod)
       "Expand org template.
-        STR is a structure template string recognised by org like <s. MOD is a
-        string with additional parameters to add the begin line of the
-        structure element. HEADER string includes more parameters that are
-        prepended to the element after the #+HEADER: tag."
+          STR is a structure template string recognised by org like <s. MOD is a
+          string with additional parameters to add the begin line of the
+          structure element. HEADER string includes more parameters that are
+          prepended to the element after the #+HEADER: tag."
       (let (text)
         (when (region-active-p)
           (setq text (buffer-substring (region-beginning) (region-end)))
@@ -3139,8 +3139,8 @@ try org modern
 ** Org tag beautify
 #+begin_src emacs-lisp :tangle no
   (use-package org-tag-beautify
-  :ensure t
-  :config (org-tag-beautify-mode 1))
+    :ensure t
+    :config (org-tag-beautify-mode 1))
 #+end_src
 ** Org Super Agenda
 #+begin_src emacs-lisp :tangle yes
@@ -3205,10 +3205,10 @@ try org modern
 #+end_src
 ** Org hugo
 #+begin_src emacs-lisp :tangle yes
-      (use-package ox-hugo
-        :ensure t
-        :pin melpa
-        :after ox)
+  (use-package ox-hugo
+    :ensure t
+    :pin melpa
+    :after ox)
 #+end_src
 
 ** add gfm markdown to Export list
@@ -3269,8 +3269,8 @@ https://www.orgroam.com
 
 ** Pandoc
 #+begin_src emacs-lisp :tangle yes
-    (use-package ox-pandoc
-      :ensure-system-package pandoc)
+  (use-package ox-pandoc
+    :ensure-system-package pandoc)
 #+end_src
 
 ** Org-pdf
