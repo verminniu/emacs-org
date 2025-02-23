@@ -104,6 +104,7 @@
   - [[#treemacs][Treemacs]]
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
+  - [[#org-自动归档配置][org 自动归档配置]]
   - [[#org-bullets][Org bullets]]
   - [[#org-babel][Org babel]]
   - [[#org-ql][Org QL]]
@@ -2987,26 +2988,61 @@ Try emr
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-
-  ;; 归档配置
-  (setq org-archive-save-context-info '(time tree))
-
-  ;; 自动归档钩子
-  (add-hook 'org-after-todo-statistics-hook
-            (lambda ()
-              (when (member org-state org-done-keywords)
-                ;; 自动继承原父标题
-                (let ((parent-heading (org-get-heading)))
-                  (save-excursion
-                    (org-up-heading-safe)
-                    (setq parent-heading (org-get-heading)))
-                  ;; 动态构建归档路径
-                  (let ((org-archive-location
-                         (format "%s_done.org::* %s/%%<%%Y-%%m> %%s"
-                                 parent-heading)))
-                    (org-archive-subtree))))))
 #+end_src
 
+** org 自动归档配置
+独立归档配置测试方便
+#+begin_src emacs-lisp :tangle yes
+(setq org-archive-location "::* 归档/%s")  ; 动态标题路径模板[4](@ref)
+
+(defun transform-archive-heading ()
+  "转换标题层级并插入时间戳"
+  (interactive)
+  (let* ((orig-heading (nth 4 (org-heading-components)))
+         (timestamp (format-time-string "%Y%m%d"))
+         (new-heading (concat timestamp "/" orig-heading)))
+    (org-edit-headline new-heading)
+    (org-demote-subtree)  ; 降级为四级标题
+    (save-excursion
+      (org-back-to-heading)
+      (insert (format "* %s归档\n" (car (split-string orig-heading "/")))))))
+
+;; ====================
+;; 自动层级调整
+;; ====================
+(defun adjust-archive-level ()
+  "自动创建时间戳层级结构"
+  (let* ((path (split-string (org-extract-archive-heading) "/"))
+         (current-level 1))
+    (save-excursion
+      (goto-char (point-min))
+      (dolist (headline path)
+        (when (string-match "\$[0-9]\\{8\\}\$" headline)  ; 识别时间戳格式[7](@ref)
+          (setq headline (format-time-string "%Y-%m-%d"
+                           (parse-time-string headline))))
+        (unless (re-search-forward
+                (concat "^\\*\\{1," (number-to-string current-level) "\\} " headline) nil t)
+          (org-insert-heading)
+          (insert headline))
+        (setq current-level (1+ current-level))))))
+
+;; ====================
+;; 触发机制
+;; ====================
+(add-hook 'org-archive-hook
+  (lambda ()
+    (transform-archive-heading)
+    (adjust-archive-level)
+    (org-save-all-org-buffers)))
+
+;; ====================
+;; 可视化优化
+;; ====================
+(setq org-archive-tag "ARCHIVED")
+(font-lock-add-keywords 'org-mode
+  '(("^\\*+.*ARCHIVED" . 'org-archived))
+  'append)
+#+end_src
 ** Org bullets
 Show org-mode bullets as UTF-8 characters.
 
