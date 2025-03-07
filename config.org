@@ -74,7 +74,7 @@
   - [[#icons][Icons]]
   - [[#dashboard][Dashboard]]
   - [[#dired][Dired]]
-  - [[#dirvish-dired][dirvish&& dired]]
+  - [[#dirvish][dirvish]]
   - [[#buffers][Buffers]]
   - [[#history][History]]
   - [[#which-key][Which-Key]]
@@ -2068,117 +2068,51 @@ For those who didn't know, GNU Emacs is also a file explorer.
     :config (treemacs-icons-dired-mode))
 
 #+END_SRC
-** dirvish&& dired
+** dirvish
 替换dired
 #+begin_src emacs-lisp :tangle yes
-
-  (use-package dired
-    :ensure nil
-    :delight "Dired "
-    :custom
-    (dired-auto-revert-buffer t)
-    (dired-dwim-target t)
-    (dired-hide-details-hide-symlink-targets nil)
-    (dired-listing-switches "-alh")
-    (dired-ls-F-marks-symlinks nil)
-    (dired-recursive-copies 'always))
-
-  ;; (use-package treemacs-icons-dired
-  ;;   :after treemacs dired
-  ;;   :ensure t
-  ;;   :config (treemacs-icons-dired-mode))
-
-  ;; (use-package dired-x
-  ;;   ;; Enable dired-omit-mode by default
-  ;;   ;; :hook
-  ;;   ;; (dired-mode . dired-omit-mode)
-  ;;   :after dired
-  ;;   :config
-  ;;   ;; Make dired-omit-mode hide all "dotfiles"
-  ;;   (setq dired-omit-files
-  ;; (concat dired-omit-files "\\|^\\..*$")))
-
-  ;; Addtional syntax highlighting for dired
-  (use-package diredfl
-    :hook
-    (dired-mode . diredfl-mode))
-
-  ;; Turn Dired into a tree browser
-  (use-package dired-subtree
-    :bind
-    (:map dired-mode-map
-          ("TAB" . dired-subtree-toggle)))
-
-  ;; Narrow a dired buffer to the files matching a string.
-  (use-package dired-narrow
-    :bind
-    (:map dired-mode-map
-          ("N" . dired-narrow)))
-
-  ;; `ibuffer' like file filtering system
-  (use-package dired-filter
-    :after dirvish
-    :config
-    ;; Define our own mode line segment
-    (dirvish-define-mode-line filter "Describe filters."
-                              (when dired-filter-mode
-                                (format " %s %s " (propertize "Filters:" 'face 'bold)
-                                        (dired-filter--describe-filters))))
-    :custom
-    ;; Do not touch the header line
-    (dired-filter-show-filters nil)
-    ;; Instead, use our mode line segment defined above
-    (dirvish-mode-line-format '(:left (sort filter) :right (yank index)))
-    (dired-filter-revert 'always)
-    :bind
-    (:map dired-mode-map
-          ([remap dired-omit-mode] . dired-filter-mode)))
-
-  (use-package dired-collapse
-    :bind
-    (:map dired-mode-map
-          ("M-c" . dired-collapse-mode)))
-
-  ;; Drop-in replacement for find-dired
-  (use-package fd-dired
-    :bind
-    ("C-c F" . fd-dired))
-
   (use-package dirvish
-    :after dired
-    :custom
-    ;; Feel free to replace `all-the-icons' with `vscode-icon'.
-    ;; (dirvish-attributes '(expanded-state all-the-icons file-size))
-    ;; Maybe the icons are too big to your eyes
-    ;; (dirvish-all-the-icons-height 0.8)
-    ;; Go back home? Just press `bh'
-    ;; (dirvish-bookmarks-alist
-    ;;  '(("h" "~/"                          "Home")
-    ;;    ("d" "~/Downloads/"                "Downloads")
-    ;;    ("m" "/mnt/"                       "Drives")
-    ;;    ("t" "~/.local/share/Trash/files/" "TrashCan")))
-    ;; List directories that has over 10000 files asynchronously
-    ;; This feature is disabled by default
-    (dirvish-async-listing-threshold 10000)
-    :config
+    :init
     (dirvish-override-dired-mode)
-    (dirvish-peek-mode)
-    ;; In case you want the details at startup like `dired'
-    ;; :hook
-    ;; (dirvish-mode . (lambda () (dired-hide-details-mode -1)))
-    :bind
-    (nil ; Bind `dirvish', `dirvish-dired' and `dirvish-side' as you see fit
-     :map dired-mode-map
-     ("SPC" . dirvish-show-history)
-     ("r"   . dirvish-roam)
-     ("b"   . dirvish-goto-bookmark)
+    :custom
+    (dirvish-quick-access-entries ; It's a custom option, `setq' won't work
+     '(("h" "~/"                          "Home")
+       ("d" "~/Downloads/"                "Downloads")
+       ("m" "/mnt/"                       "Drives")
+       ("t" "~/.local/share/Trash/files/" "TrashCan")))
+    :config
+    ;; (dirvish-peek-mode)             ; Preview files in minibuffer
+    ;; (dirvish-side-follow-mode)      ; similar to `treemacs-follow-mode'
+    (setq dirvish-mode-line-format
+          '(:left (sort symlink) :right (omit yank index)))
+    (setq dirvish-attributes
+          '(nerd-icons file-time file-size collapse subtree-state vc-state git-msg)
+          dirvish-side-attributes
+          '(vc-state file-size nerd-icons collapse))
+    (setq delete-by-moving-to-trash t)
+    (setq dired-listing-switches
+          "-l --almost-all --human-readable --group-directories-first --no-group")
+    :bind ; Bind `dirvish-fd|dirvish-side|dirvish-dwim' as you see fit
+    (("C-c f" . dirvish)
+     :map dirvish-mode-map          ; Dirvish inherits `dired-mode-map'
+     ("?"   . dirvish-dispatch)     ; contains most of sub-menus in dirvish extensions
+     ("a"   . dirvish-quick-access)
      ("f"   . dirvish-file-info-menu)
-     ("M-a" . dirvish-mark-actions-menu)
+     ("y"   . dirvish-yank-menu)
+     ("N"   . dirvish-narrow)
+     ("^"   . dirvish-history-last)
+     ("h"   . dirvish-history-jump) ; remapped `describe-mode'
+     ("s"   . dirvish-quicksort)    ; remapped `dired-sort-toggle-or-edit'
+     ("v"   . dirvish-vc-menu)      ; remapped `dired-view-file'
+     ("TAB" . dirvish-subtree-toggle)
+     ("M-f" . dirvish-history-go-forward)
+     ("M-b" . dirvish-history-go-backward)
+     ("M-l" . dirvish-ls-switches-menu)
+     ("M-m" . dirvish-mark-menu)
+     ("M-t" . dirvish-layout-toggle)
      ("M-s" . dirvish-setup-menu)
-     ("M-f" . dirvish-toggle-fullscreen)
-     ([remap dired-summary] . dirvish-dispatch)
-     ([remap dired-do-copy] . dirvish-yank)
-     ([remap mode-line-other-buffer] . dirvish-other-buffer)))
+     ("M-e" . dirvish-emerge-menu)
+     ("M-j" . dirvish-fd-jump)))
 
 #+end_src
 ** Buffers
@@ -2992,56 +2926,60 @@ Try emr
 
 ** org 自动归档配置
 独立归档配置测试方便
-#+begin_src emacs-lisp :tangle yes
-(setq org-archive-location "::* 归档/%s")  ; 动态标题路径模板[4](@ref)
+#+begin_src emacs-lisp :tangle no
+  (defun my/org-get-closed-time ()
+    "获取条目的CLOSED时间"
+    (org-entry-get (point) "CLOSED"))
 
-(defun transform-archive-heading ()
-  "转换标题层级并插入时间戳"
-  (interactive)
-  (let* ((orig-heading (nth 4 (org-heading-components)))
-         (timestamp (format-time-string "%Y%m%d"))
-         (new-heading (concat timestamp "/" orig-heading)))
-    (org-edit-headline new-heading)
-    (org-demote-subtree)  ; 降级为四级标题
+  (defun my/org-create-archive-project ()
+    "创建归档副本并重组结构，保留原项目不变"
+    (interactive)
+    (unless (org-entry-is-done-p)
+      (user-error "只有已完成的项目可以归档"))
     (save-excursion
       (org-back-to-heading)
-      (insert (format "* %s归档\n" (car (split-string orig-heading "/")))))))
+      (let* ((orig-heading (org-get-heading))
+             (closed-time (my/org-get-closed-time))
+             (archive-heading (concat orig-heading " ◀归档▶"))
+             (month-heading (when closed-time
+                              (format-time-string "%Y/%m"
+                               (date-to-time closed-time)))))
 
-;; ====================
-;; 自动层级调整
-;; ====================
-(defun adjust-archive-level ()
-  "自动创建时间戳层级结构"
-  (let* ((path (split-string (org-extract-archive-heading) "/"))
-         (current-level 1))
-    (save-excursion
-      (goto-char (point-min))
-      (dolist (headline path)
-        (when (string-match "\$[0-9]\\{8\\}\$" headline)  ; 识别时间戳格式[7](@ref)
-          (setq headline (format-time-string "%Y-%m-%d"
-                           (parse-time-string headline))))
-        (unless (re-search-forward
-                (concat "^\\*\\{1," (number-to-string current-level) "\\} " headline) nil t)
-          (org-insert-heading)
-          (insert headline))
-        (setq current-level (1+ current-level))))))
+        ;; 复制项目树
+        (org-copy-subtree nil nil t)
 
-;; ====================
-;; 触发机制
-;; ====================
-(add-hook 'org-archive-hook
-  (lambda ()
-    (transform-archive-heading)
-    (adjust-archive-level)
-    (org-save-all-org-buffers)))
+        ;; 定位到归档位置
+        (goto-char (point-max))
+        (unless (bolp) (insert "\n"))
+        (org-paste-subtree)
 
-;; ====================
-;; 可视化优化
-;; ====================
-(setq org-archive-tag "ARCHIVED")
-(font-lock-add-keywords 'org-mode
-  '(("^\\*+.*ARCHIVED" . 'org-archived))
-  'append)
+        ;; 修改归档标题
+        (org-edit-headline archive-heading)
+
+        ;; 处理开发计划
+        (org-with-point-at (point)
+          (when (re-search-forward "^*+ 开发计划" nil t)
+            (let ((dev-plan-end (org-end-of-subtree)))
+              (when month-heading
+                (org-insert-heading-after-current)
+                (insert month-heading)
+                ;; 移动功能设计条目
+                (when (re-search-forward "^*+ TODO 功能设计" dev-plan-end t)
+                  (org-cut-subtree)
+                  (org-back-to-heading)
+                  (org-paste-subtree))
+                ;; 删除原开发计划
+                (delete-region (point) dev-plan-end)))))))
+
+  ;; 自动触发归档
+  (defun my/org-auto-archive-project ()
+    (when (and (org-entry-is-done-p)
+               (not (org-entry-get (point) "ARCHIVED")))
+      (my/org-create-archive-project)
+      (org-entry-put (point) "ARCHIVED" "t")))
+
+  (add-hook 'org-after-todo-state-change-hook #'my/org-auto-archive-project)
+
 #+end_src
 ** Org bullets
 Show org-mode bullets as UTF-8 characters.
