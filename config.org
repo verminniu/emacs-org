@@ -2465,15 +2465,47 @@ magit
 https://magit.vc/manual/magit/Installing-from-Melpa.html
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package magit :defer 0.3)
+  ;; 配置 Magit
+  (use-package magit
+    :ensure t
+    :defer t
+    :bind (("C-x g" . magit-status)      ; 全局快捷键 C-x g 打开 Magit
+           ("C-x M-g" . magit-dispatch)) ; 通用 Git 命令入口
 
-  (use-package hl-todo
+    ;; 基础配置
     :config
-    (add-hook 'after-init-hook 'global-hl-todo-mode))
+    (setq magit-auto-revert-mode nil     ; 禁用自动 revert（按需设置）
+          magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1) ; 在当前窗口打开
 
-  (use-package magit-todos)
+    ;; 提交消息设置
+    (setq git-commit-summary-max-length 50
+          git-commit-fill-column 72)
+
+    ;; 启用自动换行模式（写提交信息时有用）
+    (add-hook 'git-commit-mode-hook 'turn-on-auto-fill))
+
+  ;; 可选：在侧边栏显示 Git 状态（需要 diff-hl 包）
+  (use-package diff-hl
+    :ensure t
+    :hook ((prog-mode . diff-hl-mode)      ; 在编程模式启用
+           (magit-post-refresh . diff-hl-magit-post-refresh))) ; Magit 刷新后更新
+
+  ;; 可选：增强 Git 提交信息编辑体验
+  (use-package git-commit
+    :after magit
+    :config
+    (global-git-commit-mode t))
+
+  ;; 可选：主题设置（选择你喜欢的主题）
+  (use-package magit-theme
+    :config
+    ;; 示例：使用暗色主题（根据个人喜好选择）
+    (setq magit-theme-automatic nil
+          magit-theme-default 'magit-theme-solarized-dark))
+
 
   (use-package magit-delta
+    :after magit
     :hook (magit-mode . magit-delta-mode))
 #+END_SRC
 
@@ -2481,10 +2513,8 @@ use diff-hl instead
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package diff-hl
     :config
-    (global-diff-hl-mode)
-    )
+    (global-diff-hl-mode))
 #+END_SRC
-
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package git-gutter
@@ -2495,7 +2525,6 @@ use diff-hl instead
 
 Finally, one last package that I like to use with Git to easily see the changes
 made by previous commits.
-
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-timemachine
     :defer 1
@@ -2642,16 +2671,9 @@ Use ztree to diff dirs
 代码对比
 https://github.com/wilfred/difftastic
 #+begin_src emacs-lisp :tangle yes
-  (use-package difftastic
-    :demand t
-    :bind (:map magit-blame-read-only-mode-map
-                ("D" . difftastic-magit-show)
-                ("S" . difftastic-magit-show))
-    :config
-    (eval-after-load 'magit-diff
-      '(transient-append-suffix 'magit-diff '(-1 -1)
-         [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
-          ("S" "Difftastic show" difftastic-magit-show)])))
+  (use-package abridge-diff
+    :after magit ;; optional, if you'd like to use with magit
+    :init (abridge-diff-mode 1))
 #+end_src
 ** Symbol overlay
 hight light symbol in different color
