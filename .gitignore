@@ -1,11 +1,2 @@
-cache/
 cnfonts/
-elpa/
-data/
 tree-sitter/
-var/
-transient/
-org-roam.db
-places
-smex-items
-srecode-map.el

@@ -2490,20 +2490,6 @@ https://magit.vc/manual/magit/Installing-from-Melpa.html
     :hook ((prog-mode . diff-hl-mode)      ; 在编程模式启用
            (magit-post-refresh . diff-hl-magit-post-refresh))) ; Magit 刷新后更新
 
-  ;; 可选：增强 Git 提交信息编辑体验
-  (use-package git-commit
-    :after magit
-    :config
-    (global-git-commit-mode t))
-
-  ;; 可选：主题设置（选择你喜欢的主题）
-  (use-package magit-theme
-    :config
-    ;; 示例：使用暗色主题（根据个人喜好选择）
-    (setq magit-theme-automatic nil
-          magit-theme-default 'magit-theme-solarized-dark))
-
-
   (use-package magit-delta
     :after magit
     :hook (magit-mode . magit-delta-mode))
