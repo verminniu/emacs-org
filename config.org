@@ -2474,12 +2474,12 @@ https://magit.vc/manual/magit/Installing-from-Melpa.html
 
     ;; 基础配置
     :config
-    (setq magit-auto-revert-mode nil     ; 禁用自动 revert（按需设置）
-          magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1) ; 在当前窗口打开
+    ;; (setq magit-auto-revert-mode nil     ; 禁用自动 revert（按需设置）
+    ;;       magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1) ; 在当前窗口打开
 
     ;; 提交消息设置
-    (setq git-commit-summary-max-length 50
-          git-commit-fill-column 72)
+    ;; (setq git-commit-summary-max-length 50
+    ;;       git-commit-fill-column 72)
 
     ;; 启用自动换行模式（写提交信息时有用）
     (add-hook 'git-commit-mode-hook 'turn-on-auto-fill))
