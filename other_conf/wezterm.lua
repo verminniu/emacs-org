@@ -31,17 +31,17 @@ config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 --     -- This font has a broader selection of Chinese glyphs than my preferred font
 --     "DengXian"
 -- }
--- config.font = wezterm.font_with_fallback({"JetBrainsMono Nerd Font", "LXGWWenKaiMono"})
-config.font =
-    wezterm.font_with_fallback {
-    {
-        family = "Cascadia Mono NF",
-        harfbuzz_features = {"zero", "ss01", "cv05"}
-    },
-    {family = "Terminus", weight = "Bold"},
-    "Noto Color Emoji",
-    "LXGW WenKai Mono"
-}
+config.font = wezterm.font_with_fallback({"Maple Mono NF CN"})
+-- config.font =
+--     wezterm.font_with_fallback {
+--     {
+--         family = "Cascadia Mono NF",
+--         harfbuzz_features = {"zero", "ss01", "cv05"}
+--     },
+--     {family = "Terminus", weight = "Bold"},
+--     "Noto Color Emoji",
+--     "LXGW WenKai Mono"
+-- }
 
 -- config.keys = {
 --     -- disable ctrl-shift-2 for mark in emacs
