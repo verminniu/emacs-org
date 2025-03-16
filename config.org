@@ -320,9 +320,12 @@ I also made sure to follow the XDG base directory specification for the
   ;; (set-face-attribute 'default t :font "JetBrainsMono Nerd Font")
 
   ;; (set-fontset-font t 'latin (font-spec :family "IntelOne Mono"))
-  (set-fontset-font t 'latin (font-spec :family "Cascadia Mono NF"))
-  (set-fontset-font t 'han (font-spec :family "霞鹜文楷" :weight 'bold))
-  (set-fontset-font t 'kana (font-spec :family "Sarasa Gothic J" :weight 'normal :slant 'normal))
+  ;; (set-fontset-font t 'latin (font-spec :family "Cascadia Mono NF"))
+  ;; (set-fontset-font t 'han (font-spec :family "霞鹜文楷" :weight 'bold))
+  ;; (set-fontset-font t 'kana (font-spec :family "Sarasa Gothic J" :weight 'normal :slant 'normal))
+
+  (when (display-graphic-p)
+    (set-face-attribute 'default nil :font "Maple Mono NF CN"))
 
   (use-package unicode-fonts
     :ensure t
