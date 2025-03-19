@@ -104,7 +104,6 @@
   - [[#treemacs][Treemacs]]
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
-  - [[#org-自动归档配置][org 自动归档配置]]
   - [[#org-bullets][Org bullets]]
   - [[#org-babel][Org babel]]
   - [[#org-ql][Org QL]]
@@ -2877,6 +2876,8 @@ Try emr
            ("C-c b" . org-switchb)
            ("C-c x" . org-capture))
     :config
+    ;;将archive项按日期树组织
+    (setq org-archive-location "%s_archive::datetree/")
     ;; 打开tab自动补全 <s
     (require 'org-tempo)
     ;; shifttab when open org files
@@ -2935,63 +2936,6 @@ Try emr
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 #+end_src
 
-** org 自动归档配置
-独立归档配置测试方便
-#+begin_src emacs-lisp :tangle no
-  (defun my/org-get-closed-time ()
-    "获取条目的CLOSED时间"
-    (org-entry-get (point) "CLOSED"))
-
-  (defun my/org-create-archive-project ()
-    "创建归档副本并重组结构，保留原项目不变"
-    (interactive)
-    (unless (org-entry-is-done-p)
-      (user-error "只有已完成的项目可以归档"))
-    (save-excursion
-      (org-back-to-heading)
-      (let* ((orig-heading (org-get-heading))
-             (closed-time (my/org-get-closed-time))
-             (archive-heading (concat orig-heading " ◀归档▶"))
-             (month-heading (when closed-time
-                              (format-time-string "%Y/%m"
-                               (date-to-time closed-time)))))
-
-        ;; 复制项目树
-        (org-copy-subtree nil nil t)
-
-        ;; 定位到归档位置
-        (goto-char (point-max))
-        (unless (bolp) (insert "\n"))
-        (org-paste-subtree)
-
-        ;; 修改归档标题
-        (org-edit-headline archive-heading)
-
-        ;; 处理开发计划
-        (org-with-point-at (point)
-          (when (re-search-forward "^*+ 开发计划" nil t)
-            (let ((dev-plan-end (org-end-of-subtree)))
-              (when month-heading
-                (org-insert-heading-after-current)
-                (insert month-heading)
-                ;; 移动功能设计条目
-                (when (re-search-forward "^*+ TODO 功能设计" dev-plan-end t)
-                  (org-cut-subtree)
-                  (org-back-to-heading)
-                  (org-paste-subtree))
-                ;; 删除原开发计划
-                (delete-region (point) dev-plan-end)))))))
-
-  ;; 自动触发归档
-  (defun my/org-auto-archive-project ()
-    (when (and (org-entry-is-done-p)
-               (not (org-entry-get (point) "ARCHIVED")))
-      (my/org-create-archive-project)
-      (org-entry-put (point) "ARCHIVED" "t")))
-
-  (add-hook 'org-after-todo-state-change-hook #'my/org-auto-archive-project)
-
-#+end_src
 ** Org bullets
 Show org-mode bullets as UTF-8 characters.
 
