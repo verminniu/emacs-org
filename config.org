@@ -104,6 +104,7 @@
   - [[#treemacs][Treemacs]]
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
+  - [[#org-reverse-datetree][org-reverse-datetree]]
   - [[#org-bullets][Org bullets]]
   - [[#org-babel][Org babel]]
   - [[#org-ql][Org QL]]
@@ -2661,6 +2662,7 @@ https://github.com/wilfred/difftastic
 #+begin_src emacs-lisp :tangle yes
   (use-package abridge-diff
     :after magit ;; optional, if you'd like to use with magit
+    :ensure-system-package (difft . difftastic)
     :init (abridge-diff-mode 1))
 #+end_src
 ** Symbol overlay
@@ -2936,6 +2938,11 @@ Try emr
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 #+end_src
 
+** org-reverse-datetree
+按时间逆序归档
+#+begin_src emacs-lisp
+  (use-package org-reverse-datetree)
+#+end_src
 ** Org bullets
 Show org-mode bullets as UTF-8 characters.
 
