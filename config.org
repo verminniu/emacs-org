@@ -261,6 +261,7 @@ For a better user experience of GNU Emacs, here are the default values I use.
   (add-to-list 'auto-mode-alist '("\\.inl\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.inc\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.cc\\'" . c++-mode))    ; fable template file
   (add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
   (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
 
@@ -972,7 +973,7 @@ auto install tree sitter
   (global-lsp-bridge-mode)
 #+end_src
 ** Eglot
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project)
   (use-package eglot
     :ensure t
@@ -1018,7 +1019,7 @@ auto install tree sitter
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
