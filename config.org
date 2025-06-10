@@ -914,6 +914,7 @@ https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
 #+END_SRC
 ** Citre
 部分情况下，服务不一定能编译通过，lsp无法使用，可以采用ctags补全部分
+另外现在支持eglot一起使用
 另外citre-peak很好用
 #+begin_quote
 M-n, M-p: Next/prev line.
