@@ -24,6 +24,7 @@
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
   - [[#projectile][Projectile]]
+  - [[#kkp][kkp]]
   - [[#rime][Rime]]
 - [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
@@ -522,7 +523,6 @@ modus-theme
   (add-hook 'diff-mode-hook #'my-rainbow-region-magenta)
 #+end_src
 
-
 ** mode-line
 moody
 #+begin_src emacs-lisp :tangle no
@@ -894,6 +894,16 @@ Use build.sh to compile project with build.sh
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
 #+END_SRC
+** kkp
+支持kkp协议
+https://sw.kovidgoyal.net/kitty/keyboard-protocol/
+#+begin_src emacs-lisp :tangle yes
+  (use-package kkp
+    :ensure t
+    :config
+    ;; (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
+    (global-kkp-mode +1))
+#+end_src
 ** Rime
 中文输入法支持
 https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org

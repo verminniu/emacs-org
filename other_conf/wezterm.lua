@@ -2,7 +2,9 @@
 local wezterm = require("wezterm")
 
 -- This table will hold the configuration.
-local config = {}
+local config = {
+    enable_kitty_keyboard = true
+}
 
 -- Mocha, -- or Macchiato, Frappe, Latte
 function scheme_for_appearance(appearance)
