@@ -26,6 +26,7 @@
   - [[#projectile][Projectile]]
   - [[#kkp][kkp]]
   - [[#rime][Rime]]
+  - [[#ultra-scroll---for-mac][ultra-scroll - for mac]]
 - [[#languages][Languages]]
   - [[#flycheck][FlyCheck]]
   - [[#citre][Citre]]
@@ -913,6 +914,20 @@ https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
     (default-input-method "rime"))
 #+end_src
 
+** ultra-scroll - for mac
+https://github.com/jdtsmith/ultra-scroll
+#+begin_src emacs-lisp :tangle yes
+  (cond
+   ((string-equal system-type "darwin") ; Mac OS X
+    (progn
+      (use-package ultra-scroll
+        :vc (:url "https://github.com/jdtsmith/ultra-scroll") ; For Emacs>=30
+        :init
+        (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
+              scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+        :config
+        (ultra-scroll-mode 1)))))
+  #+end_src
 * Languages
 ** FlyCheck
 #+BEGIN_SRC emacs-lisp :tangle yes
