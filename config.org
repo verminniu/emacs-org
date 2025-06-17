@@ -989,8 +989,10 @@ auto install tree sitter
 
 ** Eglot
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package project)
-  (use-package flymake)
+  (use-package project
+    :ensure nil)
+  (use-package flymake
+    :ensure nil)
   (use-package eglot
     :ensure t
     :after project
@@ -2748,7 +2750,7 @@ try Quickrun
 Try emr
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emr
-    :ensure nil
+    :ensure t
     :config
     (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
     )
@@ -2756,7 +2758,7 @@ Try emr
 ** Add multi iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit
-    :ensure nil
+    :ensure t
     :bind (("C-c ;" . iedit-mode)
            )
     )
