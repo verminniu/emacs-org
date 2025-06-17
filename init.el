@@ -26,44 +26,62 @@
 
 ;; Make startup faster by reducing the frequency of garbage
 ;; collection.
-(setq gc-cons-threshold (* 50 1000 1000))
 
-(require 'package)
-(package-initialize)
+;; Example Elpaca configuration -*- lexical-binding: t; -*-
+(defvar elpaca-installer-version 0.11)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1 :inherit ignore
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (<= emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+
+;; Uncomment for systems which cannot create symlinks:
+;; (elpaca-no-symlink-mode)
+
+;; Install a package via the elpaca macro
+;; See the "recipes" section of the manual for more details.
+
+;; (elpaca example-package)
+
+;; Install use-package support
+(elpaca elpaca-use-package
+        ;; Enable use-package :ensure support for Elpaca.
+        (elpaca-use-package-mode))
 
 (if (file-exists-p (expand-file-name "config.el" user-emacs-directory))
     (load-file (expand-file-name "config.el" user-emacs-directory))
   (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
 
 ;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
-
-;;; init.el ends here
-;;(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- ;;'(package-selected-packages
- ;;  (quote
-;;	(hungry-delete git-timemachine git-gutter magit git-commit counsel-projectile projectile smartparens rainbow-delimiters hydra async company-box company google-c-style doom-modeline nord-theme use-package-ensure-system-package delight))))
-;;(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;; )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (ztree yasnippet-snippets yapfify yaml-mode window-numbering whole-line-or-region vimrc-mode vdiff-magit use-package-ensure-system-package tree-mode toc-org symbol-overlay swift-mode smartparens smart-compile rmsbolt react-snippets rainbow-delimiters quickrun protobuf-mode powershell org-tree-slide org-rich-yank org-preview-html org-pomodoro org-fancy-priorities org-dashboard org-bullets ob-rust ob-ipython ob-go modern-cpp-font-lock magit-todos lua-mode lsp-ui live-py-mode ivy-yasnippet ivy-rich ivy-pass iedit ibuffer-projectile helm-smex helm-lsp grip-mode govet google-c-style golint go-tag go-rename go-playground go-impl go-gen-test go-fill-struct go-dlv git-timemachine git-gutter flymd flycheck fish-mode editorconfig dumb-jump doom-themes doom-modeline dockerfile-mode diffview diff-hl delight dashboard dap-mode csv-mode csharp-mode cquery counsel-projectile company-tabnine company-lsp company-ctags company-box cmake-font-lock ccls cask-mode bmx-mode auto-yasnippet all-the-icons-ivy all-the-icons-dired))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -174,7 +174,7 @@ In order to install packages, it is useful to configure the package sources.
 ** use-package
 30已经为默认
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
