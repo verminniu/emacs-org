@@ -916,7 +916,7 @@ https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org
 
 ** ultra-scroll - for mac
 https://github.com/jdtsmith/ultra-scroll
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (cond
    ((string-equal system-type "darwin") ; Mac OS X
     (progn
@@ -1162,7 +1162,7 @@ auto install tree sitter
 #+end_src
 
 **** lsp-python
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; sudo npm install -g pyright
   ;; sudo npm update -g pyright
   (use-package lsp-pyright
@@ -1324,7 +1324,7 @@ try Rainbow Identifiers
 
 ** Doxygen Comment
 Use srecode to genenate doxygen comment
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package srecode
     :config
     (semantic-mode)
@@ -1392,7 +1392,7 @@ Provides minibuffer hints when working with Emacs Lisp.
     (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
 #+end_src
 ** Python
-Lsp-mode will start py on python mode
+Lsp-mode/eglot will start py on python mode
 use [[*Format All][Format All]] to format code
 
 Use pyright
@@ -1498,7 +1498,7 @@ Grip use github api Need github account try other
 #+END_SRC
 
 ** GO
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
      ;;; Commentary:
   ;;
   ;; Golang configurations.
@@ -2577,7 +2577,6 @@ and automatically expand it into function templates.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
     :defer t
-    :after lsp-mode
     :config
     (add-hook 'prog-mode-hook 'yas-minor-mode)
     (yas-global-mode 1))
