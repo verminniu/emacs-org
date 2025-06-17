@@ -1015,9 +1015,9 @@ auto install tree sitter
   (use-package consult-eglot-embark
     :after consult-eglot)
 
-  (use-package flycheck-eglot
-    :config
-    (global-flycheck-eglot-mode 1))
+  ;; (use-package flycheck-eglot
+  ;;   :config
+  ;;   (global-flycheck-eglot-mode 1))
 #+END_SRC
 
 **** java
@@ -2464,6 +2464,7 @@ Provides fast access to the recent files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package recentf
+    :ensure nil
     :bind ("C-c r" . recentf-open-files)
     :custom
     (recentf-exclude (list "COMMIT_EDITMSG"
@@ -2628,6 +2629,7 @@ and automatically expand it into function templates.
 ** Ediff
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ediff
+    :ensure nil
     :config
     (setq ediff-window-setup-function 'ediff-setup-windows-plain)
     (setq ediff-split-window-function 'split-window-horizontally)
@@ -2744,9 +2746,9 @@ try Quickrun
 #+END_SRC
 ** Refactor
 Try emr
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package iedit)
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emr
+    :ensure nil
     :config
     (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
     )
@@ -2754,6 +2756,7 @@ Try emr
 ** Add multi iedit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit
+    :ensure nil
     :bind (("C-c ;" . iedit-mode)
            )
     )
