@@ -2142,12 +2142,14 @@ For those who didn't know, GNU Emacs is also a file explorer.
 Buffers can quickly become a mess. For some people, it's not a problem, but I
 like being able to find my way easily.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ibuffer
+    :ensure nil
     :bind ("C-x C-b" . ibuffer))
 
   (use-package ibuffer-projectile
     :after ibuffer
+    :ensure t
     :config
     (add-hook 'ibuffer-hook
               (lambda ()
@@ -2747,8 +2749,8 @@ try Quickrun
   ;;(quickrun-set-default "c++" "c++/build")
 #+END_SRC
 ** Refactor
-Try emr
-#+BEGIN_SRC emacs-lisp :tangle yes
+暂时用不到，有lsp足够
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package emr
     :ensure t
     :config
