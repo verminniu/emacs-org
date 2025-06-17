@@ -990,6 +990,7 @@ auto install tree sitter
 ** Eglot
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project)
+  (use-package flymake)
   (use-package eglot
     :ensure t
     :after project
@@ -1773,7 +1774,7 @@ emacs java 模式 主要用来看代码，防止误操作
     (global-set-key (kbd "C-c d") 'bing-dict-brief))
 #+end_src
 ** Helpful
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package helpful
     :ensure t
     :pretty-hydra
@@ -2139,7 +2140,7 @@ For those who didn't know, GNU Emacs is also a file explorer.
 Buffers can quickly become a mess. For some people, it's not a problem, but I
 like being able to find my way easily.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ibuffer
     :bind ("C-x C-b" . ibuffer))
 
@@ -2484,6 +2485,7 @@ magit
 https://magit.vc/manual/magit/Installing-from-Melpa.html
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package transient)
   ;; 配置 Magit
   (use-package magit
     :ensure t
@@ -2742,7 +2744,8 @@ try Quickrun
 #+END_SRC
 ** Refactor
 Try emr
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package iedit)
   (use-package emr
     :config
     (define-key prog-mode-map (kbd "M-RET") 'emr-show-refactor-menu)
