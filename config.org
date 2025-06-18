@@ -343,9 +343,11 @@ I also made sure to follow the XDG base directory specification for the
 自己适应的一些绑定
 #+begin_src emacs-lisp :tangle yes
   ;; use bind-key for key binding
-  (use-package bind-key)
-  ;; Use s-SPC to set mark
-  (bind-key* "M-SPC" 'set-mark-command)
+  (use-package bind-key
+    :ensure nil
+    :config
+    ;; Use s-SPC to set mark
+    (bind-key* "M-SPC" 'set-mark-command))
 #+end_src
 
 ** Hydra
