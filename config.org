@@ -1382,8 +1382,13 @@ Provides minibuffer hints when working with Emacs Lisp.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eldoc
-    :delight
+    :ensure nil
     :hook (emacs-lisp-mode . eldoc-mode))
+
+  (use-package eldoc-box
+    :config
+    :after eglot
+    (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t))
 #+END_SRC
 
 ** Lua
@@ -2010,10 +2015,6 @@ find.
     :ensure t
     :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
-  (use-package nerd-icons-completion
-    :config
-    (nerd-icons-completion-mode))
-
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
     ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
@@ -2224,11 +2225,6 @@ smaller, simpler, and smoother to use yet highly customizable.
            )
     :config (counsel-mode)
     :custom (counsel-rg-base-command "rg -S -M 150 --no-heading --line-number --color never %s"))
-
-  (use-package counsel-projectile
-    :config
-    (counsel-projectile-mode)
-    )
 
   (use-package orderless
     :ensure t
@@ -2521,13 +2517,6 @@ https://magit.vc/manual/magit/Installing-from-Melpa.html
     :hook (magit-mode . magit-delta-mode))
 #+END_SRC
 
-use diff-hl instead
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package diff-hl
-    :config
-    (global-diff-hl-mode))
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package git-gutter
     :defer 0.3
@@ -2594,7 +2583,6 @@ and automatically expand it into function templates.
 
   (use-package ivy-yasnippet :after yasnippet)
   (use-package auto-yasnippet :after yasnippet)
-  (use-package react-snippets :after yasnippet)
 #+END_SRC
 ** Number Window
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2672,12 +2660,6 @@ Use ztree to diff dirs
 
 #+begin_src emacs-lisp :tangle yes
   (use-package diffview)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package abridge-diff
-    :after magit ;; optional, if you'd like to use with magit
-    :init (abridge-diff-mode 1))
 #+end_src
 ** Difft
 代码对比
