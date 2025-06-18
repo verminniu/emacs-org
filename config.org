@@ -1020,8 +1020,9 @@ auto install tree sitter
     :after consult-eglot)
 
   (use-package eldoc-box
-    :config
     :after eglot
+    :config
+    (add-hook 'eldoc-box-buffer-setup-hook #'eldoc-box-prettify-ts-errors 0 t)
     (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t))
 #+END_SRC
 
