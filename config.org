@@ -1007,7 +1007,7 @@ auto install tree sitter
     (add-hook 'lua-mode-hook 'eglot-ensure)
     (add-hook 'sh-mode-hook 'eglot-ensure)
     ;; (add-hook 'java-mode-hook 'eglot-ensure)
-    (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+        (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
     (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
     (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
     (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions))
@@ -1019,9 +1019,10 @@ auto install tree sitter
   (use-package consult-eglot-embark
     :after consult-eglot)
 
-  ;; (use-package flycheck-eglot
-  ;;   :config
-  ;;   (global-flycheck-eglot-mode 1))
+  (use-package eldoc-box
+    :config
+    :after eglot
+    (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t))
 #+END_SRC
 
 **** java
@@ -1386,11 +1387,6 @@ Provides minibuffer hints when working with Emacs Lisp.
   (use-package eldoc
     :ensure nil
     :hook (emacs-lisp-mode . eldoc-mode))
-
-  (use-package eldoc-box
-    :config
-    :after eglot
-    (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t))
 #+END_SRC
 
 ** Lua
