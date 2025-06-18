@@ -2601,12 +2601,10 @@ and automatically expand it into function templates.
 #+end_src
 
 ** Syntax subword
-暂时不需要分subword，后续考虑
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package syntax-subword
     :config
-    (global-syntax-subword-mode)
-    )
+    (global-syntax-subword-mode))
 #+end_src
 
 ** Whole line or region
