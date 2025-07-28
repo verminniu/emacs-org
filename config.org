@@ -24,6 +24,7 @@
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
   - [[#projectile][Projectile]]
+  - [[#projection--project][Projection && Project]]
   - [[#kkp][kkp]]
   - [[#rime][Rime]]
   - [[#ultra-scroll---for-mac][ultra-scroll - for mac]]
@@ -586,7 +587,6 @@ I find invasive.
   ;; (scroll-bar-mode -1)           ; Disable the scrollbar
 #+END_SRC
 ** Projectile
-
 #+BEGIN_QUOTE
 Projectile is a project interaction library for Emacs. Its goal is to provide a
 nice set of features operating on a project level without introducing external
@@ -624,6 +624,48 @@ Use build.sh to compile project with build.sh
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
 #+END_SRC
+** Projection && Project
+快捷键不是很好使
+#+begin_src emacs-lisp :tangle no
+  (use-package projection
+    :ensure t
+    ;; Enable the `projection-hook' feature.
+    :hook (after-init . global-projection-hook-mode)
+
+    ;; Require projections immediately after project.el.
+    :config
+    (with-eval-after-load 'project
+      (require 'projection))
+
+    :config
+    ;; Uncomment if you want to disable prompts for compile commands customized in .dir-locals.el
+    ;; (put 'projection-commands-configure-project 'safe-local-variable #'stringp)
+    ;; (put 'projection-commands-build-project 'safe-local-variable #'stringp)
+    ;; (put 'projection-commands-test-project 'safe-local-variable #'stringp)
+    ;; (put 'projection-commands-run-project 'safe-local-variable #'stringp)
+    ;; (put 'projection-commands-package-project 'safe-local-variable #'stringp)
+    ;; (put 'projection-commands-install-project 'safe-local-variable #'stringp)
+
+    ;; Access pre-configured projection commands from a keybinding of your choice.
+    ;; Run `M-x describe-keymap projection-map` for a list of available commands.
+    :bind-keymap
+    ("C-x P" . projection-map))
+
+  (use-package projection-multi
+    :ensure t
+    ;; Allow interactively selecting available compilation targets from the current
+    ;; project type.
+    :bind ( :map project-prefix-map
+            ("RET" . projection-multi-compile)))
+
+  (use-package projection-multi-embark
+    :ensure t
+    :after embark
+    :after projection-multi
+    :demand t
+    ;; Add the projection set-command bindings to `compile-multi-embark-command-map'.
+    :config (projection-multi-embark-setup-command-map))
+#+end_src
 ** kkp
 支持kkp协议
 https://sw.kovidgoyal.net/kitty/keyboard-protocol/
@@ -718,8 +760,6 @@ auto install tree sitter
 
 ** Eglot
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package project
-    :ensure nil)
   (use-package flymake
     :ensure nil)
   (use-package eglot
