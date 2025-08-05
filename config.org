@@ -104,6 +104,7 @@
   - [[#add-multi-iedit][Add multi iedit]]
   - [[#comment-dwim-2][Comment dwim 2]]
   - [[#treemacs][Treemacs]]
+  - [[#pomo-cat][Pomo-cat]]
 - [[#org-mode][Org-mode]]
   - [[#org-common-setting][Org Common Setting]]
   - [[#org-reverse-datetree][org-reverse-datetree]]
@@ -2637,6 +2638,11 @@ try Quickrun
     :ensure t
     :config (treemacs-set-scope-type 'Tabs))
 
+#+end_src
+** Pomo-cat
+#+begin_src emacs-lisp :tangle yes
+  (use-package pomo-cat
+    :ensure (:host github :repo "kn66/pomo-cat.el"))
 #+end_src
 * Org-mode
 ** Org Common Setting
