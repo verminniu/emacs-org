@@ -2869,7 +2869,7 @@ try org modern
     (org-mode . org-appear-mode))
 #+end_src
 ** Org Valign
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package valign
     :config
     (setq valign-fancy-bar t)
