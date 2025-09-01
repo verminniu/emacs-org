@@ -1,6 +1,6 @@
 # 以下为mac的环境变量设置
 alias vscode='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
-alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+alias emacs='/opt/homebrew/opt/emacs-plus/bin/emacs -nw'
 alias dropshelf='open -a dropshelf'
 # alias app_emacs='open /opt/homebrew/opt/emacs-mac/Emacs.app'
 alias ec='emacsclient -t'
@@ -19,28 +19,39 @@ alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-ti
 
 # aviator
 alias aviator='~/code_tools/aviator/aviator'
-alias mysql_start='/opt/homebrew/opt/mysql/bin/mysqld_safe --datadir=/opt/homebrew/var/mysql &'
-alias mysql_stop='/opt/homebrew/opt/mysql/bin/mysqladmin shutdown'
 
-# exec brew install coreutils
+# brew install gawk grep gnu-sed coreutils
+export PATH="/opt/homebrew/opt/gawk/libexec/gnubin:$PATH"
+export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
 export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 
-export PATH="/usr/local/opt/gettext/bin:$PATH"
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH=":/Applications/IntelliJ IDEA CE.app/Contents/MacOS:$PATH"
+# mysql client
+# export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+# export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib $LDFLAGS"
+# export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include $CPPFLAGS"
+export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/mysql@8.4/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/mysql@8.4/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql@8.4/lib/pkgconfig"
+
+alias mysql_start='mysqld_safe --datadir=/opt/homebrew/var/mysql &'
+alias mysql_stop='mysqladmin shutdown'
+
+export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
+export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
-# proxy for walless
-export https_proxy=http://127.0.0.1:33210 http_proxy=http://127.0.0.1:33210 all_proxy=socks5://127.0.0.1:33211
+# 暂时不开代理
+# proxy for:
+# https://kao-laa.site/user/shop
+# export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 
 # graphviz
 export GRAPHVIZ_DOT="/opt/homebrew/bin/dot"
 
-# mysql client
-export LDFLAGS="-L/opt/homebrew/opt/mysql-client/lib $LDFLAGS"
-export CPPFLAGS="-I/opt/homebrew/opt/mysql-client/include $CPPFLAGS"
+
 export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include $CPPFLAGS"
 
 # llvm
@@ -69,17 +80,14 @@ export GROOVY_HOME="/opt/homebrew/opt/groovy/libexec"
 export CAT_HOME="/data/appdatas/cat/"
 
 # go
-export GO111MODULE=on
-export GOPROXY=https://goproxy.cn
-export GOPATH="/usr/local/gopath/"
+export GOROOT="/opt/homebrew/Cellar/go/1.24.5/libexec"
+#export GOPROXY=https://goproxy.cn
+export GOPATH="$HOME/.go"
 export PATH="$GOPATH/bin:$PATH"
-
-# export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
-export HOMEBREW_NO_AUTO_UPDATE=1
 
 export HISTCONTROL=erasedups
 export TERM=xterm-256color
-export LANG=zh_CN.utf8
+export LANG=zh_CN.UTF-8
 
 # git diff 用less进行分页，需要配置less参数，防止乱码
 export LESS=eFRX
@@ -128,6 +136,13 @@ source ${ZIM_HOME}/init.zsh
 # ----- zim end
 
 [[ -s "/opt/homebrew/etc/grc.zsh" ]] && source /opt/homebrew/etc/grc.zsh
+
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+echo 'export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"' >> ~/.zprofile
+echo 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"' >> ~/.zprofile
+export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles
 ulimit -n unlimited
