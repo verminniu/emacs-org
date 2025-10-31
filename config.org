@@ -2431,10 +2431,33 @@ Use ztree to diff dirs
 代码对比
 https://github.com/wilfred/difftastic
 #+begin_src emacs-lisp :tangle yes
-  (use-package abridge-diff
+  (use-package difftastic
+    :defer t
     :after magit ;; optional, if you'd like to use with magit
     :ensure-system-package (difft . difftastic)
-    :init (abridge-diff-mode 1))
+    :init
+    (use-package transient               ; to silence compiler warnings
+      :autoload (transient-get-suffix
+                 transient-parse-suffix))
+
+    (use-package magit-blame
+      :defer t :ensure magit
+      :bind
+      (:map magit-blame-read-only-mode-map
+            ("M-RET" . #'difftastic-magit-show))
+      :config
+      (let ((suffix '("M-RET" "Difftastic show" difftastic-magit-show)))
+        (unless (equal (transient-parse-suffix 'magit-blame suffix)
+                       (transient-get-suffix 'magit-blame "b"))
+          (transient-append-suffix 'magit-blame "b" suffix)))
+      (use-package magit-diff
+        :defer t :ensure magit
+        :config
+        (let ((suffix [("M-d" "Difftastic diff (dwim)" difftastic-magit-diff)
+                       ("M-c" "Difftastic show" difftastic-magit-show)]))
+          (unless (equal (transient-parse-suffix 'magit-diff suffix)
+                         (transient-get-suffix 'magit-diff '(-1 -1)))
+            (transient-append-suffix 'magit-diff '(-1 -1) suffix))))))
 #+end_src
 ** Symbol overlay
 hight light symbol in different color
