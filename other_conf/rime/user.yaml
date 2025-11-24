@@ -3,4 +3,4 @@ var:
   option:
     full_shape: false
     simplification: true
-  previously_selected_schema: luna_pinyin
+  previously_selected_schema: rime_ice
