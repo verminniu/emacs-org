@@ -1,6 +1,16 @@
+__include: octagram
+octagram:
+  __patch:
+    # 支持万象模型
+    # https://github.com/amzxyz/rime_wanxiang
+    grammar: {collocation_max_length: 5, collocation_min_length: 2, language: "wanxiang-lts-zh-hans"}
+    "translator/contextual_suggestions": true
+    "translator/max_homographs": 7
+    "translator/max_homophones": 7
 var:
-  last_build_time: 1758532166
+  last_build_time: 1764819138
   option:
     full_shape: false
     simplification: true
+  # rime_ice
   previously_selected_schema: rime_ice
