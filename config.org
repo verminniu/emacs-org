@@ -810,7 +810,7 @@ auto install tree sitter
 #+end_src
 
 ** LSP
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
