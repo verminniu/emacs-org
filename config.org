@@ -760,7 +760,7 @@ auto install tree sitter
 #+end_src
 
 ** Eglot
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package flymake
     :ensure nil)
   (use-package eglot
@@ -938,11 +938,13 @@ auto install tree sitter
 #+end_src
 
 **** lsp-python
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; sudo npm install -g pyright
   ;; sudo npm update -g pyright
+  ;; pip install basedpyright
   (use-package lsp-pyright
     :ensure t
+    :custom (lsp-pyright-langserver-command "basedpyright")
     :config
     (setq lsp-pyright-python-executable-cmd "python3")
     :hook (python-mode . (lambda ()
