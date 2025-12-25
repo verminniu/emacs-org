@@ -838,14 +838,17 @@ auto install tree sitter
           lsp-semantic-token-modifier-faces nil)
     (custom-set-faces
      '(lsp-face-semhl-comment ((t (:inherit shadow)))))
-    (setq lsp-clients-clangd-args '("-j=8" ; 多并发
-                                          ;"--malloc-trim" ; 通过malloc_trim定期释放内存，只支持linux，mac 不支持
-                                    "--background-index"
-                                    "--clang-tidy"
-                                    "--completion-style=bundled"
-                                    "--pch-storage=memory"
-                                    "--header-insertion=iwyu"
-                                    "--header-insertion-decorators"))
+    (setq lsp-clients-clangd-args
+          '("--header-insertion=iwyu"         ; 开启自动插入
+            "--header-insertion-decorators
+            "--background-index"              ; 开启后台索引
+            "--clang-tidy"                    ; 开启静态检查
+            "--completion-style=detailed"     ; 提供详细补全信息
+            "--pch-storage=memory"            ; PCH 存储在内存中，大幅提升速度
+            "-j=12"                           ; 并行线程数，建议设为核心数的 1.5 倍
+            "--limit-results=50"              ; 限制补全结果数量，防止渲染卡顿
+            "--all-scopes-completion"         ; 全局范围补全
+            "--header-insertion-decorators")) ; 装饰符提示
     (setq lsp-completion-enable t
           lsp-enable-snippet t
           lsp-semantic-highlighting t
