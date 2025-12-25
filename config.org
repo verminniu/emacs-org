@@ -2989,7 +2989,7 @@ export org to mind-map with Graphviz
 
 ** Org-roam
 https://www.orgroam.com
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   ;; Roam
   (use-package org-roam
     :diminish
