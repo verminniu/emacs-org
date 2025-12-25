@@ -1,2 +1,40 @@
+# .clangd 配置文件 - 针对 Clangd 20/21 优化
 CompileFlags:
-  Add: [-std=c++20]
+  # 让 Clangd 能够找到标准库头文件和正确的编译选项
+  CompilationDatabase: "build"
+  Add:
+    - "-std=c++26"          # 开启 C++26 支持（Clangd 21 强项）
+    - "-Wall"
+    - "-Wno-missing-prototypes"
+    - "-fms-extensions"     # 如果是 Windows 开发建议开启
+  Remove:
+    - "-fconserve-stack"    # 移除一些 Clang 不支持的 GCC 参数
+
+Index:
+  Background: Build         # 背景索引模式：构建时索引
+  StandardLibrary: Yes      # 索引标准库，方便跳转到 std 源码
+
+Diagnostics:
+  # 启用现代诊断功能
+  UnusedIncludes: Strict    # 严格检查未使用的头文件
+  MissingIncludes: Strict   # 检查缺失的头文件
+  # 排除一些不想看到警告的第三方库
+  Suppress: ["bugprone-narrowing-conversions", "google-readability-todo"]
+
+InlayHints:
+  # 20/21 版本增强的内联提示
+  Enabled: Yes
+  ParameterNames: Yes       # 显示函数参数名: foo(bar: 1)
+  DeducedTypes: Yes         # 显示 auto 推导出的类型
+  Designators: Yes          # 显示结构化绑定的名称
+  TypeNameLimit: 25         # 避免过长的模板类型撑爆屏幕
+
+Hover:
+  ShowAKA: Yes              # 在悬停提示中显示类型的别名（typedef/using）
+
+---
+# 针对特定平台的条件配置（示例：如果是 macOS）
+If:
+  PathMatch: .*?\.m
+CompileFlags:
+  Add: ["-xobjective-c"]
