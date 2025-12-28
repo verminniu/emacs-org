@@ -1,0 +1,12 @@
+# 字体渲染优化（解决你之前提到的发虚问题）
+font-family = "Maple Mono NF CN"
+font-size = 13
+font-thicken = true
+
+# Emacs 核心设置
+macos-option-as-alt = left
+# 允许按键重复（长按 Meta-f 快速移动）
+macos-window-introduction-animation = false
+
+# 隐藏标题栏，获得更纯净的视觉感
+macos-titlebar-style = hidden
