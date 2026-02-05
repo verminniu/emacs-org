@@ -1,0 +1,15 @@
+patch:
+  # VS Code
+  app_options/com.microsoft.VSCode:
+    ascii_mode: true
+  # IntelliJ IDEA
+  app_options/com.jetbrains.intellij.ce:
+    ascii_mode: true
+  # Emacs
+  app_options/org.gnu.Emacs:
+    ascii_mode: true
+  # Ghostty
+  app_options/com.mitchellh.ghostty:
+    ascii_mode: true
+  app_options/com.raycast.macos:
+    ascii_mode: true
