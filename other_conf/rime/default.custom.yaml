@@ -1,15 +1,31 @@
 patch:
-  # VS Code
-  app_options/com.microsoft.VSCode:
-    ascii_mode: true
-  # IntelliJ IDEA
-  app_options/com.jetbrains.intellij.ce:
-    ascii_mode: true
-  # Emacs
-  app_options/org.gnu.Emacs:
-    ascii_mode: true
-  # Ghostty
-  app_options/com.mitchellh.ghostty:
-    ascii_mode: true
-  app_options/com.raycast.macos:
-    ascii_mode: true
+  # 指定服务默认用英文模式
+  app_options
+    # VS Code
+    com.microsoft.VSCode:
+      ascii_mode: true
+    # IntelliJ IDEA
+    com.jetbrains.intellij.ce:
+      ascii_mode: true
+    # Emacs
+    org.gnu.Emacs:
+      ascii_mode: true
+    # Ghostty
+    com.mitchellh.ghostty:
+      ascii_mode: true
+    com.raycast.macos:
+      ascii_mode: true
+
+  __include: octagram
+  octagram:
+    __patch:
+      grammar: {collocation_max_length: 5, collocation_min_length: 2, language: "wanxiang-lts-zh-hans"}
+      "translator/contextual_suggestions": true
+      "translator/max_homographs": 7
+      "translator/max_homophones": 7
+  var:
+    last_build_time: 1770276421
+    option:
+      full_shape: false
+      simplification: true
+    previously_selected_schema: rime_ice
