@@ -36,6 +36,7 @@
   - [[#lsp][LSP]]
   - [[#gdb][GDB]]
   - [[#realgud][RealGud]]
+  - [[#apheleia][apheleia]]
   - [[#format-all][Format All]]
   - [[#shell][Shell]]
   - [[#common-lisp----slime][Common Lisp -- slime]]
@@ -895,11 +896,57 @@ use realgud for debug
     :ensure t
     )
 #+end_src
+** apheleia
+这个好像比formatall好使，先替换试试
+#+begin_src emacs-lisp :tangle yes
+  (use-package apheleia
+    :ensure t
+    :config
+    ;; 1. 定义自定义格式化器 (Custom Formatters)
+    ;; Apheleia 默认已经内置了 black, clang-format 等，但我们可以按你的需求覆盖它们
+    ;; 定制 pg_format (SQL)
+    (setf (alist-get 'pg_format apheleia-formatters)
+          '("pg_format" "-"))
+
+    ;; 定制 clang-format (使用 Google 风格)
+    (setf (alist-get 'g-clang-format apheleia-formatters)
+          '("clang-format" "-style=google" "-assume-filename"
+            (or (buffer-file-name)
+                (cl-case major-mode
+                  (c-mode "test.c")
+                  (c++-mode "test.cpp")
+                  (t "test.c")))))
+
+    ;; 定制 black (Python)
+    (setf (alist-get 'my-black apheleia-formatters)
+          '("black" "-q" "--experimental-string-processing"
+            (when (and (buffer-file-name)
+                       (string-suffix-p ".pyi" (buffer-file-name)))
+              "--pyi")
+            "-"))
+
+    ;; 2. 映射 Major Mode 到格式化器 (Mode Alist)
+    (setq apheleia-mode-alist
+          (append '(;; 使用自定义的格式化器
+                    (sql-mode . pg_format)
+                    (c-mode   . g-clang-format)
+                    (c++-mode . g-clang-format)
+                    (python-mode . my-black)
+                    ;; 使用内置默认的格式化器
+                    (emacs-lisp-mode . lisp-indent)
+                    (lua-mode . lua-format)
+                    (protobuf-mode . clang-format)
+                    (json-mode . prettier-json))
+                  apheleia-mode-alist))
+
+    ;; 3. 启用全局自动保存格式化
+    (apheleia-global-mode +1))
+#+end_src
 ** Format All
 format all languages
 针对python自定义一个format支持black超长行换行
 主动打开各个语言的format，否则如果没有配置formater，会报错
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package format-all
     :ensure-system-package
     ((pg_format . pgformatter)
