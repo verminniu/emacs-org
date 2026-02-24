@@ -9,7 +9,6 @@
   - [[#proxy][Proxy]]
   - [[#packages-sources][Packages Sources]]
   - [[#use-package][use-package]]
-  - [[#quelpa][Quelpa]]
   - [[#elpaca][elpaca]]
 - [[#start-up][Start Up]]
   - [[#better-defaults][Better defaults]]
@@ -188,24 +187,8 @@ In order to install packages, it is useful to configure the package sources.
   (use-package delight :ensure t)
 #+END_SRC
 
-** Quelpa
-use Quelpa for use github packages
-#+begin_src emacs-lisp :tangle yes
-  (use-package quelpa :ensure t)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (quelpa
-   '(quelpa-use-package
-     :fetcher git
-     :url "https://github.com/quelpa/quelpa-use-package.git"))
-  (require 'quelpa-use-package)
-  ;; (setq use-package-ensure-function 'quelpa)
-
-#+end_src
-
 ** elpaca
-待定
+好用
 https://github.com/progfolio/elpaca
 * Start Up
 ** Better defaults
