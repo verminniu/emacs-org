@@ -2,7 +2,9 @@ patch:
   "key_binder/bindings":
     - { when: has_menu, accept: comma, send: Page_Up }
     - { when: has_menu, accept: period, send: Page_Down }
-    - { when: has_menu, accept: minus, send: Page_Up }
-    - { when: has_menu, accept: equal, send: Page_Down }
     - { when: paging, accept: comma, send: Page_Up }
     - { when: paging, accept: period, send: Page_Down }
+    # 覆盖掉default里面的翻页方便输入英文连字
+    # 当有输入码（menu）时，按下减号，执行“提交原始字符”并输入减号
+    - { when: has_menu, accept: minus, send_sequence: "{Shift+Return}-" } # 先上屏编码
+    - { when: has_menu, accept: equal, send: equal }
