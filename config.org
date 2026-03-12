@@ -766,6 +766,22 @@ auto install tree sitter
     :commands lsp-ui-mode
     :bind (:map lsp-mode-map
                 ("C-c n" . lsp-ui-imenu))
+    :custom
+    ;; 悬浮文档 (Hover)
+    (lsp-ui-doc-enable t)
+    (lsp-ui-doc-position 'at-point)      ;; 悬浮窗紧贴光标
+    (lsp-ui-doc-show-with-cursor t)      ;; 光标停留自动显示
+    (lsp-ui-doc-show-with-mouse nil)     ;; 关闭鼠标悬停显示，防止乱弹
+    (lsp-ui-doc-max-width 80)
+    (lsp-ui-doc-max-height 20)
+    (lsp-ui-doc-border (face-foreground 'default)) ;; 加个漂亮的边框
+
+    ;; 右侧信息栏 (Sideline)
+    (lsp-ui-sideline-enable t)
+    (lsp-ui-sideline-show-diagnostics t) ;; 右侧显示 Error/Warning
+    (lsp-ui-sideline-show-code-actions t)
+    (lsp-ui-sideline-show-hover nil)     ;; 关掉 sideline 的 hover，避免和 doc 冲突
+    (lsp-ui-sideline-delay 0.5)
     :config
     (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
