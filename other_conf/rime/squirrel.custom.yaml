@@ -1,0 +1,17 @@
+patch:
+  # 指定服务默认用英文模式
+  app_options:
+    # VS Code
+    com.microsoft.VSCode:
+      ascii_mode: true
+    # IntelliJ IDEA
+    com.jetbrains.intellij.ce:
+      ascii_mode: true
+    # Emacs
+    org.gnu.Emacs:
+      ascii_mode: true
+    # Ghostty
+    com.mitchellh.ghostty:
+      ascii_mode: true
+    com.raycast.macos:
+      ascii_mode: true

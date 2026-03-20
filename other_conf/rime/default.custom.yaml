@@ -1,25 +1,30 @@
 patch:
-  # 指定服务默认用英文模式
-  app_options
-    # VS Code
-    com.microsoft.VSCode:
-      ascii_mode: true
-    # IntelliJ IDEA
-    com.jetbrains.intellij.ce:
-      ascii_mode: true
-    # Emacs
-    org.gnu.Emacs:
-      ascii_mode: true
-    # Ghostty
-    com.mitchellh.ghostty:
-      ascii_mode: true
-    com.raycast.macos:
-      ascii_mode: true
+  # 指定服务默认用英文模式 - 需要放到 squirrel.custom.yaml 或者 weasel.custom.yaml 才会生效
+  #app_options:
+  #  # VS Code
+  #  com.microsoft.VSCode:
+  #    ascii_mode: true
+  #  # IntelliJ IDEAd
+  #  com.jetbrains.intellij.ce:
+  #    ascii_mode: true
+  #  # Emacsdddd
+  #  org.gnu.Emacs:
+  #    ascii_mode: true
+  #  # Ghostty
+  #  com.mitchellh.ghostty:
+  #    ascii_mode: true
+  #  com.raycast.macos:
+  #    ascii_mode: true
 
   __include: octagram
   octagram:
     __patch:
-      grammar: {collocation_max_length: 5, collocation_min_length: 2, language: "wanxiang-lts-zh-hans"}
+      grammar:
+        {
+          collocation_max_length: 5,
+          collocation_min_length: 2,
+          language: "wanxiang-lts-zh-hans",
+        }
       "translator/contextual_suggestions": true
       "translator/max_homographs": 7
       "translator/max_homophones": 7
