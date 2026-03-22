@@ -15,3 +15,5 @@ patch:
       ascii_mode: true
     com.raycast.macos:
       ascii_mode: true
+    com.microsoft.edgemac:
+      ascii_mode: true

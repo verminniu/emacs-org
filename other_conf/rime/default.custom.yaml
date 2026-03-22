@@ -1,10 +1,10 @@
 patch:
-  # 指定服务默认用英文模式 - 需要放到 squirrel.custom.yaml 或者 weasel.custom.yaml 才会生效
+  # 指定服务默认用英文模式 - 需要放到 squirrel.custom.yaml 或者 weasel.custom.yaml 会生效
   #app_options:
   #  # VS Code
   #  com.microsoft.VSCode:
   #    ascii_mode: true
-  #  # IntelliJ IDEAd
+  #  # IntelliJ IDEA
   #  com.jetbrains.intellij.ce:
   #    ascii_mode: true
   #  # Emacsdddd
