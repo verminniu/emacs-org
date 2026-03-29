@@ -2028,6 +2028,8 @@ smaller, simpler, and smoother to use yet highly customizable.
   ;; Consult: 高级搜索与跳转 (完美替代 Swiper 和 Counsel)
   (use-package consult
     :ensure t
+    :custom
+    (consult-preview-key nil)               ;; 关闭预览
     :bind (("C-s" . consult-line)           ;; 替代 swiper: 当前文件搜索
            ("C-M-s" . consult-ripgrep)      ;; 替代 counsel-rg: 全局搜代码
            ("C-x b" . consult-buffer)       ;; 替代 counsel-switch-buffer
@@ -2162,6 +2164,10 @@ Provides fast access to the recent files.
     :init
     (recentf-mode 1)
     :custom
+    ;; 核心：不要让 recentf 去碰远程文件（TRAMP）
+    (recentf-keep '(file-remote-p reverse nil))
+    ;; 性能优化：关闭自动清理，改为手动或定时（防止每次打开文件都扫描磁盘）
+    (recentf-auto-cleanup 'never)
     (recentf-max-saved-items 200)     ;; 增加记录数量，建议 200-500
     (recentf-max-menu-items 15)
     ;; 过滤掉不需要记录的路径（比如各种插件的自动保存、缓存）
@@ -2176,10 +2182,7 @@ Provides fast access to the recent files.
        "/ssh:"
        "/sudo:"
        "/Cellar/" ;; Homebrew 的路径
-       "/opt/homebrew/"))
-    :config
-    ;; 自动清理不存在的文件路径，保持列表干净
-    (run-at-time nil (* 5 60) 'recentf-cleanup))
+       "/opt/homebrew/")))
 #+END_SRC
 
 ** Version Control
