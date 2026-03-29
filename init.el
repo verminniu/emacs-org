@@ -27,16 +27,15 @@
 ;; Make startup faster by reducing the frequency of garbage
 ;; collection.
 
-;; Example Elpaca configuration -*- lexical-binding: t; -*-
-(defvar elpaca-installer-version 0.11)
+(defvar elpaca-installer-version 0.12)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-sources-directory (expand-file-name "sources/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
                               :ref nil :depth 1 :inherit ignore
                               :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+                              :build (:not elpaca-activate)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-sources-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
        (order (cdr elpaca-order))
        (default-directory repo))
@@ -67,9 +66,6 @@
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
-;; Uncomment for systems which cannot create symlinks:
-;; (elpaca-no-symlink-mode)
-
 ;; Install a package via the elpaca macro
 ;; See the "recipes" section of the manual for more details.
 
@@ -77,8 +73,22 @@
 
 ;; Install use-package support
 (elpaca elpaca-use-package
-        ;; Enable use-package :ensure support for Elpaca.
-        (elpaca-use-package-mode))
+  ;; Enable use-package :ensure support for Elpaca.
+  (elpaca-use-package-mode))
+
+;;When installing a package used in the init file itself,
+;;e.g. a package which adds a use-package key word,
+;;use the :wait recipe keyword to block until that package is installed/configured.
+;;For example:
+;;(use-package general :ensure (:wait t) :demand t)
+
+;; Expands to: (elpaca evil (use-package evil :demand t))
+;; (use-package evil :ensure t :demand t)
+
+;;Turns off elpaca-use-package-mode current declaration
+;;Note this will cause evaluate the declaration immediately. It is not deferred.
+;;Useful for configuring built-in emacs features.
+(use-package emacs :ensure nil :config (setq ring-bell-function #'ignore))
 
 (if (file-exists-p (expand-file-name "config.el" user-emacs-directory))
     (load-file (expand-file-name "config.el" user-emacs-directory))
