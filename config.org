@@ -441,7 +441,7 @@ completion candidates.
 [[http://company-mode.github.io/][Dmitry Gutov]]
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package company
     :defer 0.5
     :delight
@@ -468,17 +468,11 @@ completion candidates.
     (add-to-list 'company-backends '(company-capf :with company-dabbrev))
     )
 
-
-
-#+END_SRC
-
-I use =company= with =company-box= that allows a company front-end with icons.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-box
     :after company
     :delight
     :hook (company-mode . company-box-mode))
+
 #+END_SRC
 ** Turn off mouse interface
 
@@ -719,7 +713,6 @@ auto install tree sitter
   (setq lsp-keymap-prefix "C-c l")
 
   (use-package lsp-mode
-    :after (yasnippet company)
     :hook (
            (c++-mode . lsp-deferred)
            (c-mode . lsp-deferred)
@@ -735,9 +728,15 @@ auto install tree sitter
     :bind (:map lsp-mode-map
                 ("C-c C-d" . lsp-describe-thing-at-point))
     :config
+    ;; 性能与行为调优
+    (setq lsp-idle-delay 0.3)
+    (setq lsp-log-io nil)
+    (setq lsp-enable-file-watchers nil)  ;; 防止大项目卡死
+
     (setq lsp-auto-guess-root t)       ; Detect project root
     ;; (setq lsp-keymap-prefix "C-c l")
     (setq lsp-semantic-tokens-enable t)
+
     (setq lsp-semantic-token-faces
           '(("comment" . lsp-face-semhl-comment))
           lsp-semantic-token-modifier-faces nil)
@@ -760,7 +759,15 @@ auto install tree sitter
           lsp-idle-delay 0.1
           lsp-enable-text-document-color t
           lsp-completion-provider :capf)
-    (push 'company-capf company-backends))
+    ;; 开启 LSP 原生实用 UI 功能
+    (setq lsp-headerline-breadcrumb-enable t) ;; 顶部路径面包屑
+    (setq lsp-modeline-code-actions-enable t) ;; 底部 code action 提示
+    (setq lsp-lens-enable t)                  ;; 代码透镜 (显示引用次数)
+
+    ;; 修复 lsp-mode 默认匹配逻辑与 Orderless 的冲突
+    (defun my/lsp-mode-setup-completion ()
+      (setq-local completion-styles '(orderless flex basic)))
+    (add-hook 'lsp-completion-mode-hook #'my/lsp-mode-setup-completion))
 
   (use-package lsp-ui
     :commands lsp-ui-mode
@@ -817,10 +824,6 @@ auto install tree sitter
   (use-package lsp-treemacs
     :commands lsp-treemacs-errors-list
     )
-
-  ;;  (use-package company-lsp
-  ;;    :config (push 'company-lsp company-backends)
-  ;;    )
 
   (use-package lsp-ivy
     :commands lsp-ivy-workspace-symbol
@@ -1037,10 +1040,10 @@ common lisp env
       (add-hook hook 'turn-on-elisp-slime-nav-mode))
     )
 
-  (use-package slime-company
-    :after (slime company)
-    :config (setq slime-company-completion 'fuzzy
-                  slime-company-after-completion 'slime-company-just-one-space))
+  ;; (use-package slime-company
+  ;;   :after (slime company)
+  ;;   :config (setq slime-company-completion 'fuzzy
+  ;;                 slime-company-after-completion 'slime-company-just-one-space))
 
 #+end_src
 
@@ -1747,42 +1750,9 @@ find.
     (nerd-icons-font-family "Cascadia Mono NF")
     )
 
-  (use-package nerd-icons-dired
-    :hook
-    (dired-mode . nerd-icons-dired-mode))
-
   (use-package nerd-icons-ibuffer
     :ensure t
     :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
-
-  ;; Enable rich annotations using the Marginalia package
-  (use-package marginalia
-    ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
-    ;; available in the *Completions* buffer, add it to the
-    ;; `completion-list-mode-map'.
-    :bind (:map minibuffer-local-map
-                ("M-A" . marginalia-cycle))
-
-    ;; The :init section is always executed.
-    :init
-
-    ;; Marginalia must be activated in the :init section of use-package such that
-    ;; the mode gets enabled right away. Note that this forces loading the
-    ;; package.
-    (marginalia-mode))
-
-  (use-package nerd-icons-completion
-    :after marginalia
-    :config
-    (nerd-icons-completion-mode)
-    (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
-
-  (use-package nerd-icons-ivy-rich
-    :ensure t
-    :after ivy-rich
-    :init
-    (nerd-icons-ivy-rich-mode 1)
-    (ivy-rich-mode 1))
 #+end_src
 
 ** Dashboard
@@ -1945,7 +1915,7 @@ smaller, simpler, and smoother to use yet highly customizable.
 [[https://github.com/abo-abo/ivy][Oleh Krehel]]
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package counsel
     :after ivy
     :delight
@@ -2020,103 +1990,91 @@ smaller, simpler, and smoother to use yet highly customizable.
 #+END_SRC
 ** Corfu
 
-#+begin_src emacs-lisp :tangle no
-  ;; Enable Corfu completion UI
-  ;; See the Corfu README for more configuration tips.
-  (use-package corfu
-    ;; Optional customizations
+#+begin_src emacs-lisp :tangle yes
+  ;; ==========================================
+  ;; 2. Minibuffer 补全全家桶 (完美替代 Ivy + Swiper)
+  ;; ==========================================
+  ;; Vertico: 极简极速的垂直补全列表
+  (use-package vertico
+    :ensure t
+    :init (vertico-mode)
     :custom
-    ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-    (corfu-auto t)                 ;; Enable auto completion
-    (corfu-separator ?\s)          ;; Orderless field separator
-    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-    ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-    ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+    ;; 1. 设置固定显示 10 行结果（你可以根据喜好改成 15 或 20）
+    (vertico-count 10)
+    ;; 2. 关键：将缩放设置为 nil，关闭自动扩展/收缩
+    (vertico-resize nil)
+    (vertico-cycle t))          ;; 允许循环滚动
 
-    ;; Enable Corfu only for certain modes.
-    ;; :hook ((prog-mode . corfu-mode)
-    ;;        (shell-mode . corfu-mode)
-    ;;        (eshell-mode . corfu-mode))
-
-    ;; Recommended: Enable Corfu globally.
-    ;; This is recommended since Dabbrev can be used globally (M-/).
-    ;; See also `corfu-excluded-modes'.
-    :config
-    (global-corfu-mode))
-
-  ;; A few more useful configurations...
-  (use-package emacs
-    :config
-    ;; TAB cycle if there are only few candidates
-    (setq completion-cycle-threshold 3)
-
-    ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
-    ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
-    ;; (setq read-extended-command-predicate
-    ;;       #'command-completion-default-include-p)
-
-    ;; Enable indentation+completion using the TAB key.
-    ;; `completion-at-point' is often bound to M-TAB.
-    (setq tab-always-indent 'complete))
-
-  ;; Use Dabbrev with Corfu!
-  (use-package dabbrev
-    ;; Swap M-/ and C-M-/
-    :bind (("M-/" . dabbrev-completion)
-           ("C-M-/" . dabbrev-expand))
-    ;; Other useful Dabbrev configurations.
-    :custom
-    (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
-
-  ;; Optionally use the `orderless' completion style.
+  ;; Orderless: 神级模糊匹配 (支持空格分隔多关键词)
   (use-package orderless
-    :config
-    ;; Configure a custom style dispatcher (see the Consult wiki)
-    ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-    (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles . (partial-completion))))))
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
 
-  ;; Add extensions
-  (use-package cape
-    ;; Bind dedicated completion commands
-    ;; Alternative prefix keys: C-c p, M-p, M-+, ...
-    :bind (("C-c p p" . completion-at-point) ;; capf
-           ("C-c p t" . complete-tag)        ;; etags
-           ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
-           ("C-c p h" . cape-history)
-           ("C-c p f" . cape-file)
-           ("C-c p k" . cape-keyword)
-           ("C-c p s" . cape-symbol)
-           ("C-c p a" . cape-abbrev)
-           ("C-c p i" . cape-ispell)
-           ("C-c p l" . cape-line)
-           ("C-c p w" . cape-dict)
-           ("C-c p \\" . cape-tex)
-           ("C-c p _" . cape-tex)
-           ("C-c p ^" . cape-tex)
-           ("C-c p &" . cape-sgml)
-           ("C-c p r" . cape-rfc1345))
+  ;; Marginalia: 列表右侧显示详细注解 (类似 ivy-rich)
+  (use-package marginalia
+    :ensure t
+    :init (marginalia-mode))
+
+  ;; 2. 现代补全图标增强 (完美替代 nerd-icons-ivy-rich)
+  (use-package nerd-icons-completion
+    :ensure t
+    :after (vertico marginalia) ;; 确保在 Vertico 和 Marginalia 之后加载
     :config
-    ;; Add `completion-at-point-functions', used by `completion-at-point'.
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    ;;(add-to-list 'completion-at-point-functions #'cape-history)
-    ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-    ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-    ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
-    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-    ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-    ;;(add-to-list 'completion-at-point-functions #'cape-line)
-    )
+    (nerd-icons-completion-mode))
+
+  ;; Consult: 高级搜索与跳转 (完美替代 Swiper 和 Counsel)
+  (use-package consult
+    :ensure t
+    :bind (("C-s" . consult-line)           ;; 替代 swiper: 当前文件搜索
+           ("C-M-s" . consult-ripgrep)      ;; 替代 counsel-rg: 全局搜代码
+           ("C-x b" . consult-buffer)       ;; 替代 counsel-switch-buffer
+           ("M-y" . consult-yank-pop)       ;; 替代 counsel-yank-pop: 剪贴板历史
+           ("M-g g" . consult-goto-line)    ;; 极速跳行
+           ("C-x C-r" . consult-recent-file)  ;; 最近文件
+           ("M-g i" . consult-imenu)))      ;; 替代 counsel-imenu: 大纲跳转
+
+  ;; ==========================================
+  ;; 3. 代码内补全全家桶 (完美替代 Company)
+  ;; ==========================================
+  ;; Corfu: 现代化的弹窗补全前端
+  (use-package corfu
+    :ensure t
+    :init (global-corfu-mode)
+    :custom
+    (corfu-auto t)                  ;; 自动弹出补全
+    (corfu-auto-delay 0.1)          ;; 极速响应
+    (corfu-auto-prefix 1)           ;; 输入 1 个字符就开始提示
+    (corfu-cycle t)                 ;; 允许循环选择
+    (corfu-quit-at-boundary 'separator)
+    (corfu-echo-documentation t)    ;; 在 echo area 显示文档摘要
+    :bind (:map corfu-map
+                ("TAB" . corfu-next)
+                ([tab] . corfu-next)
+                ("S-TAB" . corfu-previous)
+                ([backtab] . corfu-previous)))
+
+  ;; Cape: 补全后端扩展 (替代 company-backends)
+  (use-package cape
+    :ensure t
+    :init
+    ;; 基础非 LSP 补全源
+    (add-to-list 'completion-at-point-functions #'cape-file)    ;; 路径补全
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;; 当前 Buffer 单词补全
+    (add-to-list 'completion-at-point-functions #'cape-keyword))
+
+  ;; Kind-icon: 类似 VS Code 的左侧彩色类型图标 (替代 company-box)
+  (use-package kind-icon
+    :ensure t
+    :after corfu
+    :custom
+    (kind-icon-default-face 'corfu-default)
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
+**
 ** Avy
 Navigation with Avy
 #+begin_src emacs-lisp :tangle yes
@@ -2133,10 +2091,6 @@ Navigation with Avy
            ("M-g w" . avy-goto-word-1)
            ("M-g e" . avy-goto-word-0)
            )
-    )
-
-  (use-package ivy-avy
-    :after ivy
     )
 
   (use-package ace-pinyin
@@ -2204,21 +2158,28 @@ Provides fast access to the recent files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package recentf
-    :ensure nil
-    :bind ("C-c r" . recentf-open-files)
+    :ensure nil ;; 内置包不需要下载
+    :init
+    (recentf-mode 1)
     :custom
-    (recentf-exclude (list "COMMIT_EDITMSG"
-                           "~$"
-                           "/scp:"
-                           "/ssh:"
-                           "/sudo:"
-                           "/tmp/"))
+    (recentf-max-saved-items 200)     ;; 增加记录数量，建议 200-500
     (recentf-max-menu-items 15)
-    (recentf-max-saved-items 200)
-    (recentf-save-file (expand-file-name (format "~/.emacs.d/cache/recentf")))
+    ;; 过滤掉不需要记录的路径（比如各种插件的自动保存、缓存）
+    (recentf-exclude
+     '("\\.?cache"
+       "thumbnails"
+       "gio-.*"
+       "url"
+       "COMMIT_EDITMSG\\'"
+       "org-roam-.*"
+       "/tmp/"
+       "/ssh:"
+       "/sudo:"
+       "/Cellar/" ;; Homebrew 的路径
+       "/opt/homebrew/"))
     :config
-    (recentf-mode)
-    (run-at-time nil (* 5 60) 'recentf-save-list))
+    ;; 自动清理不存在的文件路径，保持列表干净
+    (run-at-time nil (* 5 60) 'recentf-cleanup))
 #+END_SRC
 
 ** Version Control
