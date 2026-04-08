@@ -22,7 +22,6 @@
   - [[#mode-line][mode-line]]
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
-  - [[#projectile][Projectile]]
   - [[#project][Project]]
   - [[#kkp][kkp]]
   - [[#rime][Rime]]
@@ -486,44 +485,6 @@ I find invasive.
   (tooltip-mode -1)              ; Disable the tooltips
   ;; (scroll-bar-mode -1)           ; Disable the scrollbar
 #+END_SRC
-** Projectile
-#+BEGIN_QUOTE
-Projectile is a project interaction library for Emacs. Its goal is to provide a
-nice set of features operating on a project level without introducing external
-dependencies (when feasible). For instance - finding project files has a
-portable implementation written in pure Emacs Lisp without the use of GNU find
-(but for performance sake an indexing mechanism backed by external commands
-exists as well).
-
-Use build.sh to compile project with build.sh
-
-[[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
-#+END_QUOTE
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package projectile
-    ;;:defer 1
-    :custom
-    (projectile-cache-file (expand-file-name (format "~/.emacs.d/cache/projectile.cache")))
-    (projectile-globally-ignored-file-suffixes '(".o" ".a"))
-    (projectile-completion-system 'ivy)
-    (projectile-enable-caching t)
-    ;;(projectile-keymap-prefix (kbd "C-c p"))
-    (projectile-require-project nil)
-    (projectile-known-projects-file (expand-file-name (format "~/.emacs.d/cache/projectile-bookmarks.eld")))
-    (projectile-mode-line '(:eval (projectile-project-name)))
-    :config
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (add-to-list 'projectile-globally-ignored-directories ".clangd")
-    (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
-    (projectile-register-project-type 'build-proj '("build.sh")
-                                      :compile "./build.sh")
-    (projectile-mode))
-
-  (use-package counsel-projectile
-    :after (counsel projectile)
-    :config (counsel-projectile-mode 1))
-#+END_SRC
 ** Project
 #+begin_src emacs-lisp :tangle yes
   ;; 1. 项目管理 (project.el)
@@ -700,126 +661,127 @@ auto install tree sitter
 
 ** LSP
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq lsp-keymap-prefix "C-c l")
+    (setq lsp-keymap-prefix "C-c l")
 
-  (use-package lsp-mode
-    :hook (
-           (c++-mode . lsp-deferred)
-           (c-mode . lsp-deferred)
-           (python-mode . lsp-deferred)
-           (go-mode . lsp-deferred)
-           ;; (java-mode . lsp-deferred)
-           (typescript-mode . lsp-deferred)
-           (js-mode . lsp-deferred)
-           (lua-mode . lsp-deferred)
-           (sh-mode . lsp-deferred)
-           (lsp-mode . lsp-enable-which-key-integration)
-           )
-    :bind (:map lsp-mode-map
-                ("C-c C-d" . lsp-describe-thing-at-point))
-    :config
-    ;; 性能与行为调优
-    (setq lsp-idle-delay 0.3)
-    (setq lsp-log-io nil)
-    (setq lsp-enable-file-watchers nil)  ;; 防止大项目卡死
+    (use-package lsp-mode
+      :hook (
+             (c++-mode . lsp-deferred)
+             (c-mode . lsp-deferred)
+             (python-mode . lsp-deferred)
+             (go-mode . lsp-deferred)
+             ;; (java-mode . lsp-deferred)
+             (typescript-mode . lsp-deferred)
+             (js-mode . lsp-deferred)
+             (lua-mode . lsp-deferred)
+             (sh-mode . lsp-deferred)
+             (lsp-mode . lsp-enable-which-key-integration)
+             )
+      :bind (:map lsp-mode-map
+                  ("C-c C-d" . lsp-describe-thing-at-point)
+                  ("C-c o" . lsp-clangd-find-other-file))
+      :config
+      ;; 性能与行为调优
+      (setq lsp-idle-delay 0.3)
+      (setq lsp-log-io nil)
+      (setq lsp-enable-file-watchers nil)  ;; 防止大项目卡死
 
-    (setq lsp-auto-guess-root t)       ; Detect project root
-    ;; 这一步很重要：确保 LSP 寻找项目根目录的逻辑与 project.el 一致
-    (setq lsp-project-relative-root-functions '(lsp--project-root-project-el))
-    ;; (setq lsp-keymap-prefix "C-c l")
-    (setq lsp-semantic-tokens-enable t)
+      (setq lsp-auto-guess-root t)       ; Detect project root
+      ;; 这一步很重要：确保 LSP 寻找项目根目录的逻辑与 project.el 一致
+      (setq lsp-project-relative-root-functions '(lsp--project-root-project-el))
+      ;; (setq lsp-keymap-prefix "C-c l")
+      (setq lsp-semantic-tokens-enable t)
 
-    (setq lsp-semantic-token-faces
-          '(("comment" . lsp-face-semhl-comment))
-          lsp-semantic-token-modifier-faces nil)
-    (custom-set-faces
-     '(lsp-face-semhl-comment ((t (:inherit shadow)))))
-    (setq lsp-clients-clangd-args
-          '("--header-insertion=iwyu"         ; 开启自动插入
-            "--header-insertion-decorators"
-            "--background-index"              ; 开启后台索引
-            "--clang-tidy"                    ; 开启静态检查
-            "--completion-style=detailed"     ; 提供详细补全信息
-            "--pch-storage=memory"            ; PCH 存储在内存中，大幅提升速度
-            "-j=12"                           ; 并行线程数，建议设为核心数的 1.5 倍
-            "--limit-results=50"              ; 限制补全结果数量，防止渲染卡顿
-            "--all-scopes-completion"         ; 全局范围补全
-            "--header-insertion-decorators")) ; 装饰符提示
-    (setq lsp-completion-enable t
-          lsp-enable-snippet t
-          lsp-semantic-highlighting t
-          lsp-idle-delay 0.1
-          lsp-enable-text-document-color t
-          lsp-completion-provider :capf)
-    ;; 开启 LSP 原生实用 UI 功能
-    (setq lsp-headerline-breadcrumb-enable t) ;; 顶部路径面包屑
-    (setq lsp-modeline-code-actions-enable t) ;; 底部 code action 提示
-    (setq lsp-lens-enable t)                  ;; 代码透镜 (显示引用次数)
+      (setq lsp-semantic-token-faces
+            '(("comment" . lsp-face-semhl-comment))
+            lsp-semantic-token-modifier-faces nil)
+      (custom-set-faces
+       '(lsp-face-semhl-comment ((t (:inherit shadow)))))
+      (setq lsp-clients-clangd-args
+            '("--header-insertion=iwyu"         ; 开启自动插入
+              "--header-insertion-decorators"
+              "--background-index"              ; 开启后台索引
+              "--clang-tidy"                    ; 开启静态检查
+              "--completion-style=detailed"     ; 提供详细补全信息
+              "--pch-storage=memory"            ; PCH 存储在内存中，大幅提升速度
+              "-j=12"                           ; 并行线程数，建议设为核心数的 1.5 倍
+              "--limit-results=50"              ; 限制补全结果数量，防止渲染卡顿
+              "--all-scopes-completion"         ; 全局范围补全
+              "--header-insertion-decorators")) ; 装饰符提示
+      (setq lsp-completion-enable t
+            lsp-enable-snippet t
+            lsp-semantic-highlighting t
+            lsp-idle-delay 0.1
+            lsp-enable-text-document-color t
+            lsp-completion-provider :capf)
+      ;; 开启 LSP 原生实用 UI 功能
+      (setq lsp-headerline-breadcrumb-enable t) ;; 顶部路径面包屑
+      (setq lsp-modeline-code-actions-enable t) ;; 底部 code action 提示
+      (setq lsp-lens-enable t)                  ;; 代码透镜 (显示引用次数)
 
-    ;; 修复 lsp-mode 默认匹配逻辑与 Orderless 的冲突
-    (defun my/lsp-mode-setup-completion ()
-      (setq-local completion-styles '(orderless flex basic)))
-    (add-hook 'lsp-completion-mode-hook #'my/lsp-mode-setup-completion))
+      ;; 修复 lsp-mode 默认匹配逻辑与 Orderless 的冲突
+      (defun my/lsp-mode-setup-completion ()
+        (setq-local completion-styles '(orderless flex basic)))
+      (add-hook 'lsp-completion-mode-hook #'my/lsp-mode-setup-completion))
 
-  (use-package lsp-ui
-    :commands lsp-ui-mode
-    :bind (:map lsp-mode-map
-                ("C-c n" . lsp-ui-imenu))
-    :custom
-    ;; 悬浮文档 (Hover)
-    (lsp-ui-doc-enable t)
-    (lsp-ui-doc-position 'at-point)      ;; 悬浮窗紧贴光标
-    (lsp-ui-doc-show-with-cursor t)      ;; 光标停留自动显示
-    (lsp-ui-doc-show-with-mouse nil)     ;; 关闭鼠标悬停显示，防止乱弹
-    (lsp-ui-doc-max-width 80)
-    (lsp-ui-doc-max-height 20)
-    (lsp-ui-doc-border (face-foreground 'default)) ;; 加个漂亮的边框
+    (use-package lsp-ui
+      :commands lsp-ui-mode
+      :bind (:map lsp-mode-map
+                  ("C-c n" . lsp-ui-imenu))
+      :custom
+      ;; 悬浮文档 (Hover)
+      (lsp-ui-doc-enable t)
+      (lsp-ui-doc-position 'at-point)      ;; 悬浮窗紧贴光标
+      (lsp-ui-doc-show-with-cursor t)      ;; 光标停留自动显示
+      (lsp-ui-doc-show-with-mouse nil)     ;; 关闭鼠标悬停显示，防止乱弹
+      (lsp-ui-doc-max-width 80)
+      (lsp-ui-doc-max-height 20)
+      (lsp-ui-doc-border (face-foreground 'default)) ;; 加个漂亮的边框
 
-    ;; 右侧信息栏 (Sideline)
-    (lsp-ui-sideline-enable t)
-    (lsp-ui-sideline-show-diagnostics t) ;; 右侧显示 Error/Warning
-    (lsp-ui-sideline-show-code-actions t)
-    (lsp-ui-sideline-show-hover nil)     ;; 关掉 sideline 的 hover，避免和 doc 冲突
-    (lsp-ui-sideline-delay 0.5)
-    :config
-    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
+      ;; 右侧信息栏 (Sideline)
+      (lsp-ui-sideline-enable t)
+      (lsp-ui-sideline-show-diagnostics t) ;; 右侧显示 Error/Warning
+      (lsp-ui-sideline-show-code-actions t)
+      (lsp-ui-sideline-show-hover nil)     ;; 关掉 sideline 的 hover，避免和 doc 冲突
+      (lsp-ui-sideline-delay 0.5)
+      :config
+      (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+      (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
-  ;; Debug
-  (use-package dap-mode
-    :diminish
-    :after lsp-mode
-    :functions dap-hydra/nil
-    :bind (:map lsp-mode-map
-                ("<f5>" . dap-debug)
-                ("M-<f5>" . dap-hydra))
-    :config
-    (setq dap-python-executable "python3")
-    (dap-auto-configure-mode)
-    :hook ((after-init . dap-mode)
-           (dap-mode . dap-ui-mode)
-           (dap-session-created . (lambda (&_rest) (dap-hydra)))
-           (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-           (python-mode . (lambda () (require 'dap-python)))
-           (ruby-mode . (lambda () (require 'dap-ruby)))
-           (go-mode . (lambda () (require 'dap-go)))
-           (java-mode . (lambda () (require 'dap-java)))
-           ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
-           (php-mode . (lambda () (require 'dap-php)))
-           (elixir-mode . (lambda () (require 'dap-elixir)))
-           ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
+    ;; Debug
+    (use-package dap-mode
+      :diminish
+      :after lsp-mode
+      :functions dap-hydra/nil
+      :bind (:map lsp-mode-map
+                  ("<f5>" . dap-debug)
+                  ("M-<f5>" . dap-hydra))
+      :config
+      (setq dap-python-executable "python3")
+      (dap-auto-configure-mode)
+      :hook ((after-init . dap-mode)
+             (dap-mode . dap-ui-mode)
+             (dap-session-created . (lambda (&_rest) (dap-hydra)))
+             (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+             (python-mode . (lambda () (require 'dap-python)))
+             (ruby-mode . (lambda () (require 'dap-ruby)))
+             (go-mode . (lambda () (require 'dap-go)))
+             (java-mode . (lambda () (require 'dap-java)))
+             ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+             (php-mode . (lambda () (require 'dap-php)))
+             (elixir-mode . (lambda () (require 'dap-elixir)))
+             ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
 
-  (with-eval-after-load 'lsp-mode
-    (require 'dap-cpptools))
+    (with-eval-after-load 'lsp-mode
+      (require 'dap-cpptools))
 
-  ;; `lsp-mode' and `treemacs' integration.
-  (use-package lsp-treemacs
-    :commands lsp-treemacs-errors-list
-    )
+    ;; `lsp-mode' and `treemacs' integration.
+    (use-package lsp-treemacs
+      :commands lsp-treemacs-errors-list
+      )
 
-  (use-package lsp-ivy
-    :commands lsp-ivy-workspace-symbol
-    )
+    (use-package lsp-ivy
+      :commands lsp-ivy-workspace-symbol
+      )
 #+END_SRC
 
 **** lsp-java
