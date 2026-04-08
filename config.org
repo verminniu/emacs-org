@@ -23,7 +23,7 @@
   - [[#company][Company]]
   - [[#turn-off-mouse-interface][Turn off mouse interface]]
   - [[#projectile][Projectile]]
-  - [[#projection--project][Projection && Project]]
+  - [[#project][Project]]
   - [[#kkp][kkp]]
   - [[#rime][Rime]]
   - [[#ultra-scroll---for-mac][ultra-scroll - for mac]]
@@ -500,7 +500,7 @@ Use build.sh to compile project with build.sh
 [[https://github.com/bbatsov/projectile][Bozhidar Batsov]]
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package projectile
     ;;:defer 1
     :custom
@@ -524,47 +524,20 @@ Use build.sh to compile project with build.sh
     :after (counsel projectile)
     :config (counsel-projectile-mode 1))
 #+END_SRC
-** Projection && Project
-快捷键不是很好使
-#+begin_src emacs-lisp :tangle no
-  (use-package projection
-    :ensure t
-    ;; Enable the `projection-hook' feature.
-    :hook (after-init . global-projection-hook-mode)
-
-    ;; Require projections immediately after project.el.
+** Project
+#+begin_src emacs-lisp :tangle yes
+  ;; 1. 项目管理 (project.el)
+  (use-package project
+    :ensure nil
+    :bind-keymap ("C-c p" . project-prefix-map)
     :config
-    (with-eval-after-load 'project
-      (require 'projection))
-
-    :config
-    ;; Uncomment if you want to disable prompts for compile commands customized in .dir-locals.el
-    ;; (put 'projection-commands-configure-project 'safe-local-variable #'stringp)
-    ;; (put 'projection-commands-build-project 'safe-local-variable #'stringp)
-    ;; (put 'projection-commands-test-project 'safe-local-variable #'stringp)
-    ;; (put 'projection-commands-run-project 'safe-local-variable #'stringp)
-    ;; (put 'projection-commands-package-project 'safe-local-variable #'stringp)
-    ;; (put 'projection-commands-install-project 'safe-local-variable #'stringp)
-
-    ;; Access pre-configured projection commands from a keybinding of your choice.
-    ;; Run `M-x describe-keymap projection-map` for a list of available commands.
-    :bind-keymap
-    ("C-x P" . projection-map))
-
-  (use-package projection-multi
-    :ensure t
-    ;; Allow interactively selecting available compilation targets from the current
-    ;; project type.
-    :bind ( :map project-prefix-map
-            ("RET" . projection-multi-compile)))
-
-  (use-package projection-multi-embark
-    :ensure t
-    :after embark
-    :after projection-multi
-    :demand t
-    ;; Add the projection set-command bindings to `compile-multi-embark-command-map'.
-    :config (projection-multi-embark-setup-command-map))
+    (setq project-switch-commands
+      '((project-find-file "Find file" "f")
+        (consult-ripgrep "Ripgrep" "g")
+        (consult-project-buffer "Buffers" "b")
+        (project-shell "Shell" "s")))
+    ;; 让 project.el 也能识别一些非 Git 项目（比如有 .project 文件的目录）
+    (setq project-vc-extra-files '(".project" "go.mod" "package.json")))
 #+end_src
 ** kkp
 支持kkp协议
@@ -636,7 +609,7 @@ https://github.com/universal-ctags/citre
      ;; citre-ctags-program "/path/to/ctags"
      ;; Set this if you use project management plugin like projectile.  It's
      ;; used for things like displaying paths relatively, see its docstring.
-     citre-project-root-function #'projectile-project-root
+     citre-project-root-function #'project-root
      ;; Set this if you want to always use one location to create a tags file.
      citre-default-create-tags-file-location 'global-cache
      ;; See the "Create tags file" section above to know these options
@@ -734,6 +707,8 @@ auto install tree sitter
     (setq lsp-enable-file-watchers nil)  ;; 防止大项目卡死
 
     (setq lsp-auto-guess-root t)       ; Detect project root
+    ;; 这一步很重要：确保 LSP 寻找项目根目录的逻辑与 project.el 一致
+    (setq lsp-project-relative-root-functions '(lsp--project-root-project-el))
     ;; (setq lsp-keymap-prefix "C-c l")
     (setq lsp-semantic-tokens-enable t)
 
@@ -1302,7 +1277,6 @@ Grip use github api Need github account try other
       (setq gofmt-command "goimports"))
     (add-hook 'before-save-hook #'gofmt-before-save)
 
-    (use-package go-projectile)
     (use-package go-dlv)
     (use-package go-fill-struct)
     (use-package go-rename)
@@ -1730,11 +1704,11 @@ find.
 
   (use-package all-the-icons-ivy-rich
     :ensure t
-    :after (projectile ibuffer ibuffer-projectile ivy-rich)
+    :after (ibuffer ivy-rich)
     :config (all-the-icons-ivy-rich-mode 1))
 
   (use-package all-the-icons-ibuffer
-    :after (projectile ibuffer ibuffer-projectile)
+    :after (ibuffer)
     :ensure t
     :config (all-the-icons-ibuffer-mode 1))
 #+END_SRC
@@ -1858,15 +1832,13 @@ like being able to find my way easily.
     :ensure nil
     :bind ("C-x C-b" . ibuffer))
 
-  (use-package ibuffer-projectile
-    :after ibuffer
+  (use-package ibuffer-project
     :ensure t
-    :config
-    (add-hook 'ibuffer-hook
-              (lambda ()
-                (ibuffer-projectile-set-filter-groups)
-                (unless (eq ibuffer-sorting-mode 'alphabetic)
-                  (ibuffer-do-sort-by-alphabetic)))))
+    :after ibuffer
+    :hook (ibuffer . (lambda ()
+                       (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+                       (unless (eq ibuffer-sorting-mode 'alphabetic)
+                         (ibuffer-do-sort-by-alphabetic)))))
 #+END_SRC
 
 ** History
@@ -2075,6 +2047,22 @@ smaller, simpler, and smoother to use yet highly customizable.
     (kind-icon-default-face 'corfu-default)
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+  ;; ==========================================
+  ;; 3. 动作中心与导出 - Embark
+  ;; ==========================================
+  (use-package embark
+    :ensure t
+    :bind
+    (("C-;" . embark-act)         ;; 现代版的“右键菜单”
+     ("C-c C-o" . embark-export)) ;; 在全局也可以使用导出
+    :config
+    ;; 导出后自动关闭 Minibuffer
+    (setq embark-quit-after-action t))
+
+  (use-package embark-consult
+    :ensure t
+    :after (embark consult))
 #+end_src
 **
 ** Avy
@@ -2418,7 +2406,6 @@ hight light symbol in different color
 
 #+END_SRC
 ** Compile
-projectile-compile-project 解决build.sh，暂时以下插件不需要
 __Use smart compile__
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package smart-compile
@@ -2515,7 +2502,7 @@ try Quickrun
             treemacs-move-forward-on-expand          nil
             treemacs-no-png-images                   nil
             treemacs-no-delete-other-windows         t
-            treemacs-project-follow-cleanup          nil
+            treemacs-project-follow-cleanup          t
             treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
             treemacs-position                        'left
             treemacs-read-string-input               'from-child-frame
@@ -2571,14 +2558,6 @@ try Quickrun
           ("C-x t B"   . treemacs-bookmark)
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag)))
-
-  ;; (use-package treemacs-evil
-  ;;   :after (treemacs evil)
-  ;;   :ensure t)
-
-  (use-package treemacs-projectile
-    :after (treemacs projectile)
-    :ensure t)
 
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-enable-once)
