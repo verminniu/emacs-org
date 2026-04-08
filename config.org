@@ -531,14 +531,31 @@ Use build.sh to compile project with build.sh
     :ensure nil
     :bind-keymap ("C-c p" . project-prefix-map)
     :config
-    (setq project-switch-commands
-      '((project-find-file "Find file" "f")
-        (consult-ripgrep "Ripgrep" "g")
-        (consult-project-buffer "Buffers" "b")
-        (project-shell "Shell" "s")))
     ;; 让 project.el 也能识别一些非 Git 项目（比如有 .project 文件的目录）
-    (setq project-vc-extra-files '(".project" "go.mod" "package.json")))
-#+end_src
+    (setq project-vc-extra-files '(".project" "go.mod" "package.json"))
+    ;; --- 核心：换掉 C-c p s ---
+    ;; Projectile 的 s 通常是搜索，我们将它绑定到 consult-ripgrep
+    (define-key project-prefix-map (kbd "s") #'consult-ripgrep)
+
+    ;; 模仿 Projectile，将 C-c p a 设为切换头文件/源文件
+    (define-key project-prefix-map (kbd "a") #'ff-find-other-file)
+    ;; --- 对齐其他 Projectile 习惯 ---
+    (define-key project-prefix-map (kbd "p") #'project-switch-project)     ;; 对应 C-c p p
+    (define-key project-prefix-map (kbd "f") #'project-find-file)          ;; 对应 C-c p f
+    (define-key project-prefix-map (kbd "b") #'consult-project-buffer)    ;; 对应 C-c p b
+    (define-key project-prefix-map (kbd "d") #'project-dired)             ;; 对应 C-c p d
+    (define-key project-prefix-map (kbd "k") #'project-kill-buffers)      ;; 对应 C-c p k
+    (define-key project-prefix-map (kbd "v") #'magit-project-status)      ;; 对应 C-c p v (Magit)
+
+    ;; 如果你还想要原先的 shell，可以把它挪到一个不常用的键位
+    (define-key project-prefix-map (kbd "!") #'project-shell)
+    (setq project-switch-commands
+    '((project-find-file "Find file" "f")
+      (consult-ripgrep "Ripgrep" "s") ;; 对应上面的 C-c p s
+      (consult-project-buffer "Buffers" "b")
+      (magit-project-status "Magit" "v")
+      (project-dired "Dired" "d"))))
+  #+end_src
 ** kkp
 支持kkp协议
 https://sw.kovidgoyal.net/kitty/keyboard-protocol/
