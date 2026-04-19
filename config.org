@@ -1987,6 +1987,8 @@ smaller, simpler, and smoother to use yet highly customizable.
            ("M-y" . consult-yank-pop)       ;; 替代 counsel-yank-pop: 剪贴板历史
            ("M-g g" . consult-goto-line)    ;; 极速跳行
            ("C-x C-r" . consult-recent-file)  ;; 最近文件
+           ("C-c n" . consult-imenu)
+           ("M-g o" . consult-outline)
            ("M-g i" . consult-imenu)))      ;; 替代 counsel-imenu: 大纲跳转
 
   ;; ==========================================
