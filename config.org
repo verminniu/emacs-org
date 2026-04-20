@@ -252,6 +252,9 @@ For a better user experience of GNU Emacs, here are the default values I use.
   (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
 
   (add-to-list 'image-types 'svg) ; add svg to image-types
+
+  ;; 强制 Emacs 在加载时如果发现源码更新，则忽略旧的字节码
+  (setq load-prefer-newer t)
 #+END_SRC
 
 ** Os Set
