@@ -9,3 +9,15 @@ patch:
   "translator/contextual_suggestions": true
   "translator/max_homophones": 7
   "translator/max_homographs": 7
+  # 薄荷拼音没有使用default.custom.yaml,配置放这里
+  "key_binder/bindings":
+    - { when: always, accept: Control+Shift+3, toggle: print } # 覆盖掉 切换全角/半角
+    - { when: always, accept: Shift+space, toggle: print } # 覆盖掉 另一种切换全角/半角的方式
+    - { when: has_menu, accept: comma, send: Page_Up }
+    - { when: has_menu, accept: period, send: Page_Down }
+    - { when: paging, accept: comma, send: Page_Up }
+    - { when: paging, accept: period, send: Page_Down }
+    # 覆盖掉default里面的翻页方便输入英文连字
+    # 当有输入码（menu）时，按下减号，执行“提交原始字符”并输入减号
+    - { when: has_menu, accept: minus, send_sequence: "{Return}-" } # 先上屏编码
+    - { when: has_menu, accept: equal, send: equal }
