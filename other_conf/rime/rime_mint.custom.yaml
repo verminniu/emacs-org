@@ -21,3 +21,8 @@ patch:
     # 当有输入码（menu）时，按下减号，执行“提交原始字符”并输入减号
     - { when: has_menu, accept: minus, send_sequence: "{Return}-" } # 先上屏编码
     - { when: has_menu, accept: equal, send: equal }
+  # 对 speller/algebra 进行追加
+  "speller/algebra/+":
+    - derive/v/u/ # u => ü
+  # 设置拼音分词
+  "speller/delimiter": " '"
