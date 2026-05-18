@@ -8,8 +8,8 @@
 - [[#emacs-initialization][Emacs Initialization]]
   - [[#proxy][Proxy]]
   - [[#packages-sources][Packages Sources]]
-  - [[#use-package][use-package]]
   - [[#elpaca][elpaca]]
+  - [[#system-package][system-package]]
 - [[#start-up][Start Up]]
   - [[#better-defaults][Better defaults]]
   - [[#os-set][Os Set]]
@@ -172,23 +172,36 @@ In order to install packages, it is useful to configure the package sources.
   ;; ))
 #+END_SRC
 
-** use-package
-30已经为默认
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-
-  (use-package system-packages
-    :ensure t)
-
-  (use-package delight :ensure t)
-#+END_SRC
-
 ** elpaca
 好用
 https://github.com/progfolio/elpaca
+** system-package
+不同系统需要不同的安装方式
+#+begin_src emacs-lisp :tangle yes
+  (use-package system-packages
+    :ensure t
+    :config
+    ;; 1. 定义 zypper 规则 (如果插件本身没包含的话)
+    (unless (assoc 'zypper system-packages-supported-package-managers)
+      (add-to-list 'system-packages-supported-package-managers
+                   '(zypper . ((default-sudo . t)
+                               (install . "zypper install")
+                               (search . "zypper search")
+                               (uninstall . "zypper remove")
+                               (update . "zypper update")
+                               (noconfirm . "--non-interactive")
+                               (list-installed-packages . "zypper search --installed-only")))))
+
+    ;; 2. 根据当前系统环境自动切换包管理器
+    (cond
+     ;; 如果是 openSUSE
+     ((executable-find "zypper")
+      (setq system-packages-package-manager 'zypper))
+
+     ;; 如果是 Mac
+     ((eq system-type 'darwin)
+      (setq system-packages-package-manager 'brew))))
+#+end_src
 * Start Up
 ** Better defaults
 
