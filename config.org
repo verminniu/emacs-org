@@ -10,6 +10,7 @@
   - [[#packages-sources][Packages Sources]]
   - [[#elpaca][elpaca]]
   - [[#system-package][system-package]]
+  - [[#系统包提醒只打印不安装][系统包提醒（只打印，不安装）]]
 - [[#start-up][Start Up]]
   - [[#better-defaults][Better defaults]]
   - [[#os-set][Os Set]]
@@ -202,6 +203,25 @@ https://github.com/progfolio/elpaca
      ((eq system-type 'darwin)
       (setq system-packages-package-manager 'brew))))
 #+end_src
+** 系统包提醒（只打印，不安装）
+#+begin_src emacs-lisp :tangle yes
+  (defmacro my/ensure-pkg (pkg-name &optional system-pkg-name)
+    "检查系统命令 PKG-NAME 是否存在，如果不存在则根据系统给出安装建议。
+  如果系统包名与命令名不同，可传入 SYSTEM-PKG-NAME。"
+    `(let ((exec-name ,pkg-name)
+           (install-name (or ,system-pkg-name ,pkg-name)))
+       (unless (executable-find exec-name)
+         (let ((install-prompt
+                (cond
+                 ((executable-find "zypper") (format "sudo zypper in %s" install-name))
+                 ((executable-find "brew")   (format "brew install %s" install-name))
+                 ((executable-find "pacman") (format "sudo pacman -S %s" install-name))
+                 ((executable-find "apt")    (format "sudo apt install %s" install-name))
+                 (t (format "请手动安装包: %s" install-name)))))
+           (display-warning 'SystemDependency
+                            (format "--- [依赖缺失] --- 执行以下命令安装 %s:\n    %s" exec-name install-prompt)
+                            :warning)))))
+#+end_src
 * Start Up
 ** Better defaults
 
@@ -264,7 +284,8 @@ For a better user experience of GNU Emacs, here are the default values I use.
   (add-to-list 'auto-mode-alist '("\\.cc.temp\\'" . c++-mode))    ; fable template file
   (add-to-list 'auto-mode-alist '("makefile." . makefile-mode))
 
-  (add-to-list 'image-types 'svg) ; add svg to image-types
+  ;; 终端下会报错，暂时不增加
+  ;; (add-to-list 'image-types 'svg) ; add svg to image-types
 
   ;; 强制 Emacs 在加载时如果发现源码更新，则忽略旧的字节码
   (setq load-prefer-newer t)
@@ -920,9 +941,12 @@ format all languages
 主动打开各个语言的format，否则如果没有配置formater，会报错
 #+begin_src emacs-lisp :tangle no
   (use-package format-all
-    :ensure-system-package
-    ((pg_format . pgformatter)
-     (black . black))
+    ;; :ensure-system-package
+    ;; ((pg_format . pgformatter)
+    ;;  (black . black))
+    :init
+    (my/ensure-pkg "pg_format" "pgformatter")
+    (my/ensure-pkg "black" "black")
     :config
     (setq-default format-all-formatters
                   ;; sql 默认用pg
@@ -2355,8 +2379,9 @@ https://github.com/wilfred/difftastic
   (use-package difftastic
     :defer t
     :after magit ;; optional, if you'd like to use with magit
-    :ensure-system-package (difft . difftastic)
+    ;; :ensure-system-package (difft . difftastic)
     :init
+    (my/ensure-pkg "difft" "difftastic")
     (use-package transient               ; to silence compiler warnings
       :autoload (transient-get-suffix
                  transient-parse-suffix))
@@ -2886,8 +2911,9 @@ export org to mind-map with Graphviz
      (use-package org-mind-map
        :init
        (require 'ox-org)
+       (my/ensure-pkg "gvgen" "Graphviz")
        :ensure t
-       :ensure-system-package (gvgen . graphviz)
+       ;; :ensure-system-package (gvgen . graphviz)
        :config
        (setq org-mind-map-engine "dot")       ; Default. Directed Graph
        ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
@@ -2923,7 +2949,10 @@ https://www.orgroam.com
 ** Pandoc
 #+begin_src emacs-lisp :tangle yes
   (use-package ox-pandoc
-    :ensure-system-package pandoc)
+    ;; :ensure-system-package pandoc
+    :init
+    (my/ensure-pkg "pandoc"))
+
 #+end_src
 
 ** Org-pdf
@@ -2978,7 +3007,9 @@ https://www.orgroam.com
   ;; brew install pngpaste
   (use-package org-download
     :after org
-    :ensure-system-package pngpaste
+    ;; :ensure-system-package pngpaste
+    :init
+    (my/ensure-pkg "pngpaste" "pngpaste")
     :config
     (setq-default org-download-heading-lvl nil)
     (setq-default org-download-image-dir "./images")
