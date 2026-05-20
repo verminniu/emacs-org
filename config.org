@@ -2912,9 +2912,11 @@ export org to mind-map with Graphviz
      (use-package org-mind-map
        :init
        (require 'ox-org)
-       (my/ensure-pkg "gvgen" "Graphviz")
+       ;; (my/ensure-pkg "gvgen" "graphviz")
+       ;; 只在mac下执行，linux大部分是tui，无意义
+       :if (eq system-type 'darwin)
        :ensure t
-       ;; :ensure-system-package (gvgen . graphviz)
+       :ensure-system-package (gvgen . graphviz)
        :config
        (setq org-mind-map-engine "dot")       ; Default. Directed Graph
        ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
@@ -3008,9 +3010,11 @@ https://www.orgroam.com
   ;; brew install pngpaste
   (use-package org-download
     :after org
-    ;; :ensure-system-package pngpaste
-    :init
-    (my/ensure-pkg "pngpaste" "pngpaste")
+    ;; 这个包只有mac下有，其他系统不设置，linux下为xclip，暂时未设置，先不考虑
+    :if (eq system-type 'darwin)
+    :ensure-system-package pngpaste
+    ;; :init
+    ;; (my/ensure-pkg "pngpaste" "pngpaste")
     :config
     (setq-default org-download-heading-lvl nil)
     (setq-default org-download-image-dir "./images")
