@@ -397,9 +397,6 @@ use Hydra for some keybinds
     )
 #+END_SRC
 ** Theme
-*NOTE:* to be able to see icons in the =doom-modeline=, you will need to install
-[[#Icons][all-the-icons]].
-
 #+begin_src emacs-lisp :tangle yes
   (use-package leuven-theme
     :config
@@ -444,17 +441,22 @@ spacemacs-theme
 #+end_src
 
 ** mode-line
-moody
-#+begin_src emacs-lisp :tangle no
+moody tui更好看一点
+#+begin_src emacs-lisp :tangle yes
+  ;; 主动安装/加载最新版 compat -- moody 依赖31版本
+  (use-package compat
+    :ensure t
+    :demand t)  ; 立即加载，不要延迟
+
   (use-package moody
     :config
+    (moody-replace-mode-line-front-space)
     (moody-replace-mode-line-buffer-identification)
-    (moody-replace-vc-mode)
-    (moody-replace-eldoc-minibuffer-message-function))
+    (moody-replace-vc-mode))
 #+end_src
 
 space line
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package spaceline
     :config
     )
