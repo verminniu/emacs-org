@@ -442,7 +442,7 @@ spacemacs-theme
 
 ** mode-line
 moody tui更好看一点
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   ;; 主动安装/加载最新版 compat -- moody 依赖31版本
   (use-package compat
     :ensure t)
@@ -456,18 +456,12 @@ moody tui更好看一点
     (moody-replace-vc-mode))
 #+end_src
 
-space line
-#+begin_src emacs-lisp :tangle no
-  (use-package spaceline
-    :config
-    )
-
-  (use-package spaceline-all-the-icons
-    :after spaceline
-    :config (spaceline-all-the-icons-theme))
+doom-line
+#+begin_src emacs-lisp :tangle yes
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
 #+end_src
-
-doom-line 后续如果需要单独配置
 ** Company
 =company= provides auto-completion at point and to Displays a small pop-in
 containing the candidates.
