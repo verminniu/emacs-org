@@ -1,4 +1,3 @@
-y
 #+Title:  Vermin's Emacs Configuration
 
 * Table of Contents                                                :TOC_2_gh:
@@ -2086,7 +2085,7 @@ smaller, simpler, and smoother to use yet highly customizable.
     :ensure t
     :after (embark consult))
 #+end_src
-**
+
 ** Avy
 Navigation with Avy
 #+begin_src emacs-lisp :tangle yes
