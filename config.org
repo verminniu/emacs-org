@@ -445,10 +445,11 @@ moody tui更好看一点
 #+begin_src emacs-lisp :tangle yes
   ;; 主动安装/加载最新版 compat -- moody 依赖31版本
   (use-package compat
-    :ensure t
-    :demand t)  ; 立即加载，不要延迟
+    :ensure t)
 
   (use-package moody
+    :ensure t
+    :after compat
     :config
     (moody-replace-mode-line-front-space)
     (moody-replace-mode-line-buffer-identification)
