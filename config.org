@@ -441,7 +441,34 @@ spacemacs-theme
 #+end_src
 
 ** mode-line
-moody tui更好看一点
+awesom-tray 清爽一点，其他的没必要
+#+begin_src emacs-lisp :tangle yes
+  (use-package awesome-tray
+    :ensure (:host github :repo "manateelazycat/awesome-tray")
+    :init
+    ;; 建议在加载前就隐藏原生的 mode-line
+    (setq-default mode-line-format nil)
+    :config
+    ;; 开启 awesome-tray
+    (awesome-tray-mode 1)
+
+    ;; --- 自定义设置 ---
+
+    ;; 1. 设置你想要显示的信息模块
+    ;; 默认包含: (git-branch mode-name location date)
+    ;; 可选模块: battery, volume, buffer-read-only 等
+    (setq awesome-tray-active-modules '("git-branch" "mode-name" "location" "date"))
+
+    ;; 2. 适配 Nerd Icons (手动指定图标)
+    ;; awesome-tray 默认使用文本，你可以通过自定义 face 或简单的字符串注入图标
+    (setq awesome-tray-separator "  ") ; 模块之间的间距
+
+    ;; 3. 如果你使用了特定的主题，可以微调颜色以匹配氛围
+    ;; (set-face-attribute 'awesome-tray-module-face nil :foreground "cyan" :weight 'bold)
+    )
+#+end_src
+
+
 #+begin_src emacs-lisp :tangle no
   ;; 主动安装/加载最新版 compat -- moody 依赖31版本
   (use-package compat
@@ -457,7 +484,7 @@ moody tui更好看一点
 #+end_src
 
 doom-line
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1))
