@@ -1,14 +1,27 @@
 patch:
-  # 默认为moqi
+  # 默认的moqi只有个样子，很小，需要重新下载
+#  grammar:
+#    language: zh-moqi
+#    non_collocation_penalty: -4
+#    collocation_max_length: 5
+#    collocation_min_length: 2
+#    collocation_penalty: -14
+#  translator/contextual_suggestions: true
+#  translator/max_homophones: 4
+#  translator/max_homographs: 2
+
+  # 使用万象模型
   grammar:
-    language: zh-moqi
-    non_collocation_penalty: -4
-    collocation_max_length: 5
+    language: wanxiang-lts-zh-hans
+    collocation_max_length: 8
     collocation_min_length: 2
-    collocation_penalty: -14
-  translator/contextual_suggestions: true
-  translator/max_homophones: 4
-  translator/max_homographs: 2
+    collocation_penalty: -15
+    non_collocation_penalty: -5
+    weak_collocation_penalty: -100
+    rear_penalty: -10
+  translator/contextual_suggestions: false
+  translator/max_homophones: 8
+  translator/max_homographs: 8
 
   # 1. 把下划线加入字母表 (认为是单词的一部分)
   "speller/alphabet": "zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA_"
