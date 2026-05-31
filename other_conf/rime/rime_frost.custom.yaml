@@ -6,9 +6,11 @@ patch:
 #    collocation_max_length: 5
 #    collocation_min_length: 2
 #    collocation_penalty: -14
-#  translator/contextual_suggestions: true
-#  translator/max_homophones: 4
-#  translator/max_homographs: 2
+#  "translator/enable_user_dict": true
+#  "translator/enable_sentence": true
+#  "translator/contextual_suggestions": true
+#  "translator/max_homophones": 4
+#  "translator/max_homographs": 2
 
   # 使用万象模型
   grammar:
@@ -19,8 +21,11 @@ patch:
     non_collocation_penalty: -5
     weak_collocation_penalty: -100
     rear_penalty: -10
-  translator/contextual_suggestions: false
-  translator/max_homophones: 8
+  # 确保翻译器开启学习
+  "translator/enable_user_dict": true
+  "translator/enable_sentence": true
+  "translator/contextual_suggestions": false
+  "translator/max_homophones": 8
   translator/max_homographs: 8
 
   # 1. 把下划线加入字母表 (认为是单词的一部分)
