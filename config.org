@@ -2922,7 +2922,7 @@ export org to mind-map with Graphviz
      brew install graphviz
    #+end_src
 
-   2. install org-mind-map
+2. install org-mind-map
    #+begin_src emacs-lisp :tangle yes
      ;; This is an Emacs package that creates graphviz directed graphs from
      ;; the headings of an org file
@@ -2945,7 +2945,7 @@ export org to mind-map with Graphviz
        )
    #+end_src
 
-   3. run M-x org-mind-map-write
+3. run M-x org-mind-map-write
 
 ** Org-roam
 https://www.orgroam.com
