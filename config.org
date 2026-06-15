@@ -2764,7 +2764,7 @@ Show org-mode bullets as UTF-8 characters.
 ** Org QL
 This package provides a query language for Org files. It offers two syntax styles: Lisp-like sexps and search engine-like keywords.
 use libraries org-ql and org-ql-view.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package org-ql)
   (use-package helm-org-ql)
 #+end_src
@@ -2900,7 +2900,7 @@ try org modern
     (add-hook 'markdown-mode-hook 'toc-org-mode))
 #+end_src
 ** Org hugo
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package ox-hugo
     :ensure t
     :pin melpa
@@ -2919,11 +2919,11 @@ export org to mind-map with Graphviz
 
 1. install Graphviz
    #+begin_src shell :tangle no
-     brew install graphviz
+     Brew install graphviz
    #+end_src
 
 2. install org-mind-map
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
      ;; This is an Emacs package that creates graphviz directed graphs from
      ;; the headings of an org file
      (use-package org-mind-map
@@ -2977,7 +2977,7 @@ https://www.orgroam.com
 
 ** Org-pdf
 如果遇到报错，执行 pdf-tools-install
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package org-pdftools
     :hook (org-mode . org-pdftools-setup-link))
 
@@ -3022,7 +3022,7 @@ https://www.orgroam.com
 #+end_src
 
 ** Org download
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   ;; first install with brew
   ;; brew install pngpaste
   (use-package org-download
