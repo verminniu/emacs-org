@@ -1,0 +1,38 @@
+#+TITLE: Elfeed Feeds
+
+* Feeds :elfeed:
+** 科技、算法与黑客 :tech:
+*** [[https://news.ycombinator.com/rss][Hacker News]] :hackernews:重要:
+*** [[https://reddit.com/r/programming/.rss][Reddit Programming]] :reddit:
+*** [[https://lobste.rs/rss][Lobsters]]
+*** [[https://slashdot.org/slashdot.rss][Slashdot]]
+*** [[https://www.theverge.com/rss/index.xml][The Verge]] :news:
+*** [[https://archlinux.org/feeds/news/][Arch Linux News]] :linux:
+*** [[https://github.com/blog.atom][GitHub Blog]]
+*** [[https://v2ex.com/index.xml][V2EX]] :forum:
+*** [[https://sspai.com/feed][少数派]] :gadget:
+
+** 大厂与硬核架构博客 :engineering:
+*** [[https://netflixtechblog.com/feed][Netflix TechBlog]]
+*** [[https://githubengineering.com/atom.xml][GitHub Engineering]]
+*** [[https://engineering.fb.com/feed/][Meta Engineering]]
+*** [[https://blog.cloudflare.com/rss/][Cloudflare Blog]]
+*** [[https://aws.amazon.com/blogs/aws/feed/][AWS News Blog]]
+
+** 经济、商业与金融投资 :finance:经济:
+*** [[https://www.economist.com/sections/economics/rss.xml][The Economist - Economics]] :economist:精品:
+*** [[https://www.ft.com/?format=rss][Financial Times]] :ft:
+*** [[https://feeds.bloomberg.com/bussinessweek/news.rss][Bloomberg Businessweek]] :bloomberg:
+*** [[https://www.wsj.com/xml/rss/3_7014.xml][Wall Street Journal - Markets]] :wsj:
+*** [[https://www.hbr.org/rss/feed][Harvard Business Review]] :hbr:
+*** [[https://mises.org/rss/wire][Mises Wire (奥地利经济学)]] :mises:
+*** [[https://wallstreetcn.com/rss][华尔街见闻]] :cn:
+
+** Emacs 生态 :emacs:
+*** [[https://planet.emacslife.com/atom.xml][Planet Emacslife]]
+*** [[https://reddit.com/r/emacs/.rss][Reddit Emacs]]
+
+** 独立博客与硬核周刊 :blogs:
+*** [[https://wanqu.co/feed/][湾区日报]]
+*** [[https://ruanyifeng.com/blog/atom.xml][阮一峰的网络日志]]
+*** [[https://coolshell.cn/feed][酷壳 (CoolShell)]]
