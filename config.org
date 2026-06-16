@@ -128,6 +128,7 @@
   - [[#pandoc][Pandoc]]
   - [[#org-pdf][Org-pdf]]
   - [[#org-download][Org download]]
+  - [[#elfeeds][elfeeds]]
 
 * Install
 ** linux Install From Sources
@@ -3030,4 +3031,42 @@ https://www.orgroam.com
     (setq org-download-annotate-function
           #'dummy-org-download-annotate-function)
     (org-download-enable))
+#+end_src
+** elfeeds
+#+begin_src emacs-lisp :tangle yes
+  (use-package elfeed
+    :ensure t
+    :config
+    (setq elfeed-db-directory (expand-file-name "elfeed/db" user-emacs-directory)
+          elfeed-search-filter "@3-months-ago +unread"
+          elfeed-search-title-max-width 85)
+
+    ;; 确保前面有单引号 '
+    (setq elfeed-feeds
+          '(
+            ("http://0x100.club" blogs)
+            ("https://isamert.net/feeds.html" blogs emacs)
+            ("http://pragmaticemacs.com/feed/" blogs emacs)
+            ("https://blog.tecosaur.com/tmio/rss.xml" blogs emacs orgmode)
+            ("https://nullprogram.com/feed/" blogs tech c linux)
+            ("https://kitchingroup.cheme.cmu.edu/blog/" blogs emacs orgmode)
+            ("https://protesilaos.com/feeds/" blogs emacs philosophy)
+            ("http://weiwuhui.com/feed" blogs media)
+            ("https://bzg.fr/index.xml" blogs emacs orgmode)
+            ("https://alhassy.github.io/rss.xml" blogs emacs)
+            ("http://blog.aaronbieber.com/feed.xml" blogs emacs)
+            ("https://rgoswami.me/posts/index.xml" blogs tech science)
+            ("https://archive.casouri.cat/note/rss.xml" blogs emacs)
+            ("http://bnbeckwith.com/rss.xml" blogs)
+            ("http://abovethecrowd.com" blogs finance)
+            ("http://feeds.feedburner.com/xxddite" blogs tech)
+            ("http://batsov.com/atom.xml" blogs emacs clojure)
+            ))
+
+    ;; 安全的快捷键绑定方式
+    (define-key elfeed-search-mode-map (kbd "G") 'elfeed-update)
+    (define-key elfeed-search-mode-map (kbd "g") 'elfeed-search-update--force)
+    (define-key elfeed-search-mode-map (kbd "v a") (lambda () (interactive) (elfeed-search-set-filter "@6-months-ago +unread")))
+    (define-key elfeed-search-mode-map (kbd "v e") (lambda () (interactive) (elfeed-search-set-filter "+emacs +unread")))
+    (define-key elfeed-search-mode-map (kbd "v b") (lambda () (interactive) (elfeed-search-set-filter "+blogs +unread"))))
 #+end_src
