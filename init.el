@@ -1,3 +1,4 @@
+;;; ...  -*- lexical-binding: nil -*-
 ;;; init.el --- GNU Emacs Configuration
 
 ;; Copyright (C) 2014 Terencio Agozzino
