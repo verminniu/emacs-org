@@ -1502,16 +1502,16 @@ emacs java 模式 主要用来看代码，防止误操作
 #+end_src
 
 ** parrot
-摇头鹦鹉
-#+begin_src emacs-lisp :tangle yes
+摇头鹦鹉 - 去除了modeline，这个也没必要了
+#+begin_src emacs-lisp :tangle no
   (use-package parrot
     :config
     (parrot-mode))
 #+end_src
 
 ** nyan-mode
-彩虹猫
-#+begin_src emacs-lisp :tangle yes
+彩虹猫 - 去除了modeline，么必要
+#+begin_src emacs-lisp :tangle no
   (use-package nyan-mode
     :config
     (nyan-mode))
