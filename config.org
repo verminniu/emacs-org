@@ -2865,7 +2865,8 @@ try org modern
 #+end_src
 
 ** Pomodoro
-#+begin_src emacs-lisp :tangle yes
+暂时没必要，tomatoBar更好使一点
+#+begin_src emacs-lisp :tangle no
   ;; Pomodoro
   (use-package org-pomodoro
     :custom-face
