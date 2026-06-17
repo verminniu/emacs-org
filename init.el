@@ -77,6 +77,9 @@
   ;; Enable use-package :ensure support for Elpaca.
   (elpaca-use-package-mode))
 
+;; 只有当发生真正会导致崩溃的 Error 时才弹窗，普通的 Warning 直接忽略
+(setq warning-minimum-level :error)
+
 ;;When installing a package used in the init file itself,
 ;;e.g. a package which adds a use-package key word,
 ;;use the :wait recipe keyword to block until that package is installed/configured.
