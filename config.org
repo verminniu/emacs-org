@@ -3038,13 +3038,19 @@ https://www.orgroam.com
   (use-package elfeed
     :ensure t
     :config
+    ;; ==========================================
+    ;; 1. 基础路径、过滤器与界面布局优化
+    ;; ==========================================
     (setq elfeed-db-directory (expand-file-name "elfeed/db" user-emacs-directory)
-          elfeed-search-filter "@3-months-ago +unread"
-          elfeed-search-title-max-width 85)
+          elfeed-search-filter "@2-months-ago +unread" ; 默认显示两个月内未读
+          elfeed-search-title-max-width 90)
 
-    ;; 确保前面有单引号 '
+    ;; ==========================================
+    ;; 2. 完整的订阅列表（含你提供及追加的所有国内外源）
+    ;; ==========================================
     (setq elfeed-feeds
           '(
+            ;; ===== 👤 你的专属独立博客列表 =====
             ("http://0x100.club" blogs)
             ("https://isamert.net/feeds.html" blogs emacs)
             ("http://pragmaticemacs.com/feed/" blogs emacs)
@@ -3062,12 +3068,115 @@ https://www.orgroam.com
             ("http://abovethecrowd.com" blogs finance)
             ("http://feeds.feedburner.com/xxddite" blogs tech)
             ("http://batsov.com/atom.xml" blogs emacs clojure)
+
+            ;; ===== 🌐 英文硬核社区与技术媒体 =====
+            ("https://news.ycombinator.com/rss" tech hackernews)
+            ("https://hnrss.org/frontpage?comments=10" tech hackernews)
+            ("https://lobste.rs/rss" tech lobsters)
+            ("https://lwn.net/headlines/rss" tech linux open-source)
+
+            ;; ===== ✍️ 国外顶级技术专家/黑客博客 =====
+            ("https://danluu.com/atom.xml" blogs tech performance)
+            ("https://jvns.ca/atom.xml" blogs tech networking linux)
+            ("https://www.joelonsoftware.com/feed/" blogs tech management)
+            ("https://martin创造.com/feed.xml" blogs tech architecture)
+
+            ;; ===== 🤖 Reddit 优质技术子版块 =====
+            ("https://www.reddit.com/r/emacs/.rss" reddit emacs)
+            ("https://www.reddit.com/r/programming/.rss" reddit tech programming)
+            ("https://www.reddit.com/r/linux/.rss" reddit tech linux)
+
+            ;; ===== 🇨🇳 国内顶级大厂技术团队 =====
+            ("https://tech.meituan.com/feed" tech china meituan-only)
+            ("https://vlambda.com/feed" tech china)
+            ("https://juejin.cn/rss" tech china)
+            ("https://linux.cn/rss.xml" tech linux china)
+
+            ;; ===== 📰 国内极客与数字生活媒体 =====
+            ("https://sspai.com/feed" blogs china sspai-only)
+            ("https://www.williamlong.info/catfeed.asp" blogs china tech)
+            ("https://www.geekpark.net/rss" tech china media)
+            ("https://36kr.com/feed" news china finance)
+
+            ;; ===== 👤 国内顶尖个人极客/独立开发者 =====
+            ("https://blog.tualatrix.com/feed.xml" blogs china emacs)
+            ("https://coolshell.cn/feed" blogs tech china)
+            ("https://macshuo.com/feed" blogs china tech)
+            ("https://sspai.com/u/easy/posts/feed" blogs tech china)
+            ("https://yinwang.org/atom.xml" blogs china philosophy yin-only)
             ))
 
-    ;; 安全的快捷键绑定方式
+    ;; ==========================================
+    ;; 3. 视觉美化：根据不同来源/标签配置不同颜色
+    ;; ==========================================
+    (defface elfeed-color-emacs   '((t :foreground "#268bd2" :weight bold)) "Emacs 来源颜色")
+    (defface elfeed-color-hn      '((t :foreground "#cb4b16" :weight bold)) "HackerNews 颜色")
+    (defface elfeed-color-reddit  '((t :foreground "#ff4500")) "Reddit 颜色")
+    (defface elfeed-color-china   '((t :foreground "#b8bb26")) "国内通用源颜色")
+    (defface elfeed-color-blogs   '((t :foreground "#859900")) "普通独立博客颜色")
+
+    ;; 专属定制网站颜色
+    (defface elfeed-color-sspai   '((t :foreground "#da251d" :weight bold)) "少数派专属红")
+    (defface elfeed-color-yin     '((t :foreground "#d33682" :slant italic)) "王垠专属斜体紫")
+    (defface elfeed-color-meituan '((t :foreground "#00ced1" :weight bold)) "美团专属青")
+
+    (setq elfeed-search-face-alist
+          '((unread elfeed-search-unread-face) ; 未读默认加粗
+            (sspai-only elfeed-color-sspai)
+            (yin-only elfeed-color-yin)
+            (meituan-only elfeed-color-meituan)
+            (emacs elfeed-color-emacs)
+            (hackernews elfeed-color-hn)
+            (reddit elfeed-color-reddit)
+            (china elfeed-color-china)
+            (blogs elfeed-color-blogs)))
+
+    ;; ==========================================
+    ;; 4. 界面自定义渲染：标题前强制显示 [来源网站名称]
+    ;; ==========================================
+    (defun my-elfeed-search-print-entry (entry)
+      "自定义 Elfeed 列表渲染：在标题前显示对齐的 [来源名称]"
+      (let* ((date (elfeed-entry-date entry))
+             (date-str (format-time-string "%Y-%m-%d" (seconds-to-time date)))
+             (title (elfeed-entry-title entry))
+             (tags (elfeed-entry-tags entry))
+             (tags-str (mapconcat #'symbol-name tags " "))
+             (feed (elfeed-entry-feed entry))
+             ;; 获取该源的名称（若无则用URL替代）
+             (feed-title (or (elfeed-feed-title feed) (elfeed-feed-url feed)))
+             ;; 固定缩进宽度为 14 个字符，多出的截断，不够的补空格
+             (feed-str (truncate-string-to-width (format "[%s]" feed-title) 14 0 ?\s))
+
+             ;; 颜色匹配
+             (title-face (elfeed-search--faces tags))
+             (feed-face 'font-lock-keyword-face)
+             (date-face 'font-lock-variable-name-face))
+
+        (insert (propose-font-lock-face date-str date-face) " ")
+        (insert (propose-font-lock-face feed-str feed-face) " ")
+        (insert (propose-font-lock-face title title-face))
+        (when tags
+          (insert (concat " (" (propose-font-lock-face tags-str 'font-lock-comment-face) ")")))))
+
+    (defun propose-font-lock-face (string face)
+      (let ((str (copy-sequence string)))
+        (put-text-property 0 (length str) 'face face str)
+        str))
+
+    ;; 启用自定义界面渲染
+    (setq elfeed-search-print-entry-function #'my-elfeed-search-print-entry)
+
+    ;; ==========================================
+    ;; 5. 快捷键配置：常规操作与分类一键过滤
+    ;; ==========================================
+    (keymap-global-set "C-x w" #'elfeed)
     (define-key elfeed-search-mode-map (kbd "G") 'elfeed-update)
     (define-key elfeed-search-mode-map (kbd "g") 'elfeed-search-update--force)
-    (define-key elfeed-search-mode-map (kbd "v a") (lambda () (interactive) (elfeed-search-set-filter "@6-months-ago +unread")))
+
+    ;; 视图过滤组合键 (连按 v 激活)
+    (define-key elfeed-search-mode-map (kbd "v a") (lambda () (interactive) (elfeed-search-set-filter "@2-months-ago +unread")))
     (define-key elfeed-search-mode-map (kbd "v e") (lambda () (interactive) (elfeed-search-set-filter "+emacs +unread")))
-    (define-key elfeed-search-mode-map (kbd "v b") (lambda () (interactive) (elfeed-search-set-filter "+blogs +unread"))))
+    (define-key elfeed-search-mode-map (kbd "v t") (lambda () (interactive) (elfeed-search-set-filter "+tech +unread")))
+    (define-key elfeed-search-mode-map (kbd "v c") (lambda () (interactive) (elfeed-search-set-filter "+china +unread")))
+    (define-key elfeed-search-mode-map (kbd "v r") (lambda () (interactive) (elfeed-search-set-filter "+reddit +unread"))))
 #+end_src
